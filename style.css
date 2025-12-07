@@ -60,19 +60,83 @@ a { text-decoration: none; color: inherit; }
 .logo { font-size: 1.5rem; font-weight: 900; color: #fff; }
 .logo span { color: var(--gold-main); }
 
-.nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+.nav-links { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { 
     font-size: 1rem; color: #ccc; font-weight: 500; transition: 0.3s; 
     padding: 5px 10px; border-radius: 15px;
 }
-.nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.nav-links a:hover { color: #fff; background: #D4AF37; }
 
-/* الساعة والإضافات */
-.nav-extras { display: flex; align-items: center; gap: 15px; }
-.nav-clock { 
-    font-family: 'Courier New', monospace; font-weight: bold; color: var(--gold-main);
-    background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 15px; font-size: 0.9rem;
-    border: 1px solid rgba(255,255,255,0.05); display: block !important; opacity: 1 !important; top: auto !important; position: relative !important; left: auto !important; transform: none !important;
+
+/* =========================================
+   ⏱️ NAV CLOCK WITH ROTATING BORDER ⏱️
+   ========================================= */
+
+.nav-clock {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* سنترة أفقية */
+    
+    /* التنسيق الأساسي */
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--gold-main);
+    font-size: 1.2rem;
+    padding: 5px 20px; /* مساحة داخلية */
+    border-radius: 20px;
+    
+    /* إعدادات الحركة */
+    overflow: hidden; /* عشان الشعاع ما يخرجش بره */
+    z-index: 100; /* فوق النافبار */
+    opacity: 0; /* مخفية في البداية */
+    transition: 0.3s ease;
+    
+    /* إلغاء الحدود والخلفية القديمة لأننا هنصنعهم من جديد */
+    background: transparent !important;
+    border: none !important;
+    pointer-events: none;
+}
+
+/* حالة الظهور (تضاف بالجافاسكريبت عند السكرول) */
+.nav-clock.visible {
+    opacity: 1;
+    top: 22px; /* مكان الظهور */
+}
+
+/* 1. الشعاع الدوار (Snake Line) */
+.nav-clock::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;  /* أكبر من الساعة */
+    height: 500%; /* طويل جداً عشان يغطي الدوران */
+    
+    /* تدرج لوني دائري يخلق شكل الشعاع */
+    background: conic-gradient(
+        transparent 70%, 
+        var(--gold-main) 100%
+    );
+    
+    animation: rotateClockBorder 4s linear infinite; /* دوران مستمر */
+    z-index: -2; /* في الخلفية تماماً */
+}
+
+/* 2. الخلفية السوداء الداخلية (عشان تغطي وسط الشعاع ويبان كإطار) */
+.nav-clock::after {
+    content: '';
+    position: absolute;
+    inset: 2px; /* سُمك الخط (2 بكسل) */
+    background: rgba(0, 0, 0, 0.95); /* لون خلفية الساعة */
+    border-radius: 18px; /* أقل قليلاً من الحواف الخارجية */
+    z-index: -1; /* خلف النص وأمام الشعاع */
+}
+
+/* حركة الدوران */
+@keyframes rotateClockBorder {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* Mobile */
@@ -88,7 +152,6 @@ a { text-decoration: none; color: inherit; }
         display: none; border: 1px solid var(--gold-main);
     }
     .nav-links.active { display: flex; }
-    .nav-clock { display: none !important; } /* اخفي الساعة في الموبايل لتوفير مساحة */
 }
 
 /* =========================================
@@ -113,7 +176,65 @@ a { text-decoration: none; color: inherit; }
 .hero { min-height: 100vh; padding-top: 100px; display: flex; align-items: center; justify-content: center; text-align: center; }
 .system-status { font-family: 'Courier New', monospace; font-size: 1.1rem; color: var(--gold-main); margin-bottom: 10px; display: inline-block; padding: 5px 15px; border-radius: 5px; border: 1px solid rgba(var(--gold-rgb), 0.5); box-shadow: 0 0 15px rgba(var(--gold-rgb), 0.2); background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); transition: 0.3s; }
 .system-status.hidden { opacity: 0; transform: translateY(-20px); }
-.glitch-name { position: relative; font-size: 5rem; font-weight: 900; color: #fff; letter-spacing: 2px; }
+/* =========================================
+   🔥 ULTIMATE GLITCH EFFECT 🔥
+   ========================================= */
+.glitch-name {
+    position: relative;
+    font-size: 6rem; /* كبرنا الخط */
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 5px;
+    z-index: 1;
+}
+
+/* النسخة الأولى من النص (اللون السماوي) */
+.glitch-name::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: -2px;
+    width: 100%;
+    height: 100%;
+    background: var(--black-bg); /* خلفية سوداء لتغطية النص الأصلي */
+    text-shadow: 2px 0 #00ffff; /* ظل سماوي */
+    clip-path: inset(20% 0 80% 0); /* قص جزء من النص */
+    animation: glitch-1 5s infinite linear alternate-reverse;
+}
+
+/* النسخة الثانية من النص (اللون البنفسجي) */
+.glitch-name::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 2px;
+    width: 100%;
+    height: 100%;
+    background: var(--black-bg);
+    text-shadow: -2px 0 #ff00c1; /* ظل بنفسجي */
+    clip-path: inset(80% 0 10% 0);
+    animation: glitch-2 10s infinite linear alternate-reverse;
+}
+
+/* حركة التقطيع العشوائية 1 */
+@keyframes glitch-1 {
+    0% { clip-path: inset(20% 0 80% 0); }
+    20% { clip-path: inset(60% 0 10% 0); }
+    40% { clip-path: inset(40% 0 50% 0); }
+    60% { clip-path: inset(80% 0 5% 0); }
+    80% { clip-path: inset(10% 0 70% 0); }
+    100% { clip-path: inset(30% 0 20% 0); }
+}
+
+/* حركة التقطيع العشوائية 2 */
+@keyframes glitch-2 {
+    0% { clip-path: inset(15% 0 60% 0); }
+    20% { clip-path: inset(80% 0 5% 0); }
+    40% { clip-path: inset(40% 0 25% 0); }
+    60% { clip-path: inset(10% 0 80% 0); }
+    80% { clip-path: inset(50% 0 20% 0); }
+    100% { clip-path: inset(0% 0 70% 0); }
+}       
 .text-gradient { background: linear-gradient(to right, var(--gold-dark), var(--gold-main), #fff, var(--gold-main)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; animation: shine 5s linear infinite; }
 @keyframes shine { to { background-position: 200% center; } }
 .hero-btns { margin-top: 50px; display: flex; gap: 25px; justify-content: center; }
@@ -172,7 +293,7 @@ a { text-decoration: none; color: inherit; }
 .skill-bar { width: 100%; height: 10px; background: #222; border-radius: 5px; overflow: hidden; border: 1px solid #333; }
 .skill-progress { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold-main)); width: 0; transition: width 1s; border-radius: 5px; box-shadow: 0 0 10px var(--gold-main); animation: fillBar 2s ease-out forwards; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
 .project-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; transition: 0.4s; text-align: right; border: 1px solid #222; position: relative; }
 .project-card:hover { transform: translateY(-10px); border-color: var(--gold-main); }
 .project-video { position: absolute; top: 0; left: 0; width: 100%; height: 220px; z-index: 2; opacity: 0; transition: 0.5s ease; background: #000; }
@@ -261,6 +382,7 @@ footer p { position: relative; z-index: 2; color: #888; font-size: 1.2rem; }
 .alert-overlay.active .alert-box { transform: scale(1); }
 .alert-icon { font-size: 3rem; color: var(--gold-main); margin-bottom: 15px; animation: flicker 2s infinite; }
 .alert-box button { width: 100%; }
+
 
 /* Mobile */
 .hamburger { display: none; font-size: 1.8rem; color: var(--gold-main); cursor: pointer; }
@@ -398,134 +520,6 @@ footer p { position: relative; z-index: 2; color: #888; font-size: 1.2rem; }
     z-index: 100; /* يظهر فوق الجميع */
 }
 
-/* =========================================
-   18. Solar System Skills (نظام المهارات الشمسي)
-   ========================================= */
-.solar-wrapper {
-    padding: 100px 0;
-    background: #080808; /* خلفية داكنة قليلاً */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-top: 1px solid #222;
-    border-bottom: 1px solid #222;
-}
-
-.solar-system {
-    position: relative;
-    width: 600px;
-    height: 600px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* الشمس (المركز) */
-.sun {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    color: #000;
-    box-shadow: 0 0 30px var(--gold-main);
-    z-index: 10;
-    animation: pulseSun 2s infinite alternate;
-}
-
-/* المدارات (Orbits) */
-.orbit {
-    position: absolute;
-    border: 1px dashed rgba(212, 175, 55, 0.2); /* خط مداري خفيف */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.orbit-1 {
-    width: 200px; height: 200px;
-    animation: spinRight 10s linear infinite;
-    z-index: 3;
-}
-
-.orbit-2 {
-    width: 350px; height: 350px;
-    animation: spinLeft 15s linear infinite;
-    z-index: 2;
-}
-
-.orbit-3 {
-    width: 500px; height: 500px;
-    animation: spinRight 20s linear infinite;
-    z-index: 1;
-}
-
-/* الكواكب (Planets/Icons) */
-.planet {
-    position: absolute;
-    width: 50px; height: 50px;
-    background: #111;
-    border: 1px solid var(--gold-main);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    color: var(--gold-main);
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-    transition: 0.3s;
-}
-
-/* دوران الكواكب عكس المدار لتبقى ثابتة (Upright) */
-.planet i {
-    animation: keepUpright 10s linear infinite; /* نفس مدة المدار */
-}
-.orbit-2 .planet i { animation-duration: 15s; animation-direction: reverse; }
-.orbit-3 .planet i { animation-duration: 20s; }
-
-.planet:hover {
-    background: var(--gold-main);
-    color: #000;
-    transform: scale(1.2);
-    box-shadow: 0 0 20px var(--gold-main);
-    z-index: 100;
-}
-
-/* مواقع الكواكب على المدارات */
-/* المدار 1 */
-.p-1 { top: 0; left: 50%; transform: translate(-50%, -50%); }
-.p-2 { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
-
-/* المدار 2 */
-.p-3 { top: 0; left: 50%; transform: translate(-50%, -50%); }
-.p-4 { bottom: 20%; left: 10%; }
-.p-5 { bottom: 20%; right: 10%; }
-
-/* المدار 3 */
-.p-6 { top: 50%; left: 0; transform: translate(-50%, -50%); }
-.p-7 { top: 50%; right: 0; transform: translate(50%, -50%); }
-.p-8 { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
-
-
-/* الحركات (Animations) */
-@keyframes spinRight { 100% { transform: rotate(360deg); } }
-@keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-
-@keyframes keepUpright {
-    100% { transform: rotate(-360deg); }
-}
-
-@keyframes pulseSun {
-    from { box-shadow: 0 0 20px var(--gold-main); transform: scale(1); }
-    to { box-shadow: 0 0 50px var(--gold-main); transform: scale(1.05); }
-}
-
 /* للموبايل */
 @media (max-width: 768px) {
     .solar-system { transform: scale(0.6); } /* تصغير النظام بالكامل للموبايل */
@@ -631,4 +625,217 @@ footer p { position: relative; z-index: 2; color: #888; font-size: 1.2rem; }
         font-size: 1.2rem !important; /* تكبير وصف الرقم */
         margin-top: 10px !important;
     }
+}
+/* --- تنسيق زر اللغة الجديد (عربي | EN) --- */
+.lang-switch-wrapper {
+    cursor: pointer;
+    font-weight: bold;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.lang-opt {
+    color: #888; /* لون اللغة غير النشطة */
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.lang-opt.active {
+    color: var(--gold-main); /* لون اللغة النشطة (ذهبي) */
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.lang-switch-wrapper:hover .lang-opt {
+    color: #fff; /* تبييض بسيط عند المرور */
+}
+
+.lang-switch-wrapper:hover .lang-opt.active {
+    color: var(--gold-main); /* الحفاظ على الذهبي للنشط */
+}
+
+.separator {
+    color: #444;
+    font-size: 0.8rem;
+}
+/* تثبيت اتجاه النافبار دائماً (مثلاً من اليسار لليمين) */
+.navbar {
+    direction: ltr !important; 
+}
+
+/* لو عايز اللوجو يفضل على الشمال والروابط يمين، استخدم ltr */
+/* لو عايز العكس (الوضع العربي)، استخدم rtl */
+/* تنسيقات خاصة لما الموقع يكون إنجليزي (LTR) */
+html[dir="ltr"] .project-card,
+html[dir="ltr"] .service-box,
+html[dir="ltr"] .about-text {
+    text-align: left; /* يجبر النص يبدأ من الشمال */
+}
+
+html[dir="ltr"] .timeline-item {
+    /* إصلاح التايم لاين في الإنجليزي */
+    text-align: left; 
+}
+
+/* عكس اتجاه الأسهم والأيقونات في الإنجليزي */
+html[dir="ltr"] .btn i {
+    transform: rotate(180deg); /* لف السهم الناحية التانية */
+    margin-left: 10px;
+    margin-right: 0;
+}
+/* إصلاح نهائي لرأس القسم */
+.section-header-group {
+    display: flex;
+    justify-content: space-between; /* يوزعهم يمين وشمال */
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap; /* مهم للموبايل */
+}
+
+/* إجبار العنوان على اليمين */
+.section-header-group h2 {
+    margin: 0;
+    text-align: right;
+    flex: 1; /* يأخذ المساحة المتاحة */
+}
+
+/* إجبار الزر على اليسار */
+.section-header-group .btn {
+    margin: 0;
+}   
+/* =========================================
+   🏛️ Pharaonic Font for English Only
+   ========================================= */
+html[lang="en"] body,
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] p,
+html[lang="en"] a,
+html[lang="en"] span,
+html[lang="en"] button,
+html[lang="en"] li {
+    font-family: 'Reem Kufi', sans-serif !important;
+    letter-spacing: 1px; /* مسافة بسيطة لتعزيز الشكل الفرعوني */
+}
+
+/* تكبير الخط الإنجليزي قليلاً ليكون مقروءاً بنفس قوة العربي */
+html[lang="en"] p {
+    font-size: 1.1rem;
+}
+/* --- تنسيق صورة اللوجو في النافبار --- */
+.logo-img img {
+    height: 45px; /* ارتفاع مناسب للنافبار */
+    width: auto;  /* العرض يتظبط لوحده */
+    transition: 0.3s;
+    display: block;
+}
+
+.logo-img:hover img {
+    transform: scale(1.1); /* تكبير بسيط لما تقف عليه */
+    filter: drop-shadow(0 0 5px var(--gold-main)); /* وهج ذهبي */
+}
+
+/* تعديل للموبايل عشان اللوجو ميخدش مساحة كبيرة */
+@media (max-width: 768px) {
+    .logo-img img {
+        height: 40px;
+    }
+}
+/* =========================================
+   تنسيق النافبار العائم (مع الترتيب الجديد)
+   ========================================= */
+
+.floating-nav {
+    position: fixed;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none; /* يسمح بالضغط حول الكبسولة */
+}
+
+.nav-container {
+    pointer-events: auto; /* إعادة التفاعل للكبسولة */
+    background: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 10px 30px;
+    
+    /* 🛑 الخلطة السحرية للترتيب 🛑 */
+    display: flex;
+    align-items: center;
+    width: 90%;
+    max-width: 1000px;
+    position: relative; /* عشان الساعة تتموضع بالنسبة ليه */
+    direction: ltr !important; /* إجبار الترتيب من اليسار لليمين */
+}
+
+/* 1. اللوجو */
+.logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+    margin-right: 20px; /* مسافة عن زر اللغة */
+    flex-shrink: 0;
+}
+.logo span { color: var(--gold-main); }
+
+/* 2. زر اللغة */
+.lang-switch-wrapper {
+    cursor: pointer;
+    font-weight: bold;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: auto; /* 👈 هذا ما يدفع الروابط لليمين */
+}
+
+/* 3. الساعة (في المنتصف) */
+.nav-clock {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--gold-main);
+    background: rgba(0,0,0,0.6);
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    opacity: 0; 
+    transition: 0.3s;
+}
+.nav-clock.visible { opacity: 1; }
+
+/* 4. الروابط */
+.nav-links {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.nav-links li { direction: rtl; } /* تصحيح اتجاه النص العربي */
+
+/* الموبايل */
+.hamburger { display: none; font-size: 1.5rem; color: var(--gold-main); cursor: pointer; margin-left: 15px; }
+
+@media (max-width: 900px) {
+    .hamburger { display: block; margin-left: auto; } /* الهامبرجر يروح يمين */
+    
+    .nav-links {
+        position: absolute; top: 100%; right: 0; width: 100%;
+        background: rgba(10, 10, 10, 0.98); border-radius: 20px;
+        flex-direction: column; padding: 20px; gap: 15px; text-align: center;
+        display: none; margin-top: 10px; border: 1px solid var(--gold-main);
+    }
+    .nav-links.active { display: flex;}
 }

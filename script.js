@@ -1,4 +1,212 @@
+/* =========================================
+   1🌍 Translation System
+   ========================================= */
+let currentLang = 'ar'; // اللغة الافتراضية
 
+// 1. قاموس الكلمات (أضف كل كلمات موقعك هنا)
+const translations = {
+    ar: {
+        nav_home: "الرئيسية",
+        nav_services: "خدماتي",
+        nav_project: "أعمالي",
+        nav_contact: "ابدأ مشروعك",
+        btn_work: "شاهد إبداعي",
+        btn_contact: "تواصل معي",
+        hero_contact: "تواصل معي",
+        hero_work: "شاهد إبداعي",
+        about1: "أنا كيرلس، ",
+        about2: "مهندس برمجيات",
+        about3: "شغوف بالتفاصيل.",
+        addreview: "أضف تقييمك",
+        settheme: "اختر ثيم الموقع",
+        about4: "لا أقوم فقط بكتابة الكود، بل أصنع تجارب رقمية حية. أدمج بين الفن البرمجي والتصميم الإبداعي لخلق مواقع لا تُنسى.",  
+        co_me: "تواصل معي",
+        myskills: "مهاراتي التقنية",
+        mywork: "احدث اعمالي",
+        viewproject: "معاينة المشروع",
+        yourname: "الاسـم ",
+        email: "البريد الإلكتروني ",
+        whatsapp: "رقـم الواتسـاب ",
+        yourproject: "تفـاصيل مشـروعـك",
+        sendmsg: "إرسال الرسالة",
+        credit: "جميع الحقوق محفوظة &copy; 2025 كيرلس",
+        p1t: "مـصـر الحـضاره",
+        p1i: "موقع متكامل يعرض الاماكن الاثريه",
+        p2t: "موقع مطعم فاخر",
+        p2i: "قائمة طعام تفاعلية ونظام حجز.",
+        p3t: "شركة عقارات",
+        p3i: "عرض الوحدات السكنية بشكل احترافي.",
+        t1: "من أنا؟",
+        l2: "الاسم:",
+        l2a: "كيرلس",
+        l3: "الخبرة:",
+        l3a: "+3 سنوات",
+        l4: "الدولة:",
+        l4a: "مصر",
+        l5: "العمل:",
+        l5a: "متاح فريلانسر",
+        i1: "مشروع مكتمل",
+        i2: "عميل سعيد",
+        i3: "جودة وتسليم",
+        pt : "رحلة نجاح مشروعك",
+        rrc: "آراء العملاء",
+        btnloadmore: "عرض المزيد",
+        cobtn: "ناقش مشروعك معي",
+        faqt: "أسئلة شائعة",
+        q6: "ما هي الخدمات التي تقدمها؟",
+        a6: "أقدم خدمات تصميم وتطوير مواقع الويب المخصصة، بما في ذلك التصميم المتجاوب، حلول التجارة الإلكترونية، وتحسين محركات البحث لمساعدة عملك على الازدهار عبر الإنترنت.",
+        q7: "ما هو الجدول الزمني النموذجي للمشروع؟",
+        a7: "تختلف الجداول الزمنية للمشاريع بناءً على التعقيد، ولكنها تتراوح عادةً بين 2 إلى 6 أسابيع. أقدم جدولًا زمنيًا مفصلاً بعد مناقشة متطلباتك المحددة.",
+        q8: "هل يمكنني طلب تعديلات لاحقاً؟",
+        a8: "نعم، أقدم دعم فني مجاني لمدة أسبوع بعد التسليم لضمان رضاك التام، وأي تعديلات جوهرية يمكن الاتفاق عليها بسهولة.",
+        q9: "هل توفر الاستضافة والدومين؟",
+        a9: "أنا أساعدك في اختيار وشراء أفضل استضافة تناسب مشروعك، وأقوم بربط الدومين ورفع ملفات الموقع مجاناً كجزء من الخدمة.",
+        q10: "كيف يتم الدفع وضمان الحقوق؟",
+        a10: "العمل يتم عبر منصات مضمونة مثل (مستقل) أو (خمسات)، حيث تضمن المنصة حق الطرفين ولا يتم تحويل المبلغ إلا بعد استلامك للمشروع كاملاً.",
+        q11: "ماذا لو حدث خطأ في الموقع مستقبلاً؟",
+        a11: "أكوادنا نظيفة ومستقرة، ولكن في حال حدوث أي خطأ تقني مفاجئ، يمكنك التواصل معي في أي وقت للصيانة الفورية.",
+        s1: "التخطيط والتحليل",
+        s1a: "فهم متطلباتك بدقة وتحويلها لخطة عمل واضحة لضمان تحقيق أهدافك.",
+        s2: "التصميم الإبداعي (UI/UX)",
+        s2a: "رسم واجهات عصرية تخطف العين، سهلة الاستخدام، وتناسب هوية مشروعك.",
+        s3: "التكويد والتطوير",
+        s3a: "تحويل التصميم لموقع حقيقي بكود نظيف، سريع، ومتجاوب مع جميع الشاشات.",
+        s4: "التسليم والدعم",
+        s4a: "رفع الموقع أونلاين، التأكد من خلوه من الأخطاء، وتقديم دعم فني مستمر.",
+        contact_success: "تم استلام رسالتك بنجاح! سأتواصل معك قريباً.",
+        // ... أكمل باقي نصوص موقعك هنا بنفس الطريقة
+    },
+    en: {
+        nav_home: "Home",
+        nav_services: "Services",
+        nav_project: "My Work",
+        nav_contact: "Start Project",
+        btn_work: "View Work",
+        btn_contact: "Contact Me",
+        hero_contact: "Contact Me",
+        hero_work: "View Work",
+        about1: "I'm Kyrillos, ",
+        about2: "A Software Engineer",
+        about3: "Passionate about details.",
+        addreview: "Add Review",
+        settheme: "Choose Site Theme",
+        about4: "I don't just write code, I craft living digital experiences. I blend coding art with creative design to create unforgettable websites.",
+        co_me: "Contact Me",
+        myskills: "My Skills",
+        mywork: "My Latest Works",
+        viewproject: "View Project",
+        yourname: "Your Name",
+        email: "Email Address",
+        whatsapp: "WhatsApp Number",
+        yourproject: "Project Details",
+        sendmsg: "Send Message",
+        credit: "All rights reserved &copy; 2025 Kyrillos",
+        p1t: "Egypt Tourism",
+        p1i: "A comprehensive site showcasing historical places",
+        p2t: "Luxury Restaurant Site",
+        p2i: "Interactive menu and reservation system.",
+        p3t: "Real Estate Company",
+        p3i: "Professional display of housing units.",
+        t1: "Who am I?",
+        l2: "Name:",
+        l2a: "Kyrillos",
+        l3: "Experience:",
+        l3a: "+3 Years",
+        l4: "Country:",
+        l4a: "Egypt",
+        l5: "Availability:",
+        l5a: "Available Freelance",
+        i1: "Completed Projects",
+        i2: "Happy Clients",
+        i3: "Quality & Delivery",
+        pt : "Your Project Journey",
+        rrc: "Clients Reviews",
+        btnloadmore: "Load More",
+        cobtn: "Discuss Your Project",
+        faqt: "FAQ",
+        q6: "What services do you offer?",
+        a6: "I offer custom web design and development services, including responsive design, e-commerce solutions, and SEO optimization to help your business thrive online.",
+        q7: "What is the typical project timeline?",
+        a7: "Project timelines vary based on complexity, but typically range from 2 to 6 weeks. I provide a detailed timeline after discussing your specific requirements.",
+        q8: "Can I request revisions later?",
+        a8: "Yes, I provide free technical support for one week after delivery to ensure your complete satisfaction, and any substantial revisions can be easily agreed upon.",
+        q9: "Do you provide hosting and domain services?",
+        a9: "I assist you in selecting and purchasing the best hosting suitable for your project, and I connect the domain and upload the site files for free as part of the service.",
+        q10: "How is payment handled and rights ensured?",
+        a10: "Work is conducted through secure platforms like (Mostaql) or (Khamsat), where the platform guarantees the rights of both parties and the amount is only transferred after you receive the complete project.",
+        q11: "What if an error occurs on the site in the future?",
+        a11: "Our codes are clean and stable, but in case of any sudden technical error, you can contact me anytime for immediate maintenance.",
+        s1: "Planning & Analysis",
+        s1a: "Understanding your requirements precisely and turning them into a clear action plan to ensure your goals are met.",
+        s2: "Creative Design (UI/UX)",
+        s2a: "Crafting eye-catching, user-friendly interfaces that align with your project's identity.",
+        s3: "Coding & Development",
+        s3a: "Transforming designs into a real website with clean, fast, and responsive code for all screens.",
+        s4: "Delivery & Support",
+        s4a: "Launching the website online, ensuring it's error-free, and providing ongoing technical support.",
+        contact_success: "Your message has been successfully received! I will get back to you soon."
+        
+        // ... أكمل الترجمة الإنجليزية هنا
+    }
+};
+// 🌟 الجديد: ترجمة الـ Placeholders 🌟
+const placeholders = document.querySelectorAll('[data-lang-placeholder]');
+placeholders.forEach(el => {
+    const key = el.getAttribute('data-lang-placeholder');
+    if (translations[currentLang][key]) {
+        el.placeholder = translations[currentLang][key];
+    }
+});
+
+/* =========================================
+   🌍 وظيفة تبديل اللغة (تحديث الزر الجديد)
+   ========================================= */
+function toggleLanguage() {
+    // 1. تبديل اللغة والاتجاه
+    const langAr = document.getElementById('lang-ar');
+    const langEn = document.getElementById('lang-en');
+    
+    if (currentLang === 'ar') {
+        currentLang = 'en';
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', 'en');
+        langAr.classList.remove('active');
+        langEn.classList.add('active');
+    } else {
+        currentLang = 'ar';
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+        langEn.classList.remove('active');
+        langAr.classList.add('active');
+    }
+
+    // 2. ترجمة النصوص العادية (التي لها data-lang)
+    document.querySelectorAll('[data-lang]').forEach(el => {
+        const key = el.getAttribute('data-lang');
+        if (translations[currentLang][key]) {
+            el.innerText = translations[currentLang][key];
+        }
+    });
+
+    // 3. 🌟 ترجمة الـ Placeholders (الإصلاح هنا) 🌟
+    document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-lang-placeholder');
+        if (translations[currentLang][key]) {
+            el.placeholder = translations[currentLang][key];
+        }
+    });
+
+    // 4. تحديث Typed.js (اختياري)
+    if (typeof typed !== 'undefined') {
+        typed.destroy();
+        typed = new Typed('.auto-type', {
+            strings: currentLang === 'ar' 
+                ? ['مصمم واجهات مبدع.', 'مطور ويب محترف.', 'شريك نجاحك.'] 
+                : ['Creative UI Designer.', 'Pro Web Developer.', 'Your Success Partner.'],
+            typeSpeed: 100, backSpeed: 50, loop: true
+        });
+    }
+}
 /* =========================================
    2. Init Libraries
    ========================================= */
@@ -611,4 +819,3 @@ document.addEventListener('mousemove', function(e) {
         char.remove();
     }, 2000);
 });
-
