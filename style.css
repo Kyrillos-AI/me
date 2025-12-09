@@ -60,7 +60,7 @@ a { text-decoration: none; color: inherit; }
 .logo { font-size: 1.5rem; font-weight: 900; color: #fff; }
 .logo span { color: var(--gold-main); }
 
-.nav-links { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; }
+.nav-links { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0;  direction: rtl;}
 .nav-links a { 
     font-size: 1rem; color: #ccc; font-weight: 500; transition: 0.3s; 
     padding: 5px 10px; border-radius: 15px;
@@ -838,4 +838,616 @@ html[lang="en"] p {
         display: none; margin-top: 10px; border: 1px solid var(--gold-main);
     }
     .nav-links.active { display: flex;}
+}
+/* --- Price Estimator Updates --- */
+.price-display {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--gold-main);
+    margin: 10px 0;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    font-family: 'Cairo', sans-serif; /* خط عربي للأرقام والعملة */
+    direction: rtl; /* عشان العملة تظهر جنب الرقم صح */
+}
+
+.currency {
+    font-size: 1.5rem;
+    color: #fff;
+    vertical-align: middle;
+}
+
+/* تحسين شكل الأزرار الكثيرة */
+.est-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* مسافة أقل عشان الخيارات الكثيرة */
+    flex-wrap: wrap;
+}
+
+.est-btn {
+    font-size: 0.9rem; /* تصغير الخط شوية */
+    padding: 8px 15px;
+}
+/* --- Fun & Impressive Estimator --- */
+.estimator-box.fun-glass {
+    background: rgba(10, 10, 10, 0.9);
+    border: 2px solid #222;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+    direction: rtl;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: visible; /* مهم عشان الأنيميشن يخرج بره الصندوق */
+}
+
+.est-header h3 {
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 1. الشبكة (Grid Layout) */
+.pop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* 2. كروت الأنواع (The Pop Cards) */
+.pop-card {
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مطاطية */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+}
+
+.pop-card i {
+    font-size: 2rem;
+    color: #555;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.pop-card h4 { font-size: 0.85rem; margin: 0; color: #ccc; }
+.price-badge {
+    background: #222;
+    color: var(--gold-main);
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+/* 🔥 Pop-Zoom Effect on Hover 🔥 */
+.pop-card:hover {
+    transform: translateY(-10px) scale(1.1); /* تكبير وقفز */
+    background: #222;
+    border-color: #666;
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.pop-card:hover i { color: #fff; transform: rotate(-10deg); }
+
+/* ✨ Active State (Selected) ✨ */
+.pop-card.active {
+    background: var(--gold-main); /* خلفية ذهبية */
+    border-color: var(--gold-main);
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    animation: jelly 0.5s; /* هزة عند الاختيار */
+}
+
+.pop-card.active i { color: #000; }
+.pop-card.active h4 { color: #000; font-weight: 900; }
+.pop-card.active .price-badge { background: #000; color: var(--gold-main); }
+
+/* 3. كروت الإضافات (Bubbles) */
+.pop-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 50px; /* شكل بيضاوي */
+    padding: 10px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #bbb;
+}
+
+.pop-bubble:hover {
+    background: #222;
+    transform: scale(1.05);
+}
+
+.pop-bubble.active {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: var(--gold-main);
+    color: var(--gold-main);
+    font-weight: bold;
+    box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+.pop-bubble small { color: #666; font-size: 0.7rem; margin-right: 5px; }
+.pop-bubble.active small { color: var(--gold-main); }
+
+/* 4. Divider Glow */
+.est-divider-glow {
+    border: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-main), transparent);
+    margin: 30px 0;
+    opacity: 0.5;
+}
+
+/* 5. النتيجة النهائية */
+.est-result-bar {
+    background: #000;
+    border: 1px solid #333;
+    padding: 15px 30px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bouncy-price {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold-main);
+    font-family: 'Cairo', sans-serif;
+    transition: 0.2s;
+}
+
+/* أنيميشن الجيلي (Jelly) */
+@keyframes jelly {
+    0% { transform: scale(1, 1); }
+    30% { transform: scale(1.25, 0.75); }
+    40% { transform: scale(0.75, 1.25); }
+    50% { transform: scale(1.15, 0.85); }
+    65% { transform: scale(0.95, 1.05); }
+    75% { transform: scale(1.05, 0.95); }
+    100% { transform: scale(1, 1); }
+}
+
+@media (max-width: 768px) {
+    .pop-grid { grid-template-columns: repeat(2, 1fr); }
+    .est-result-bar { flex-direction: column; text-align: center; gap: 10px; }
+}
+/* --- 🧾 Holographic Bill Modal --- */
+.bill-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 20000; /* Above everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.4s;
+}
+
+.bill-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bill-container {
+    background: #111;
+    border: 2px solid var(--gold-main);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    transform: translateY(100px) scale(0.9);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+    position: relative;
+}
+
+.bill-overlay.active .bill-container {
+    transform: translateY(0) scale(1);
+}
+
+/* Header */
+.bill-header {
+    background: var(--gold-main);
+    color: #000;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.bill-header h2 { margin: 0; font-size: 1.5rem; font-weight: 900; }
+.bill-header i { font-size: 2rem; margin-bottom: 10px; }
+
+.close-bill {
+    position: absolute; top: 15px; right: 20px;
+    font-size: 2rem; cursor: pointer; color: #000;
+    transition: 0.3s;
+}
+.close-bill:hover { transform: rotate(90deg); color: #fff; }
+
+/* Body (Receipt Look) */
+.bill-body { padding: 30px; }
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-family: 'Courier New', monospace; /* Invoice Font */
+    color: #ccc;
+    font-size: 1rem;
+    border-bottom: 1px dashed #333;
+    padding-bottom: 5px;
+}
+
+.header-row { font-weight: bold; color: var(--gold-main); border-bottom: 2px solid #333; }
+.total-row { border-bottom: none; font-size: 1.5rem; margin-top: 20px; color: #fff; }
+.gold-text { color: var(--gold-main); font-weight: 900; }
+
+.bill-divider { border: 0; border-top: 2px dashed #444; margin: 20px 0; }
+
+/* Footer */
+.bill-footer {
+    padding: 20px;
+    background: #0a0a0a;
+    text-align: center;
+    border-top: 1px solid #333;
+}
+.bill-footer p { font-size: 0.8rem; color: #666; margin-bottom: 15px; }
+
+.full-width { width: 100%; justify-content: center; }
+/* =========================================
+   19. Compact Bill Modal (Maximized List Area)
+   ========================================= */
+
+/* 1. The Container (Fixed Size Logic) */
+.bill-container {
+    background: #111;
+    border: 2px solid var(--gold-main);
+    width: 90%;
+    max-width: 450px;       /* Slightly narrower for mobile feel */
+    max-height: 85vh;       /* Keeps it within screen limits */
+    display: flex;          /* Stack layout */
+    flex-direction: column;
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+    transform: translateY(100px) scale(0.9);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bill-overlay.active .bill-container {
+    transform: translateY(0) scale(1);
+}
+
+/* 2. Compact Header */
+.bill-header {
+    flex-shrink: 0;
+    background: var(--gold-main);
+    color: #000;
+    padding: 8px 15px;      /* Reduced padding */
+    display: flex;          /* Horizontal layout */
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;           /* Fixed small height */
+}
+
+.bill-header h2 { 
+    font-size: 1rem;        /* Smaller font */
+    font-weight: 800; 
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bill-header i { 
+    font-size: 1.2rem;      /* Smaller icon */
+    margin: 0; 
+}
+
+.close-bill {
+    position: static;       /* Reset position */
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* 3. The Body (Flex Grow) */
+.bill-body {
+    flex: 1;                /* Grows to fill available space */
+    padding: 10px 15px;     /* Minimal padding */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;       /* Crucial for internal scroll */
+}
+
+/* 4. The List (THE BIG AREA) */
+#billItems {
+    flex: 1;                /* Takes ALL remaining space */
+    overflow-y: auto;       /* Scrolls internally */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed #333;
+    border-radius: 8px;
+    margin-bottom: 5px;     /* Small gap before total */
+}
+
+/* Custom Scrollbar */
+#billItems::-webkit-scrollbar { width: 5px; }
+#billItems::-webkit-scrollbar-track { background: #000; }
+#billItems::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+.bill-row {
+    font-size: 0.85rem;     /* Compact text */
+    padding: 6px 0;
+    border-bottom: 1px dashed #222;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 5. Compact Total Section */
+.bill-divider { margin: 5px 0; border-top-color: #333; }
+
+.total-row {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    margin-top: 0;
+    border: none;
+}
+
+.total-row span:first-child { font-size: 0.9rem; color: #888; }
+
+#billTotal {
+    font-size: 1.4rem;      /* Smaller but bold total */
+    color: var(--gold-main);
+    font-weight: 900;
+}
+
+/* 6. Compact Footer */
+.bill-footer {
+    flex-shrink: 0;
+    padding: 10px 15px;
+    background: #050505;
+    border-top: 1px solid #222;
+}
+
+.bill-footer p {
+    font-size: 0.65rem;     /* Tiny text */
+    margin-bottom: 8px;
+    color: #555;
+    margin-top: 0;
+}
+
+/* Smaller Button */
+.bill-footer .btn {
+    width: 100%;
+    padding: 8px 0;         /* Slim button */
+    font-size: 0.9rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+/* --- Wrapper Position --- */
+.smart-wa-wrapper {
+    position: fixed;
+    bottom: 30px;
+    left: 30px; /* Adjusted to Left side */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+/* Wrapper Position */
+.smart-wa-wrapper {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* The Border Box Container */
+.qr-popup-box {
+    position: absolute;
+    bottom: 70px; /* Distance above button */
+    
+    /* Box Styling */
+    border: 2px solid #d4af37; /* Gold Border */
+    background: transparent;   /* No Background */
+    padding: 8px;              /* Space between border and QR */
+    border-radius: 15px;       /* Rounded Corners */
+    
+    /* Size */
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Hidden by default (Animation) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+/* The QR Image Styling */
+.qr-code-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 8px; /* Slightly rounds the image itself */
+}
+
+/* Hover Effect: Show Box */
+.smart-wa-wrapper:hover .qr-popup-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Button Styling (Gold) */
+.my-gold-button {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(45deg, #d4af37, #b49321);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-size: 28px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transition: transform 0.3s;
+}
+
+.my-gold-button:hover {
+    transform: scale(1.1);
+}
+/* --- 1. The Label 'تواصل معي' --- */
+.wa-label-text {
+    background: #000;       /* Black Background */
+    color: #d4af37;         /* Gold Text */
+    border: 1px solid #d4af37; /* Gold Border */
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Cairo', sans-serif;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    /* Simple Float Animation */
+    animation: floatLabel 2s ease-in-out infinite;
+}
+
+/* --- 2. The QR Popup --- */
+.qr-popup-box {
+    position: absolute;
+    bottom: 80px; /* Sits above the button */
+    left: 0;
+    background: #ffffff00;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #d4af37; /* Gold Border */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    width: 140px;
+    
+    /* Hidden State */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    pointer-events: none;
+}
+
+/* Logic: Show QR when hovering the Wrapper */
+.smart-wa-wrapper:hover .qr-popup-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Logic: Hide text label when QR opens (cleaner look) */
+.smart-wa-wrapper:hover .wa-label-text {
+    opacity: 0;
+}
+
+/* --- QR & Logo Formatting --- */
+.qr-content {
+    position: relative; /* Needed to center the logo */
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.qr-code {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* The Logo in the Middle */
+.qr-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;   /* Size of your logo inside QR */
+    height: 30px;
+    background: #fff;
+    padding: 2px;
+    border-radius: 50%; /* Makes it circular */
+    object-fit: contain;
+}
+
+.qr-popup-box p {
+    margin: 8px 0 0 0;
+    font-size: 11px;
+    color: #000;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Animation Keyframes */
+@keyframes floatLabel {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* --- Placeholder Style (Only if you don't use your own button) --- */
+.my-gold-button {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(45deg, #d4af37, #b49321); /* Gold Gradient */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-size: 28px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transition: transform 0.3s;
+}
+.my-gold-button:hover {
+    transform: scale(1.1) rotate(10deg);
 }

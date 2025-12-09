@@ -29,7 +29,7 @@ const translations = {
         whatsapp: "رقـم الواتسـاب ",
         yourproject: "تفـاصيل مشـروعـك",
         sendmsg: "إرسال الرسالة",
-        credit: "جميع الحقوق محفوظة &copy; 2025 كيرلس",
+        credit: "جميع الحقوق محفوظة © 2025 كيرلس",
         p1t: "مـصـر الحـضاره",
         p1i: "موقع متكامل يعرض الاماكن الاثريه",
         p2t: "موقع مطعم فاخر",
@@ -100,7 +100,7 @@ const translations = {
         whatsapp: "WhatsApp Number",
         yourproject: "Project Details",
         sendmsg: "Send Message",
-        credit: "All rights reserved &copy; 2025 Kyrillos",
+        credit: "All rights reserved © 2025 Kyrillos",
         p1t: "Egypt Tourism",
         p1i: "A comprehensive site showcasing historical places",
         p2t: "Luxury Restaurant Site",
@@ -505,16 +505,6 @@ window.addEventListener('scroll', () => {
 });
 
 /* =========================================
-   12. Tab Title Trick
-   ========================================= */
-let docTitle = document.title;
-window.addEventListener("blur", () => { document.title = "🥺 لا ترحل!"; });
-window.addEventListener("focus", () => {
-    document.title = "🔥 أهلاً بك مجدداً";
-    setTimeout(() => { document.title = docTitle; }, 2000);
-});
-
-/* =========================================
    13. Contact Form (EmailJS)
    ========================================= */
 const contactForm = document.querySelector('.contact-form');
@@ -819,3 +809,293 @@ document.addEventListener('mousemove', function(e) {
         char.remove();
     }, 2000);
 });
+
+/* =========================================
+   💰 Pop-Zoom Estimator Logic (Flexible)
+   ========================================= */
+let basePrice = 0;
+let addonsPrice = 0;
+let priceInterval;
+
+function selectType(price, card) {
+    // 1. Feature: Allow deselecting (Clicking again removes selection)
+    if (card.classList.contains('active')) {
+        card.classList.remove('active');
+        basePrice = 0; // Reset base price
+        updateTotal();
+        return; 
+    }
+
+    basePrice = price;
+
+    // Remove Active from other project types
+    const allTypes = document.querySelectorAll('.type-item');
+    allTypes.forEach(c => c.classList.remove('active'));
+
+    // Activate clicked card
+    card.classList.add('active');
+
+    updateTotal();
+}
+
+function toggleAddon(price, bubble) {
+    bubble.classList.toggle('active');
+
+    if (bubble.classList.contains('active')) {
+        addonsPrice += price;
+    } else {
+        addonsPrice -= price;
+    }
+    updateTotal();
+}
+
+function updateTotal() {
+    const totalElement = document.getElementById('totalPrice');
+    const priceContainer = document.querySelector('.bouncy-price');
+    const targetTotal = basePrice + addonsPrice;
+
+    if (priceInterval) clearInterval(priceInterval);
+
+    // Bounce animation
+    if(priceContainer) {
+        priceContainer.style.transform = "scale(1.2)";
+        setTimeout(() => { priceContainer.style.transform = "scale(1)"; }, 200);
+    }
+
+    let currentVal = parseInt(totalElement.innerText) || 0;
+    if (currentVal === targetTotal) return;
+
+    const stepTime = 16;
+    const increment = (targetTotal - currentVal) / 10;
+
+    priceInterval = setInterval(() => {
+        currentVal += increment;
+        if (Math.abs(targetTotal - currentVal) < 1) {
+            totalElement.innerText = targetTotal;
+            clearInterval(priceInterval);
+        } else {
+            totalElement.innerText = Math.floor(currentVal);
+        }
+    }, stepTime);
+}
+
+/* =========================================
+   🧾 Bill Generator (No Project Required)
+   ========================================= */
+
+function showBill() {
+    const billModal = document.getElementById('billModal');
+    const billItemsContainer = document.getElementById('billItems');
+    const billTotalEl = document.getElementById('billTotal');
+    
+    // Check Active Project & Addons
+    const activeProject = document.querySelector('.type-item.active');
+    const activeAddons = document.querySelectorAll('.pop-bubble.active');
+
+    // Validation: Must select AT LEAST one thing (Project OR Addon)
+    if (!activeProject && activeAddons.length === 0) {
+        showCustomAlert('من فضلك اختر خدمة واحدة على الأقل!', 'السلة فارغة');
+        return;
+    }
+
+    // Clear previous items
+    billItemsContainer.innerHTML = '';
+    let finalBillTotal = 0;
+
+    // --- A. Add Project (If selected) ---
+    if (activeProject) {
+        const projName = activeProject.querySelector('h4').innerText;
+        const projPriceText = activeProject.querySelector('.price-badge').innerText;
+        const projPriceVal = parseInt(projPriceText.replace(/[^0-9]/g, ''));
+
+        finalBillTotal += projPriceVal;
+
+        billItemsContainer.innerHTML += `
+            <div class="bill-row">
+                <span>🔹 ${projName}</span>
+                <span>${projPriceVal} EGP</span>
+            </div>
+        `;
+    }
+
+    // --- B. Add Addons ---
+    if (activeAddons.length > 0) {
+        // If no project selected, add a header for clarity
+        if(!activeProject) {
+             billItemsContainer.innerHTML += `<div class="bill-row" style="border:none; color:#888; font-size:0.8rem;"><span>خدمات فردية:</span></div>`;
+        }
+
+        activeAddons.forEach(addon => {
+            const addonName = addon.querySelector('span').innerText;
+            const addonPriceText = addon.querySelector('small').innerText;
+            const addonPriceVal = parseInt(addonPriceText.replace(/[^0-9]/g, ''));
+            
+            finalBillTotal += addonPriceVal;
+
+            billItemsContainer.innerHTML += `
+                <div class="bill-row">
+                    <span>🔸 ${addonName}</span>
+                    <span>${addonPriceVal} EGP</span>
+                </div>
+            `;
+        });
+    }
+
+    // --- C. Update Total ---
+    billTotalEl.innerText = finalBillTotal + " ج.م";
+
+    // Show Modal
+    billModal.classList.add('active');
+}
+
+function closeBill() {
+    document.getElementById('billModal').classList.remove('active');
+}
+
+// 3. Confirm on WhatsApp (Flexible Format)
+function confirmOrderOnWhatsApp() {
+    // Collect Data
+    const activeProject = document.querySelector('.type-item.active');
+    const totalText = document.getElementById('billTotal').innerText;
+    
+    let message = `مرحباً كيرلس 👋\nأريد تأكيد هذا الطلب:\n\n`;
+    message += `🧾 *فاتورة مبدئية*\n`;
+    message += `------------------\n`;
+
+    // Add Project Row IF exists
+    if (activeProject) {
+        const projName = activeProject.querySelector('h4').innerText;
+        const projPrice = activeProject.querySelector('.price-badge').innerText.replace(/[^0-9]/g, '');
+        message += `🔹 ${projName} : ${projPrice} EGP\n`;
+    }
+
+    // Add Addons
+    const addons = document.querySelectorAll('.pop-bubble.active');
+    if (addons.length > 0) {
+        if(activeProject) message += `\n*--- الإضافات ---*\n`;
+        addons.forEach(addon => {
+            const name = addon.querySelector('span').innerText;
+            const price = addon.querySelector('small').innerText.replace(/[^0-9]/g, '');
+            message += `🔸 ${name} : ${price} EGP\n`;
+        });
+    }
+
+    message += `------------------\n`;
+    message += `💰 *الإجمالي : ${totalText}*\n\n`;
+    message += `هل يمكننا البدء؟`;
+
+    const url = `https://wa.me/201275944732?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+/* =========================================
+   🧾 Bill Generator Logic
+   ========================================= */
+
+// 1. Show Bill Function (Flexible)
+function showBill() {
+    const billModal = document.getElementById('billModal');
+    const billItemsContainer = document.getElementById('billItems');
+    const billTotalEl = document.getElementById('billTotal');
+    
+    // فحص العناصر النشطة
+    const activeProject = document.querySelector('.type-item.active');
+    const activeAddons = document.querySelectorAll('.pop-bubble.active');
+
+    // 🛑 التعديل هنا: السماح بالمرور إذا كان هناك مشروع أو إضافات 🛑
+    if (!activeProject && activeAddons.length === 0) {
+        showCustomAlert('من فضلك اختر خدمة واحدة على الأقل!', 'السلة فارغة');
+        return;
+    }
+
+    // تنظيف الفاتورة
+    billItemsContainer.innerHTML = '';
+    let finalBillTotal = 0;
+
+    // A. إضافة المشروع (فقط إذا تم اختياره)
+    if (activeProject) {
+        const projName = activeProject.querySelector('h4').innerText;
+        const projPriceText = activeProject.querySelector('.price-badge').innerText;
+        const projPriceVal = parseInt(projPriceText.replace(/[^0-9]/g, ''));
+
+        finalBillTotal += projPriceVal;
+
+        billItemsContainer.innerHTML += `
+            <div class="bill-row">
+                <span>🔹 ${projName}</span>
+                <span>${projPriceVal} EGP</span>
+            </div>
+        `;
+    }
+
+    // B. إضافة الإضافات
+    if (activeAddons.length > 0) {
+        // إذا لم يختر مشروعاً، نضع عنواناً توضيحياً
+        if(!activeProject) {
+             billItemsContainer.innerHTML += `<div class="bill-row" style="border:none; color:#888; font-size:0.8rem;"><span>خدمات فردية (Add-ons):</span></div>`;
+        }
+
+        activeAddons.forEach(addon => {
+            const addonName = addon.querySelector('span').innerText;
+            const addonPriceText = addon.querySelector('small').innerText;
+            const addonPriceVal = parseInt(addonPriceText.replace(/[^0-9]/g, ''));
+            
+            finalBillTotal += addonPriceVal;
+
+            billItemsContainer.innerHTML += `
+                <div class="bill-row">
+                    <span>🔸 ${addonName}</span>
+                    <span>${addonPriceVal} EGP</span>
+                </div>
+            `;
+        });
+    }
+
+    // C. تحديث الإجمالي
+    billTotalEl.innerText = finalBillTotal + " ج.م";
+
+    // إظهار النافذة
+    billModal.classList.add('active');
+}
+
+// 2. Close Bill Function
+function closeBill() {
+    document.getElementById('billModal').classList.remove('active');
+}
+
+// 3. Confirm on WhatsApp (Smart Format)
+function confirmOrderOnWhatsApp() {
+    // تجميع البيانات (مع التأكد من وجود مشروع أم لا)
+    const activeProject = document.querySelector('.type-item.active');
+    const totalText = document.getElementById('billTotal').innerText;
+    
+    let message = `مرحباً كيرلس 👋\nأريد تأكيد هذا الطلب:\n\n`;
+    message += `🧾 *فاتورة مبدئية*\n`;
+    message += `------------------\n`;
+
+    // 1. إضافة المشروع للفاتورة (إن وجد)
+    if (activeProject) {
+        const projName = activeProject.querySelector('h4').innerText;
+        const projPrice = activeProject.querySelector('.price-badge').innerText.replace(/[^0-9]/g, '');
+        message += `🔹 ${projName} : ${projPrice} EGP\n`;
+    }
+
+    // 2. إضافة الإضافات
+    const addons = document.querySelectorAll('.pop-bubble.active');
+    if (addons.length > 0) {
+        // فاصل شكلي لو فيه مشروع وإضافات
+        if(activeProject) message += `\n*--- الإضافات ---*\n`;
+        
+        addons.forEach(addon => {
+            const name = addon.querySelector('span').innerText;
+            const price = addon.querySelector('small').innerText.replace(/[^0-9]/g, '');
+            message += `🔸 ${name} : ${price} EGP\n`;
+        });
+    }
+
+    message += `------------------\n`;
+    message += `💰 *الإجمالي : ${totalText}*\n\n`;
+    message += `هل يمكننا البدء؟`;
+
+    const url = `https://wa.me/201275944732?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}

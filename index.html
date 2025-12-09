@@ -68,7 +68,7 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a href="#home" data-lang="nav_home">الرئيسية</a></li>
-            <li><a href="#services" data-lang="nav_services">خدماتي</a></li>
+            <li><a href="#estimator" data-lang="nav_price">اسعارى</a></li>
             <li><a href="#work" data-lang="nav_project">أعمالي</a></li>
             <li><a href="#contact" data-lang="nav_contact">راسلنى</a></li>
         </ul>
@@ -397,7 +397,114 @@
             </div>
         </div>
     </section>
+<section class="section" id="estimator">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">اختر مكونات مشروعك</h2>
+        
+        <div class="estimator-box fun-glass" data-aos="zoom-in-up">
+            
+            <div class="est-header">
+                <h3><i class="fas fa-cubes"></i> اختر الباقة الأساسية:</h3>
+            </div>
 
+            <div class="pop-grid types-area">
+                <div class="pop-card type-item" onclick="selectType(400, this)">
+                    <i class="fas fa-rocket"></i>
+                    <h4>Landing Page</h4>
+                    <span class="price-badge">400 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(600, this)">
+                    <i class="fas fa-id-card"></i>
+                    <h4>CV / Portfolio</h4>
+                    <span class="price-badge">600 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(1000, this)">
+                    <i class="fas fa-blog"></i>
+                    <h4>مدونة شخصية</h4>
+                    <span class="price-badge">1000 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(1500, this)">
+                    <i class="fas fa-building"></i>
+                    <h4>موقع شركة (Start)</h4>
+                    <span class="price-badge">1500 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(2500, this)">
+                    <i class="fas fa-city"></i>
+                    <h4>موقع شركة (Pro)</h4>
+                    <span class="price-badge">2500 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(3000, this)">
+                    <i class="fas fa-store"></i>
+                    <h4>متجر (Basic)</h4>
+                    <span class="price-badge">3000 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(5000, this)">
+                    <i class="fas fa-gem"></i>
+                    <h4>متجر (Premium)</h4>
+                    <span class="price-badge">5000 ج.م</span>
+                </div>
+                <div class="pop-card type-item" onclick="selectType(200, this)">
+                    <i class="fas fa-wrench"></i>
+                    <h4>إصلاحات / Bug Fix</h4>
+                    <span class="price-badge">200 ج.م</span>
+                </div>
+                
+                
+            </div>
+
+            <hr class="est-divider-glow">
+
+            <div class="est-header">
+                <h3><i class="fas fa-magic"></i> دلّع مشروعك (إضافات):</h3>
+            </div>
+            
+            <div class="pop-grid addons-area">
+                <div class="pop-bubble" onclick="toggleAddon(200, this)">
+                    <span>🎨 لوجو احترافي</span> <small>+200</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(150, this)">
+                    <span>🌙 وضع ليلي (Dark)</span> <small>+150</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(300, this)">
+                    <span>🌐 لغة ثانية (En)</span> <small>+300</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(200, this)">
+                    <span>🔍 SEO جوجل</span> <small>+200</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(100, this)">
+                    <span>⚡ تسريع خارق</span> <small>+100</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(150, this)">
+                    <span>💬 زر واتساب</span> <small>+150</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(200, this)">
+                    <span>☁️ حجز استضافة</span> <small>+200</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(500, this)">
+                    <span>🚀 تسليم مستعجل</span> <small>+500</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(150, this)">
+                    <span>🔗 سوشيال ميديا</span> <small>+150</small>
+                </div>
+                <div class="pop-bubble" onclick="toggleAddon(100, this)">
+                    <span>🔒 حماية SSL</span> <small>+100</small>
+                </div>
+                
+            </div>
+
+            <div class="est-result-bar">
+                <div class="result-text">
+                    <span style="font-size:0.9rem; color:#888;">الإجمالي المتوقع:</span>
+                    <div class="bouncy-price"><span id="totalPrice">0</span> ج.م</div>
+                </div>
+                <button class="btn primary small-btn" onclick="showBill()">
+    أنا جاهز، اصدر الفاتورة! <i class="fas fa-file-invoice"></i>
+</button>   
+            </div>
+
+        </div>
+    </div>
+</section>
     <section id="contact" class="section">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up" data-lang="co_me">تواصل معي</h2>
@@ -425,7 +532,18 @@
     </section>
 
     <footer><p data-lang="credit">جميع الحقوق محفوظة &copy; 2025 كيرلس</p></footer>
-    <a href="https://wa.me/201275944732" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i></a>
+    
+    <div class="smart-wa-wrapper">
+    
+    <div class="qr-popup-box">
+        <img src="qr-code.png" class="qr-code-img" alt="Scan">
+    </div>
+
+    <a href="https://wa.me/201xxxxxxxxx" class="my-gold-button">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+</div>
 
     <div id="contextMenu" class="context-menu">
         <ul>
@@ -473,5 +591,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="script.js"></script>
+    <div id="billModal" class="bill-overlay">
+    <div class="bill-container glass">
+        <div class="bill-header">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <h2>ملخص الطلب (Invoice)</h2>
+            <span class="close-bill" onclick="closeBill()">&times;</span>
+        </div>
+
+        <div class="bill-body">
+            <div class="bill-row header-row">
+                <span>البيان / Item</span>
+                <span>السعر / Price</span>
+            </div>
+            
+            <div id="billItems"></div>
+
+            <hr class="bill-divider">
+            
+            <div class="bill-row total-row">
+                <span>الإجمالي النهائي:</span>
+                <span id="billTotal" class="gold-text">0 ج.م</span>
+            </div>
+        </div>
+
+        <div class="bill-footer">
+            <p>عند تأكيد الطلب، سيتم تحويلك للواتساب بهذه التفاصيل.</p>
+            <button class="btn primary full-width" onclick="confirmOrderOnWhatsApp()">
+                <i class="fab fa-whatsapp"></i> تأكيد وإرسال الفاتورة
+            </button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
