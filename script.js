@@ -1013,61 +1013,86 @@ function closeBill() {
 }
 
 /* =========================================
-   🚀 COOL WHATSAPP RECEIPT GENERATOR
+   💎 ULTIMATE WHATSAPP INVOICE (WITH ICONS)
    ========================================= */
 function confirmOrderOnWhatsApp() {
-    // 1. Collect Data
+    
+    // --- 1. Helpher: Convert FontAwesome Class to Emoji ---
+    // This looks at the icon inside your selected card and picks an emoji
+    function getEmoji(element) {
+        if(!element) return '⚡';
+        const icon = element.querySelector('i');
+        if(!icon) return '⚡';
+        const cls = icon.className;
+
+        if(cls.includes('globe') || cls.includes('laptop')) return '🌐'; // Website
+        if(cls.includes('mobile')) return '📱'; // App
+        if(cls.includes('shopping')) return '🛒'; // E-commerce
+        if(cls.includes('paint')) return '🎨'; // Design
+        if(cls.includes('search') || cls.includes('google')) return '🔍'; // SEO
+        if(cls.includes('lock') || cls.includes('shield')) return '🛡️'; // Security
+        if(cls.includes('bolt') || cls.includes('rocket')) return '🚀'; // Speed
+        if(cls.includes('server') || cls.includes('database')) return '💾'; // Hosting
+        if(cls.includes('language') || cls.includes('comment')) return '💬'; // Multi-lang
+        
+        return '⚡'; // Default fallback
+    }
+
+    // --- 2. Collect Data ---
     const activeProject = document.querySelector('.type-item.active');
     const totalText = document.getElementById('billTotal').innerText;
     const activeAddons = document.querySelectorAll('.pop-bubble.active');
-    
-    // Get Current Date (Egyptian Format)
-    const date = new Date().toLocaleDateString('ar-EG');
+    const date = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    // 2. Build the Message (The Cool Part)
-    let message = `*مرحباً كيرلس* 👋\n`;
-    message += `أرغب في بدء مشروع جديد، إليك التفاصيل:\n\n`;
+    // --- 3. Build The "Cyber Receipt" ---
+    let message = `*👋 مرحباً كيرلس* \n`;
+    message += `أريد تأكيد طلب جديد، إليك الفاتورة:\n\n`;
 
-    // --- Header ---
-    message += `━━━━━━━━━━━━━━━━━━\n`;
-    message += `🧾  *فــاتــورة مــبــدئــيــة* \n`;
-    message += `📅  التاريخ: ${date} \n`;
-    message += `━━━━━━━━━━━━━━━━━━\n\n`;
+    // HEADER
+    message += `╔══════════════════╗\n`;
+    message += `║   🧾 *DIGITAL INVOICE* ║\n`;
+    message += `║   📅 ${date} • ${time}   ║\n`;
+    message += `╚══════════════════╝\n\n`;
 
-    // --- Core Service ---
+    // MAIN PROJECT
     if (activeProject) {
         const projName = activeProject.querySelector('h4').innerText;
         const projPrice = activeProject.querySelector('.price-badge').innerText.replace(/[^0-9]/g, '');
-        
-        message += `📌 *الخدمة الأساسية:*\n`;
-        message += `💠 *${projName}*\n`;
-        message += `   └─ 💰 ${projPrice} ج.م\n\n`;
+        const emoji = getEmoji(activeProject);
+
+        message += `📦 *الخدمة الأساسية:*\n`;
+        message += `━━━━━━━━━━━━━━━━━━\n`;
+        message += `${emoji} *${projName}*\n`;
+        message += `   └─ 🏷️ ${projPrice} EGP\n\n`;
     }
 
-    // --- Addons (If Any) ---
+    // ADDONS
     if (activeAddons.length > 0) {
-        message += `🔌 *الإضافات المختارة:*\n`;
+        message += `🔌 *الإضافات والتحسينات:*\n`;
+        message += `━━━━━━━━━━━━━━━━━━\n`;
+        
         activeAddons.forEach(addon => {
-            // Get text clean without extra spaces
-            const name = addon.querySelector('span').innerText.trim(); 
+            const name = addon.querySelector('span').innerText.trim();
             const price = addon.querySelector('small').innerText.replace(/[^0-9]/g, '');
-            
-            message += `🔸 ${name}\n`;
-            message += `   └─ 💰 ${price} ج.م\n`;
+            const emoji = getEmoji(addon);
+
+            message += `${emoji} ${name}\n`;
+            message += `   └─ 🏷️ +${price} EGP\n`;
         });
         message += `\n`;
     }
 
-    // --- Total Section ---
-    message += `━━━━━━━━━━━━━━━━━━\n`;
-    message += `💵 *الإجــمــالــي الــمــتــوقــع:*\n`;
-    message += `👉   *${totalText}* 👈\n`;
-    message += `━━━━━━━━━━━━━━━━━━\n\n`;
+    // TOTAL
+    message += `╭──────────────────╮\n`;
+    message += `│  💰 *الإجــمــالــي:* \n`;
+    message += `│  👉 *${totalText}* \n`;
+    message += `╰──────────────────╯\n\n`;
 
-    // --- Footer ---
-    message += `🚀 *هل يمكننا البدء في التنفيذ؟*`;
+    // FOOTER
+    message += `🚀 *بانتظار تأكيدك للبدء فوراً!*`;
 
-    // 3. Send to WhatsApp
+    // --- 4. Send ---
     const url = `https://wa.me/201275944732?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
 }
