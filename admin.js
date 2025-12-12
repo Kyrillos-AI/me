@@ -291,12 +291,27 @@ db.collection("projects").orderBy("date", "desc").onSnapshot((snapshot) => {
     });
 });
 
+/* =========================================
+   🗑️ PROJECT DELETE LOGIC (WITH CUSTOM ALERT)
+   ========================================= */
 window.deleteProject = function(id) {
-    if(confirm("هل أنت متأكد من حذف هذا المشروع؟")) {
-        db.collection("projects").doc(id).delete().catch(err => showAlert("خطأ: " + err, "خطأ"));
-    }
+    
+    // Call our custom confirmation box
+    showConfirm(
+        "حذف المشروع؟", 
+        "سيتم حذف هذا المشروع نهائياً من المعرض. هل أنت متأكد؟",
+        
+        // This runs only if they click "Yes"
+        function() {
+            db.collection("projects").doc(id).delete().then(() => {
+                showAlert("تم حذف المشروع بنجاح!", "تم الحذف", "fa-trash");
+            }).catch(err => {
+                console.error(err);
+                showAlert("حدث خطأ أثناء الحذف: " + err.message, "خطأ");
+            });
+        }
+    );
 }
-
 /* =========================================
    🔥 DASHBOARD TABS LOGIC (FIXED) 🔥
    ========================================= */
@@ -386,10 +401,14 @@ function changePassword() {
         btn.disabled = false;
     });
 }
-/* --- 📸 Profile Image Logic --- */
+
+/* --- 📸 Profile Image Logic (FIXED) --- */
 const profileDrop = document.getElementById('profileDropZone');
 const profileInput = document.getElementById('profileFile');
 const profilePreview = document.getElementById('profilePreview');
+// Select the text content inside the box
+const profileContent = document.querySelector('#profileDropZone .drop-content'); 
+
 let selectedProfileFile = null;
 
 if(profileDrop) profileDrop.addEventListener('click', () => profileInput.click());
@@ -402,6 +421,9 @@ if(profileInput) profileInput.addEventListener('change', (e) => {
         reader.onload = (e) => {
             profilePreview.src = e.target.result;
             profilePreview.classList.remove('hidden');
+            
+            // ✅ FIX: Hide the text explicitly
+            if(profileContent) profileContent.style.display = 'none';
         };
         reader.readAsDataURL(file);
     }
@@ -422,287 +444,78 @@ document.getElementById('saveProfileBtn').addEventListener('click', function() {
             image: reader.result,
             isCustom: true
         }, { merge: true }).then(() => {
-            showAlert("تم تحديث الصورة!", "نجاح");
+            showAlert("تم تحديث الصورة!", "نجاح", "fa-check-circle");
             btn.innerHTML = oldHtml;
         });
     };
 });
 
-// Delete (Reset) Function
+/* =========================================
+   🛑 CUSTOM CONFIRMATION FUNCTION (YES/NO)
+   ========================================= */
+function showConfirm(title, message, yesCallback) {
+    const modal = document.getElementById('confirmModal');
+    const titleEl = document.getElementById('confirmTitle');
+    const msgEl = document.getElementById('confirmMsg');
+    const yesBtn = document.getElementById('btnConfirmYes');
+    const noBtn = document.getElementById('btnConfirmNo');
+
+    // 1. Set the Text
+    if(titleEl) titleEl.innerText = title;
+    if(msgEl) msgEl.innerText = message;
+
+    // 2. Show the Modal
+    if(modal) modal.classList.add('active');
+
+    // 3. Handle "Yes" Click
+    yesBtn.onclick = function() {
+        if(modal) modal.classList.remove('active');
+        yesCallback(); // Run the actual delete code
+    };
+
+    // 4. Handle "No" Click
+    noBtn.onclick = function() {
+        if(modal) modal.classList.remove('active');
+    };
+}
+
+/* =========================================
+   📸 PROFILE DELETE LOGIC (USING THE NEW ALERT)
+   ========================================= */
 document.getElementById('deleteProfileBtn').addEventListener('click', function() {
-    if(confirm("هل تريد العودة للصورة الأصلية؟")) {
-        db.collection("settings").doc("profile").set({
-            image: null,
-            isCustom: false
-        }, { merge: true }).then(() => {
-            showAlert("تم استرجاع الصورة الافتراضية", "تم");
-            profilePreview.classList.add('hidden');
-            profilePreview.src = "";
-        });
-    }
-});
-/* =========================================
-   💰 FINAL CALCULATOR LOGIC (v3 - No Conflicts)
-   ========================================= */
-
-// 1. Load Data Immediately
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait 1 second for Firebase to initialize
-    setTimeout(loadCalcData, 1000);
-});
-
-// 2. Load Data Function
-function loadCalcData() {
-    console.log("Loading Calculator Data...");
-    const serviceList = document.getElementById('adminServicesList');
-    const addonList = document.getElementById('adminAddonsList');
-
-    // Show loading state
-    serviceList.innerHTML = '<p style="color:#666; text-align:center;">جاري التحميل...</p>';
-
-    db.collection("settings").doc("calculator_v3").get().then((doc) => {
-        // Clear loading text
-        serviceList.innerHTML = "";
-        addonList.innerHTML = "";
-
-        if (doc.exists) {
-            const data = doc.data();
-
-            // Load Services
-            if (data.services && data.services.length > 0) {
-                data.services.forEach(item => {
-                    createRow('adminServicesList', item.name, item.price, item.icon, 'service-row');
-                });
-            }
-
-            // Load Addons
-            if (data.addons && data.addons.length > 0) {
-                data.addons.forEach(item => {
-                    createRow('adminAddonsList', item.name, item.price, item.icon, 'addon-row');
-                });
-            }
-        }
-    }).catch(error => {
-        console.error("Error loading calc data:", error);
-        serviceList.innerHTML = '<p style="color:red;">خطأ في التحميل</p>';
-    });
-}
-
-// 3. Add Service Button Logic
-function addNewService() {
-    const name = document.getElementById('newServName').value;
-    const price = document.getElementById('newServPrice').value;
-    const icon = document.getElementById('newServIcon').value;
-
-    if (!name || !price) {
-        showAlert("يرجى كتابة الاسم والسعر", "بيانات ناقصة");
-        return;
-    }
-
-    createRow('adminServicesList', name, price, icon, 'service-row');
     
-    // Clear Inputs
-    document.getElementById('newServName').value = "";
-    document.getElementById('newServPrice').value = "";
-}
-
-// 4. Add Addon Button Logic
-function addNewAddon() {
-    const name = document.getElementById('newAddonName').value;
-    const price = document.getElementById('newAddonPrice').value;
-    const icon = document.getElementById('newAddonIcon').value;
-
-    if (!name || !price) {
-        showAlert("يرجى كتابة الاسم والسعر", "بيانات ناقصة");
-        return;
-    }
-
-    createRow('adminAddonsList', name, price, icon, 'addon-row');
-
-    // Clear Inputs
-    document.getElementById('newAddonName').value = "";
-    document.getElementById('newAddonPrice').value = "";
-}
-
-// 5. Create Row Helper (The Visual Part)
-function createRow(containerID, name, price, icon, typeClass) {
-    const container = document.getElementById(containerID);
-    const div = document.createElement('div');
-    
-    // Use the CSS class we added in Step 1
-    div.className = `calc-row ${typeClass}`;
-    
-    div.innerHTML = `
-        <div style="text-align:center; font-size:1.2rem; color:var(--gold);">
-            <i class="fas ${icon}"></i>
-        </div>
+    // Call our new custom function instead of window.confirm()
+    showConfirm(
+        "حذف الصورة الشخصية؟", 
+        "سيتم استرجاع الصورة الافتراضية فوراً. هل أنت متأكد؟",
         
-        <input type="text" class="p-name" value="${name}">
-        <input type="number" class="p-price" value="${price}">
-        <input type="hidden" class="p-icon" value="${icon}">
-        
-        <button onclick="deleteRow(this)" class="btn-del" style="padding:5px 10px;">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    
-    container.appendChild(div);
-}
-
-// 6. Delete Row Function
-window.deleteRow = function(btn) {
-    if(confirm("هل تريد حذف هذا العنصر؟ (يجب الضغط على حفظ لتأكيد الحذف)")) {
-        btn.closest('.calc-row').remove();
-    }
-}
-
-// 7. Save Everything Function
-window.saveAllCalculatorData = function() {
-    const btn = document.getElementById('saveDynamicPricesBtn');
-    const oldText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-    // 1. Scrape Services
-    const services = [];
-    document.querySelectorAll('.service-row').forEach(row => {
-        services.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    // 2. Scrape Addons
-    const addons = [];
-    document.querySelectorAll('.addon-row').forEach(row => {
-        addons.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    // 3. Send to Firebase
-    db.collection("settings").doc("calculator_v3").set({
-        services: services,
-        addons: addons
-    }).then(() => {
-        showAlert("تم تحديث الموقع بنجاح!", "تم الحفظ", "fa-check-circle");
-        btn.innerHTML = oldText;
-    }).catch(err => {
-        console.error("Save failed:", err);
-        showAlert("حدث خطأ في الحفظ", "خطأ");
-        btn.innerHTML = oldText;
-    });
-}
-/* =========================================
-   💰 CALCULATOR LOGIC (FINAL & ROBUST)
-   ========================================= */
-
-// 1. ADD SERVICE (VISUAL)
-function addNewService() {
-    const name = document.getElementById('newServName').value;
-    const price = document.getElementById('newServPrice').value;
-    const icon = document.getElementById('newServIcon').value;
-
-    if (!name || !price) { showAlert("يرجى ملء الاسم والسعر!", "خطأ"); return; }
-
-    // Create the row HTML
-    createRow('adminServicesList', name, price, icon, 'service-row');
-
-    // Reset inputs
-    document.getElementById('newServName').value = "";
-    document.getElementById('newServPrice').value = "";
-}
-
-// 2. ADD ADDON (VISUAL)
-function addNewAddon() {
-    const name = document.getElementById('newAddonName').value;
-    const price = document.getElementById('newAddonPrice').value;
-    const icon = document.getElementById('newAddonIcon').value;
-
-    if (!name || !price) { showAlert("يرجى ملء الاسم والسعر!", "خطأ"); return; }
-
-    createRow('adminAddonsList', name, price, icon, 'addon-row');
-
-    document.getElementById('newAddonName').value = "";
-    document.getElementById('newAddonPrice').value = "";
-}
-
-// 3. HELPER: CREATE ROW HTML
-function createRow(containerID, name, price, icon, rowClass) {
-    const container = document.getElementById(containerID);
-    const div = document.createElement('div');
-    div.className = rowClass; // Used for saving later
-    div.style.cssText = "display: grid; grid-template-columns: 40px 2fr 1fr auto; gap: 10px; align-items: center; background: #111; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #333;";
-    
-    div.innerHTML = `
-        <div style="text-align:center;"><i class="fas ${icon}" style="color:var(--gold); font-size:1.2rem;"></i></div>
-        <input type="text" class="p-name" value="${name}" style="background:transparent; border:none; color:#fff;">
-        <input type="number" class="p-price" value="${price}" style="background:transparent; border:none; color:var(--gold); font-weight:bold;">
-        <input type="hidden" class="p-icon" value="${icon}">
-        <button onclick="this.parentElement.remove()" style="background:#ff2e63; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button>
-    `;
-    container.appendChild(div);
-}
-
-// 4. SAVE ALL TO DATABASE
-function saveAllCalculatorData() {
-    const btn = document.getElementById('saveDynamicPricesBtn');
-    const oldText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-    // Collect Services
-    const services = [];
-    document.querySelectorAll('.service-row').forEach(row => {
-        services.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    // Collect Addons
-    const addons = [];
-    document.querySelectorAll('.addon-row').forEach(row => {
-        addons.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    // Save to Firestore (Collection: settings, Doc: calculator_v3)
-    db.collection("settings").doc("calculator_v3").set({
-        services: services,
-        addons: addons
-    }).then(() => {
-        showAlert("تم تحديث الحاسبة بنجاح!", "تم الحفظ");
-        btn.innerHTML = oldText;
-    }).catch(err => {
-        console.error(err);
-        showAlert("حدث خطأ في الاتصال", "خطأ");
-        btn.innerHTML = oldText;
-    });
-}
-
-// 5. LOAD DATA ON STARTUP
-function loadCalcData() {
-    db.collection("settings").doc("calculator_v3").get().then((doc) => {
-        if (doc.exists) {
-            const data = doc.data();
-            // Clear lists first
-            document.getElementById('adminServicesList').innerHTML = "";
-            document.getElementById('adminAddonsList').innerHTML = "";
-
-            if (data.services) data.services.forEach(s => createRow('adminServicesList', s.name, s.price, s.icon, 'service-row'));
-            if (data.addons) data.addons.forEach(a => createRow('adminAddonsList', a.name, a.price, a.icon, 'addon-row'));
+        // This code ONLY runs if "Yes" is clicked
+        function() {
+            db.collection("settings").doc("profile").set({
+                image: null,
+                isCustom: false
+            }, { merge: true }).then(() => {
+                
+                // Show your existing Success Alert
+                showAlert("تم استرجاع الصورة الافتراضية بنجاح", "تم الحذف", "fa-trash");
+                
+                // Reset Preview Image
+                const profilePreview = document.getElementById('profilePreview');
+                const profileContent = document.querySelector('#profileDropZone .drop-content');
+                
+                if(profilePreview) {
+                    profilePreview.classList.add('hidden');
+                    profilePreview.src = "";
+                }
+                // Show the "Upload" text again
+                if(profileContent) {
+                    profileContent.style.display = 'block';
+                }
+            });
         }
-    });
-}
+    );
+});
 
-// Run load when page is ready
-document.addEventListener('DOMContentLoaded', () => setTimeout(loadCalcData, 1000));
 /* =========================================
    💰 ROBUST CALCULATOR LOGIC (V3)
    ========================================= */

@@ -99,6 +99,9 @@
      <header class="admin-header">
                 <h2><i class="fas fa-microchip"></i> مركز التحكم</h2>
                 <div class="status-badge">SYSTEM: ONLINE</div>
+                <button class="mobile-logout-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-sign-out-alt"></i> خروج
+    </button>
             </header>
         <div id="add-project" class="tab-section" style="display:none;">
             <div class="admin-card glass-panel">
@@ -171,28 +174,29 @@
             <label><i class="fab fa-facebook-f"></i> فيسبوك</label>
             <input type="text" id="fbLink" placeholder="رابط فيسبوك">
         </div>
+
         <div class="input-group">
             <label><i class="fab fa-instagram"></i> انستجرام</label>
             <input type="text" id="instaLink" placeholder="رابط انستجرام">
         </div>
+
+        <div class="input-group">
+            <label><i class="fab fa-whatsapp"></i> واتساب</label>
+            <input type="text" id="waLink" placeholder="https://wa.me/...">
+        </div>
+
+ <div class="input-group">
+           <label><i class="fab fa-tiktok"></i> تيك توك</label>
+           <input type="text" id="tiktokLink" placeholder="رابط تيك توك">
+       </div>
     </div>
 
     <div class="row-group">
-        <div class="input-group">
-            <label><i class="fab fa-whatsapp"></i> واتساب (رابط كامل)</label>
-            <input type="text" id="waLink" placeholder="https://wa.me/...">
-        </div>
         <div class="input-group">
             <label><i class="fab fa-github"></i> جيت هب</label>
             <input type="text" id="gitLink" placeholder="رابط GitHub">
         </div>
     </div>
-
-    <div class="input-group">
-        <label><i class="fab fa-tiktok"></i> تيك توك</label>
-        <input type="text" id="tiktokLink" placeholder="رابط تيك توك">
-    </div>
-
     <button class="btn-cyber" id="saveSocialsBtn" style="border-color: #000000; color: #000000;">
         <span class="btn-text">حفظ الروابط</span>
         <i class="fas fa-save"></i>
@@ -327,18 +331,7 @@
     </div></div>  
 </section>
     </main>
-        <div class="container">
-           
-
-            <div class="dashboard-wrapper">
-
-    
-
-    
-
-</div>
-
-            </div>
+        
         </div>
     </div>
 
@@ -350,7 +343,20 @@
             <button class="btn-cyber small-btn" onclick="closeAlert()">حسناً</button>
         </div>
     </div>
-
+<div id="confirmModal" class="alert-overlay">
+    <div class="alert-box glass-panel" style="border-color: #ff2e63;">
+        <div class="alert-icon-box" style="color: #ff2e63;">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 id="confirmTitle" style="color:#fff;">هل أنت متأكد؟</h3>
+        <p id="confirmMsg" style="color:#bbb;">سيتم حذف الصورة والعودة للصورة الأصلية.</p>
+        
+        <div class="confirm-actions" style="display:flex; gap:15px; justify-content:center; margin-top:20px;">
+            <button id="btnConfirmYes" class="btn-del" style="padding:10px 30px;">نعم، احذف</button>
+            <button id="btnConfirmNo" class="btn-cyber" style="border-color:#555; color:#aaa; background:transparent; padding:10px 30px;">إلغاء</button>
+        </div>
+    </div>
+</div>
     <script src="admin.js"></script>
 
     </body>

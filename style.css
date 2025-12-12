@@ -155,42 +155,6 @@ a { text-decoration: none; color: inherit; }
     box-shadow: 0 0 10px var(--gold-main);
 }
 
-/* --- MOBILE ADJUSTMENTS --- */
-@media (max-width: 900px) {
-    /* On mobile menu, we want BIG icons with text next to them */
-    .nav-links li { width: auto; }
-    
-    .nav-icon {
-        width: auto; height: auto;
-        background: transparent;
-        font-size: 2.5rem; /* Huge icons */
-        flex-direction: column;
-        gap: 10px;
-        border-radius: 0;
-    }
-    
-    .nav-icon:hover { 
-        background: transparent; 
-        box-shadow: none;
-        transform: scale(1.1);
-    }
-
-    /* Show text on mobile permanently, not as tooltip */
-    .nav-icon::before {
-        position: static;
-        transform: none;
-        opacity: 1;
-        visibility: visible;
-        background: transparent;
-        color: #fff;
-        font-size: 1.5rem;
-        box-shadow: none;
-    }
-    
-    .nav-icon:hover::before {
-        color: var(--gold-main);
-    }
-}
 /* =========================================
    ⏱️ NAV CLOCK WITH ROTATING BORDER ⏱️
    ========================================= */
@@ -264,18 +228,6 @@ a { text-decoration: none; color: inherit; }
 
 /* Mobile */
 .hamburger { display: none; font-size: 1.5rem; color: var(--gold-main); cursor: pointer; }
-
-@media (max-width: 768px) {
-    .nav-container { padding: 15px 25px; border-radius: 20px; }
-    .hamburger { display: block; }
-    .nav-links {
-        position: absolute; top: 100%; left: 0; right: 0; margin-top: 10px;
-        background: rgba(10, 10, 10, 0.95); border-radius: 20px;
-        flex-direction: column; padding: 20px; gap: 15px; text-align: center;
-        display: none; border: 1px solid var(--gold-main);
-    }
-    .nav-links.active { display: flex; }
-}
 
 /* =========================================
    3. CLEAN TIKTOK GLITCH (NO BOX)
@@ -429,6 +381,13 @@ a { text-decoration: none; color: inherit; }
 }
 
 .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
+
+/* --- ANIMATIONS --- */
+@keyframes rotate1 { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); } }
+@keyframes rotate2 { 0% { transform: rotateX(60deg) rotateY(0deg); } 100% { transform: rotateX(60deg) rotateY(360deg); } }
+@keyframes rotate3 { 0% { transform: rotateX(-60deg) rotateY(0deg); } 100% { transform: rotateX(-60deg) rotateY(360deg); } }
+
+
 /* =========================================
    4. HERO SECTION
    ========================================= */
@@ -726,66 +685,6 @@ a { text-decoration: none; color: inherit; }
     background-repeat: no-repeat;
     background-position: center;
 }
-
-/* =========================================
-   🔥 FULL UNIT GLITCH LOGIC 🔥
-   ========================================= */
-
-.glitch-layer {
-    opacity: 0; 
-    z-index: -1;
-    pointer-events: none;
-    mix-blend-mode: screen; /* Blends colors nicely */
-}
-
-/* Remove shadows from ghost rings to avoid "Box Effect" */
-.glitch-layer .reactor-ring {
-    box-shadow: none !important;
-}
-
-/* Red Shift Layer */
-.glitch-layer.red {
-    opacity: 1;
-    /* Turns everything Pink/Red */
-    filter: sepia(100%) saturate(300%) hue-rotate(360deg);
-    /* Glitches the WHOLE container (Rings + Logo) */
-    animation: tiktok-glitch-1 2.5s infinite steps(2) alternate-reverse;
-}
-
-/* Blue Shift Layer */
-.glitch-layer.blue {
-    opacity: 1;
-    /* Turns everything Cyan/Blue */
-    filter: sepia(100%) saturate(300%) hue-rotate(180deg);
-    animation: tiktok-glitch-2 0.8infinite steps(2) alternate-reverse;
-}
-
-/* --- ANIMATIONS --- */
-@keyframes rotate1 { 0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); } }
-@keyframes rotate2 { 0% { transform: rotateX(60deg) rotateY(0deg); } 100% { transform: rotateX(60deg) rotateY(360deg); } }
-@keyframes rotate3 { 0% { transform: rotateX(-60deg) rotateY(0deg); } 100% { transform: rotateX(-60deg) rotateY(360deg); } }
-
-/* Re-using the Loader Glitch Animations */
-@keyframes tiktok-glitch-1 {
-    0% { clip-path: inset(20% 0 50% 0); transform: translate(-3px, 1px); }
-    5% { clip-path: inset(10% 0 85% 0); transform: translate(3px, -1px); }
-    10% { clip-path: inset(80% 0 5% 0); transform: translate(-3px, 2px); }
-    15% { clip-path: inset(40% 0 30% 0); transform: translate(2px, -2px); }
-    20% { clip-path: inset(50% 0 20% 0); transform: translate(-2px, 1px); }
-    25%, 100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
-}
-
-@keyframes tiktok-glitch-2 {
-    0% { clip-path: inset(60% 0 10% 0); transform: translate(5x, 2px); }
-    5% { clip-path: inset(30% 0 40% 0); transform: translate(-5px, -4px); }
-    10% { clip-path: inset(10% 0 80% 0); transform: translate(4px, 4px); }
-    15% { clip-path: inset(90% 0 0% 0); transform: translate(-4px, -4px); }
-    20% { clip-path: inset(20% 0 50% 0); transform: translate(3px, 3px); }
-    25%, 100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; }
-}
-/* =========================================
-   5. OTHER SECTIONS (ABOUT, RIBBON, STATS)
-   ========================================= */
 /* =========================================
    5. ULTRA-MODERN ABOUT (DATA & ANIMATION)
    ========================================= */
@@ -962,14 +861,6 @@ a { text-decoration: none; color: inherit; }
     100% { opacity: 1; transform: skewX(0); filter: blur(0); }
 }
 
-@media (max-width: 900px) {
-    .about-ultra-wrapper { flex-direction: column; text-align: center; }
-    .term-body { text-align: right; }
-    .ultra-title { font-size: 2.5rem; }
-    .hud-card-container { width: 100%; max-width: 350px; }
-    .ultra-actions { justify-content: center; }
-}
-
 .stats-section { background: #000; padding: 50px 0; border-bottom: 1px solid #222; }
 .stats-grid { display: flex; justify-content: space-around; flex-wrap: wrap; }
 .stat-item h3 { font-size: 3.5rem; font-weight: 900; color: var(--gold-main); display: inline-block; margin: 0; text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.3); }
@@ -1067,12 +958,6 @@ a { text-decoration: none; color: inherit; }
     text-shadow: 0 0 10px var(--gold-main);
 }
 
-/* Mobile Adjustment */
-@media (max-width: 768px) {
-    .nav-icon-btn {
-        margin: 0 10px; /* Less space on mobile */
-    }
-}
 .contact-container { max-width: 800px; margin: auto; background: rgba(17, 17, 17, 0.8); padding: 40px; border-radius: 20px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
 .input-group { display: flex; gap: 20px; } .input-group input { width: 50%; }
@@ -1206,15 +1091,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold-main); box
 }
 
 .sys-ver { font-family: monospace; color: #444; }
-
-/* للموبايل */
-@media (max-width: 768px) {
-    .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-    .footer-logo, .footer-socials { justify-content: center; }
-    .footer-bio { margin: 0 auto; }
-    .footer-bottom { flex-direction: column; gap: 10px; }
-    .footer-links a:hover { transform: translateX(0); letter-spacing: 1px; } /* نلغي الحركة الجانبية في الموبايل */
-}
 .whatsapp-btn { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: linear-gradient(45deg, var(--gold-main), var(--gold-dark)); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; z-index: 1000; transition: 0.3s; border: 2px solid #000; box-shadow: 0 0 15px rgba(var(--gold-rgb), 0.6); }
 .whatsapp-btn:hover { transform: translateY(-5px); background: #fff; box-shadow: 0 0 30px rgba(var(--gold-rgb), 1); }
 
@@ -1237,17 +1113,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold-main); box
 
 /* Mobile */
 .hamburger { display: none; font-size: 1.8rem; color: var(--gold-main); cursor: pointer; }
-@media (max-width: 768px) {
-    .hamburger { display: block; }
-    .nav-links { position: absolute; top: 80px; right: -100%; width: 100%; height: 50vh; background: rgba(0, 0, 0, 0.95); flex-direction: column; justify-content: center; transition: 0.4s ease; border-bottom: 2px solid var(--gold-main); }
-    .nav-links.active { right: 0; }
-    .stats-grid { flex-direction: column; gap: 30px; }
-    .timeline::after { left: 30px; }
-    .timeline-item { width: 100%; align-self: flex-start !important; padding-left: 20px; padding-right: 70px; text-align: right !important; }
-    .timeline-item:nth-child(odd)::after, .timeline-item:nth-child(even)::after { right: 20px; left: auto; }
-    .timeline-item:nth-child(odd) .step-number, .timeline-item:nth-child(even) .step-number { left: 20px; right: auto; }.section-header-group { flex-direction: column; text-align: center; }
-    .section-header-group .btn { margin-right: 0; }
-}
 /* =========================================
    9. MODERN CYBER FAQ (DATA GRID)
    ========================================= */
@@ -1390,12 +1255,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold-main); box
     width: 100%; /* Line shoots across when opened */
 }
 
-/* Mobile Fix */
-@media (max-width: 768px) {
-    .faq-grid { grid-template-columns: 1fr; }
-    .q-content { gap: 15px; }
-    .faq-num { font-size: 1.2rem; }
-}
 /* =========================================
    18. 3D Tag Cloud (كرة المهارات)
    ========================================= */
@@ -1440,11 +1299,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold-main); box
     z-index: 100; /* يظهر فوق الجميع */
 }
 
-/* للموبايل */
-@media (max-width: 768px) {
-    .solar-system { transform: scale(0.6); } /* تصغير النظام بالكامل للموبايل */
-    .solar-wrapper { height: 400px; }
-}
 
 
 
@@ -1466,86 +1320,6 @@ input:focus, textarea:focus { outline: none; border-color: var(--gold-main); box
     100% { opacity: 0; transform: translateY(50px) scale(0.5); }
 }
 
-
-/* =========================================
-   🚨 إصلاحات عاجلة للموبايل (Mobile Emergency Fixes) 🚨
-   ========================================= */
-@media (max-width: 768px) {
-
-    /* 1. إصلاح صورة "من أنا" (About Image) */
-    /* المشكلة: كانت بتصغر جداً وتدخل في الكلام */
-    .about-container {
-        flex-direction: column !important; /* الصورة فوق والكلام تحت */
-        align-items: center !important;
-        text-align: center !important;
-        gap: 40px !important;
-    }
-
-    .about-img {
-        width: 100% !important;
-        max-width: 300px !important; /* حجم مناسب للموبايل */
-        margin: 0 auto !important;   /* سنترة في النص */
-        flex: none !important;       /* منع الانكماش */
-    }
-    
-    .about-img img {
-        width: 100% !important;
-        height: auto !important;
-    }
-    
-    .img-border {
-        /* تظبيط البرواز عشان ميبعدش عن الصورة */
-        top: 15px !important;
-        left: 15px !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
-
-    /* 2. إصلاح زرار "ناقش مشروعك" (Button Slice Fix) */
-    /* المشكلة: الكلام مقصوص أو الزرار شكله غلط */
-    .about-text .btn {
-        display: inline-block !important;
-        width: auto !important;
-        max-width: 100% !important;
-        padding: 15px 30px !important; /* تكبير المساحة الداخلية */
-        height: auto !important;       /* ارتفاع أوتوماتيك حسب الكلام */
-        line-height: normal !important;
-        white-space: normal !important; /* السماح للكلام ينزل سطرين لو طويل */
-        margin-top: 20px !important;
-    }
-
-    /* 3. إصلاح الأرقام والإحصائيات (Stats Fix) */
-    /* المشكلة: الأرقام بتنزل تحت بعض وشكلها صغير */
-    .stats-grid {
-        flex-direction: row-reverse !important; /* العناصر تحت بعض */
-        gap: 40px !important;
-        padding: 20px !important;
-    }
-
-    .stat-item {
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin-bottom: 10px !important;
-    }
-
-    /* منع الرقم والرمز (+) من الانفصال */
-    .stat-item h3, 
-    .stat-item .plus, 
-    .stat-item .symbol {
-        display: inline-block !important;
-        font-size: 3rem !important; /* تكبير الخط عشان ميبقاش minimized */
-        line-height: 1 !important;
-        white-space: nowrap !important; /* منع نزول الرمز سطر جديد */
-    }
-    
-    .stat-item p {
-        font-size: 1.2rem !important; /* تكبير وصف الرقم */
-        margin-top: 10px !important;
-    }
-}
 /* --- تنسيق زر اللغة الجديد (عربي | EN) --- */
 .lang-switch-wrapper {
     cursor: pointer;
@@ -1659,12 +1433,6 @@ html[lang="en"] p {
     filter: drop-shadow(0 0 5px var(--gold-main)); /* وهج ذهبي */
 }
 
-/* تعديل للموبايل عشان اللوجو ميخدش مساحة كبيرة */
-@media (max-width: 768px) {
-    .logo-img img {
-        height: 40px;
-    }
-}
 /* =========================================
    تنسيق النافبار العائم (مع الترتيب الجديد)
    ========================================= */
@@ -1748,17 +1516,6 @@ html[lang="en"] p {
 /* الموبايل */
 .hamburger { display: none; font-size: 1.5rem; color: var(--gold-main); cursor: pointer; margin-left: 15px; }
 
-@media (max-width: 900px) {
-    .hamburger { display: block; margin-left: auto; } /* الهامبرجر يروح يمين */
-    
-    .nav-links {
-        position: absolute; top: 100%; right: 0; width: 100%;
-        background: rgba(10, 10, 10, 0.98); border-radius: 20px;
-        flex-direction: column; padding: 20px; gap: 15px; text-align: center;
-        display: none; margin-top: 10px; border: 1px solid var(--gold-main);
-    }
-    .nav-links.active { display: flex;}
-}
 /* --- Price Estimator Updates --- */
 .price-display {
     font-size: 3.5rem;
@@ -1949,10 +1706,6 @@ html[lang="en"] p {
     100% { transform: scale(1, 1); }
 }
 
-@media (max-width: 768px) {
-    .pop-grid { grid-template-columns: repeat(2, 1fr); }
-    .est-result-bar { flex-direction: column; text-align: center; gap: 10px; }
-}
 /* --- 🧾 Holographic Bill Modal --- */
 .bill-overlay {
     position: fixed;
@@ -2258,15 +2011,184 @@ html[lang="en"] p {
 .my-gold-button:hover {
     transform: scale(1.1) rotate(20deg);
 }
-/* =========================================
-   12. MOBILE MENU & CLOCK FIX (FINAL)
-   ========================================= */
 
-/* Default: Hide mobile theme button on desktop */
+
+/* --- Admin Secret Button --- */
+.admin-lock {
+    color: #333; /* غامق جداً عشان ميبانش */
+    font-size: 0.9rem;
+    margin: 0 15px;
+    transition: 0.3s;
+    opacity: 0.3; /* شفاف */
+}
+
+.admin-lock:hover {
+    color: var(--gold-main); /* يظهر لما الماوس ييجي عليه */
+    opacity: 1;
+    transform: scale(1.2);
+    text-shadow: 0 0 10px var(--gold-main);
+}
+/* =========================================
+   12. MOBILE FIX 
+   ========================================= */
 .mobile-theme-item { display: none; }
 
 @media (max-width: 900px) {
+    
+    /* On mobile menu, we want BIG icons with text next to them */
+    .nav-links li { width: auto; }
+    
+    .nav-icon {
+        width: auto; height: auto;
+        background: transparent;
+        font-size: 2.5rem; /* Huge icons */
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 0;
+    }
+    
+    .nav-icon:hover { 
+        background: transparent; 
+        box-shadow: none;
+        transform: scale(1.1);
+    }
 
+    /* Show text on mobile permanently, not as tooltip */
+    .nav-icon::before {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        background: transparent;
+        color: #fff;
+        font-size: 1.5rem;
+        box-shadow: none;
+    }
+    
+    .nav-icon:hover::before {
+        color: var(--gold-main);
+    }
+    .nav-container { padding: 15px 25px; border-radius: 20px; }
+    .hamburger { display: block; }
+    .nav-links {
+        position: absolute; top: 100%; left: 0; right: 0; margin-top: 10px;
+        background: rgba(10, 10, 10, 0.95); border-radius: 20px;
+        flex-direction: column; padding: 20px; gap: 15px; text-align: center;
+        display: none; border: 1px solid var(--gold-main);
+    }
+    .nav-links.active { display: flex; }
+    .about-ultra-wrapper { flex-direction: column; text-align: center; }
+    .term-body { text-align: right; }
+    .ultra-title { font-size: 2.5rem; }
+    .hud-card-container { width: 100%; max-width: 350px; }
+    .ultra-actions { justify-content: center; }
+    .nav-icon-btn {
+        margin: 0 10px; /* Less space on mobile */
+    }
+    .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+    .footer-logo, .footer-socials { justify-content: center; }
+    .footer-bio { margin: 0 auto; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
+    .footer-links a:hover { transform: translateX(0); letter-spacing: 1px; } 
+    .hamburger { display: block; }
+    .nav-links { position: absolute; top: 80px; right: -100%; width: 100%; height: 50vh; background: rgba(0, 0, 0, 0.95); flex-direction: column; justify-content: center; transition: 0.4s ease; border-bottom: 2px solid var(--gold-main); }
+    .nav-links.active { right: 0; }
+    .stats-grid { flex-direction: column; gap: 30px; }
+    .timeline::after { left: 30px; }
+    .timeline-item { width: 100%; align-self: flex-start !important; padding-left: 20px; padding-right: 70px; text-align: right !important; }
+    .timeline-item:nth-child(odd)::after, .timeline-item:nth-child(even)::after { right: 20px; left: auto; }
+    .timeline-item:nth-child(odd) .step-number, .timeline-item:nth-child(even) .step-number { left: 20px; right: auto; }.section-header-group { flex-direction: column; text-align: center; }
+    .section-header-group .btn { margin-right: 0; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .q-content { gap: 15px; }
+    .faq-num { font-size: 1.2rem; }
+    .solar-system { transform: scale(0.6); } /* تصغير النظام بالكامل للموبايل */
+    .solar-wrapper { height: 400px; }
+     .about-container {
+        flex-direction: column !important; /* الصورة فوق والكلام تحت */
+        align-items: center !important;
+        text-align: center !important;
+        gap: 40px !important;
+    }
+
+    .about-img {
+        width: 100% !important;
+        max-width: 300px !important; /* حجم مناسب للموبايل */
+        margin: 0 auto !important;   /* سنترة في النص */
+        flex: none !important;       /* منع الانكماش */
+    }
+    
+    .about-img img {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .img-border {
+        /* تظبيط البرواز عشان ميبعدش عن الصورة */
+        top: 15px !important;
+        left: 15px !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* 2. إصلاح زرار "ناقش مشروعك" (Button Slice Fix) */
+    /* المشكلة: الكلام مقصوص أو الزرار شكله غلط */
+    .about-text .btn {
+        display: inline-block !important;
+        width: auto !important;
+        max-width: 100% !important;
+        padding: 15px 30px !important; /* تكبير المساحة الداخلية */
+        height: auto !important;       /* ارتفاع أوتوماتيك حسب الكلام */
+        line-height: normal !important;
+        white-space: normal !important; /* السماح للكلام ينزل سطرين لو طويل */
+        margin-top: 20px !important;
+    }
+
+    /* 3. إصلاح الأرقام والإحصائيات (Stats Fix) */
+    /* المشكلة: الأرقام بتنزل تحت بعض وشكلها صغير */
+    .stats-grid {
+        flex-direction: row-reverse !important; /* العناصر تحت بعض */
+        gap: 40px !important;
+        padding: 20px !important;
+    }
+
+    .stat-item {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* منع الرقم والرمز (+) من الانفصال */
+    .stat-item h3, 
+    .stat-item .plus, 
+    .stat-item .symbol {
+        display: inline-block !important;
+        font-size: 3rem !important; /* تكبير الخط عشان ميبقاش minimized */
+        line-height: 1 !important;
+        white-space: nowrap !important; /* منع نزول الرمز سطر جديد */
+    }
+    
+    .stat-item p {
+        font-size: 1.2rem !important; /* تكبير وصف الرقم */
+        margin-top: 10px !important;
+    }
+    .logo-img img {
+        height: 40px;
+    }
+    .hamburger { display: block; margin-left: auto; } /* الهامبرجر يروح يمين */
+    
+    .nav-links {
+        position: absolute; top: 100%; right: 0; width: 100%;
+        background: rgba(10, 10, 10, 0.98); border-radius: 20px;
+        flex-direction: column; padding: 20px; gap: 15px; text-align: center;
+        display: none; margin-top: 10px; border: 1px solid var(--gold-main);
+    }
+    .nav-links.active { display: flex;}
+.pop-grid { grid-template-columns: repeat(2, 1fr); }
+    .est-result-bar { flex-direction: column; text-align: center; gap: 10px; }
     /* 1. RESTORE CLOCK POSITION */
     .nav-clock {
         display: block !important; /* Force show */
@@ -2347,20 +2269,4 @@ html[lang="en"] p {
         font-size: 1.8rem;
         color: var(--gold-main);
     }
-}
-
-/* --- Admin Secret Button --- */
-.admin-lock {
-    color: #333; /* غامق جداً عشان ميبانش */
-    font-size: 0.9rem;
-    margin: 0 15px;
-    transition: 0.3s;
-    opacity: 0.3; /* شفاف */
-}
-
-.admin-lock:hover {
-    color: var(--gold-main); /* يظهر لما الماوس ييجي عليه */
-    opacity: 1;
-    transform: scale(1.2);
-    text-shadow: 0 0 10px var(--gold-main);
 }

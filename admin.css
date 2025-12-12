@@ -131,19 +131,57 @@ label {
     font-size: 0.8rem; /* Smaller font */
 }
 
-/* Remove the old scan-line if you want a cleaner look, or keep it */
-.scan-line { display: none; }
-
-.drop-zone {
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 25px; /* Much smaller */
-    text-align: center;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.01);
-    transition: 0.3s;
+/* --- FIX: Make Input Clickable --- */
+.scan-line {
+    /* ... your existing styles (width, height, background, etc) ... */
+    pointer-events: none; /* 👈 THIS IS THE FIX */
+    z-index: 10; /* Keep it visual, but untouchable */
 }
 
+/* Also ensure the input itself is on top if needed */
+.input-group input {
+    position: relative;
+    z-index: 5;
+}
+
+/* --- FIX: DROPZONE IMAGE FIT --- */
+.drop-zone {
+    position: relative;
+    height: 200px; /* Fixed height prevents page stretching */
+    width: 100%;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.01);
+    transition: 0.3s;
+    text-align: center;
+    cursor: pointer;
+}
+
+.img-preview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 95%;  /* Leave a small gap */
+    max-height: 95%; /* Fits height perfectly */
+    width: auto;
+    height: auto;
+    object-fit: contain; /* KEY: Shows full image without crop */
+    border-radius: 5px;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* Hide upload text when image is shown */
+.img-preview:not(.hidden) + .drop-content {
+    opacity: 0;
+    pointer-events: none;
+}
 .drop-zone:hover, .drop-zone.drag-over {
     border-color: var(--gold);
     background: rgba(212, 175, 55, 0.08);
@@ -176,19 +214,82 @@ label {
 
 .row-group { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
 
+/* =========================================
+   🔥 MODERN CYBER BUTTONS
+   ========================================= */
 .btn-cyber {
-    width: 100%; background: var(--gold); color: #000; padding: 15px; font-weight: 900; border: none; border-radius: 5px; cursor: pointer; position: relative; overflow: hidden; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s;
+    position: relative;
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(212, 175, 55, 0.1); /* Low opacity gold */
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
 }
-.btn-cyber:hover { transform: translateY(-3px); box-shadow: 0 0 20px var(--gold); color: #fff; background: #000; border: 1px solid var(--gold); }
-.btn-cyber:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.projects-grid { display: grid; gap: 15px; }
-.project-item { background: #111; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; }
-.p-info { display: flex; align-items: center; gap: 15px; }
-.p-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; border: 1px solid #333; }
-.btn-del { background: rgba(255, 46, 99, 0.1); color: #ff2e63; border: 1px solid #ff2e63; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-.btn-del:hover { background: #ff2e63; color: #fff; box-shadow: 0 0 15px #ff2e63; }
+/* Hover State: Fill with Gold & Glow */
+.btn-cyber:hover {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+    letter-spacing: 2px; /* Text expands */
+}
 
+/* The "Shine" Swipe Effect */
+.btn-cyber::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.5s;
+    transform: skewX(-20deg);
+}
+.btn-cyber:hover::before { left: 100%; }
+
+/* --- DANGER BUTTON (DELETE/RESET) --- */
+.btn-del {
+    background: rgba(255, 46, 99, 0.1);
+    color: #ff2e63;
+    border: 1px solid #ff2e63;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-del:hover {
+    background: #ff2e63;
+    color: #fff;
+    box-shadow: 0 0 20px #ff2e63;
+    transform: scale(1.05);
+}
+
+/* Confirmation Modal Specific Styles */
+.confirm-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
 /* Alert */
 .alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
 .alert-overlay.active { opacity: 1; visibility: visible; }
@@ -198,8 +299,6 @@ label {
 .small-btn { padding: 10px 30px; width: auto; margin: 0 auto; display: inline-flex; }
 
 @keyframes pulse { 0% { transform: scale(1); text-shadow: 0 0 10px var(--gold); } 50% { transform: scale(1.1); text-shadow: 0 0 20px var(--gold); } 100% { transform: scale(1); } }
-
-@media (max-width: 768px) { .row-group { grid-template-columns: 1fr; } .project-item { flex-direction: column; text-align: center; gap: 15px; } .p-info { flex-direction: column; } }
 
 /* =========================================
    3. CLEAN TIKTOK GLITCH (NO BOX)
@@ -377,13 +476,6 @@ label {
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
 }
 
-
-/* للموبايل: إخفاء النص والاكتفاء بالأيقونة */
-@media (max-width: 768px) {
-    .btn-home .btn-text { display: none; }
-    .btn-home { padding: 10px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
-    .header-right { flex-direction: column; align-items: flex-start; gap: 5px; }
-}
 /* =========================================
    🔥 DASHBOARD LAYOUT SYSTEM (FIXED) 🔥
    ========================================= */
@@ -499,60 +591,8 @@ html, body {
     font-size: 1.1rem;
     border: 1px solid rgba(212, 175, 55, 0.2);
 }
-.btn-cyber {
-    width: 100%;
-    /* Gradient Gold Background */
-    background: linear-gradient(135deg, #d4af37 0%, #b49321 100%);
-    color: #000;
-    padding: 12px 20px; /* More compact */
-    font-weight: 800;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
 
-.btn-cyber:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
-    background: linear-gradient(135deg, #f3cd57 0%, #d4af37 100%); /* Brighter on hover */
-    color: #000;
-}
 
-.btn-cyber:active {
-    transform: scale(0.98);
-}
-/* Forces smaller columns so more items fit in one row */
-.form-grid, .row-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Smaller minimum width */
-    gap: 15px; /* Tighter gap */
-}
-/* --- تنسيق خانات الأسعار (اسم + سعر) --- */
-.split-group {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* الاسم يأخذ مساحة أكبر من السعر */
-    gap: 10px;
-}
-
-/* في الموبايل نجعلهم تحت بعض */
-@media (max-width: 768px) {
-    .split-group { grid-template-columns: 1fr; }
-}
-/* يوضع في نهاية admin.css */
-.split-group {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* الاسم عريض، السعر ضيق */
-    gap: 10px;
-}
 /* =========================================
    💰 CALCULATOR ROW STYLING
    ========================================= */
@@ -589,8 +629,21 @@ html, body {
     text-align: center;
 }
 
-/* Mobile Adjustment for Rows */
-@media (max-width: 768px) {
+/* =========================================
+   EXIT BUTTON LOGIC (PC vs MOBILE)
+   ========================================= */
+
+/* 1. Desktop Default: Hide Top Button, Show Sidebar Button */
+.mobile-logout-btn { display: none; }
+.sidebar .logout { display: flex; margin-top: auto; }
+
+
+/* =========================================
+   📱 MOBILE LAYOUT: BOTTOM BAR + FITTED CONTENT
+   ========================================= */
+@media (max-width: 900px) {
+
+    
     .calc-row {
         grid-template-columns: 40px 1fr auto;
         grid-template-rows: auto auto;
@@ -598,12 +651,46 @@ html, body {
     .calc-row input.p-name { grid-column: 2 / 4; }
     .calc-row input.p-price { grid-column: 2 / 3; text-align: right; }
     .calc-row .btn-del { grid-row: 1 / 3; grid-column: 3 / 4; height: 100%; }
-}
-/* =========================================
-   📱 MOBILE LAYOUT: BOTTOM BAR + FITTED CONTENT
-   ========================================= */
-@media (max-width: 900px) {
+    /* Show Top Button on Phone */
+    .mobile-logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 46, 99, 0.2);
+        color: #ff2e63;
+        border: 1px solid #ff2e63;
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
 
+    /* Hide Sidebar Button on Phone */
+    .sidebar .logout { display: none !important; }
+
+    /* Fix Header Layout (Text on Top, Badge Below) */
+    .admin-header {
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: flex-start; /* Aligns text block to top */
+    }
+    
+    /* Ensure the Title & Badge stack correctly */
+    .admin-header div:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Force left alignment */
+        gap: 5px;
+    }
+    
+    .status-badge {
+        font-size: 0.7rem; /* Smaller badge on phone */
+        padding: 3px 8px;
+    }
+    .btn-home .btn-text { display: none; }
+    .btn-home { padding: 10px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+    .header-right { flex-direction: column; align-items: flex-start; gap: 5px; }
     /* 1. LOCK THE SCREEN (Prevents double scrolling) */
     html, body {
         height: 100%;
@@ -734,4 +821,36 @@ html, body {
         align-items: flex-start;
         gap: 10px;
     }
+    
+}
+/* --- FIX: ARCHIVE IMAGE SIZING --- */
+.p-img {
+    width: 70px !important;       /* Force Width */
+    height: 70px !important;      /* Force Height */
+    min-width: 70px;              /* Prevent shrinking below 70px */
+    max-width: 70px;              /* Prevent growing above 70px */
+    border-radius: 8px;
+    object-fit: cover;            /* Crop image to fit box, don't stretch */
+    border: 1px solid #333;
+    flex-shrink: 0;               /* 👈 KEY FIX: Stops flexbox from resizing it */
+    display: block;
+}
+
+/* Ensure the container doesn't overflow */
+.project-item {
+    background: #111;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #222;
+    overflow: hidden; /* Cuts off anything sticking out */
+}
+
+.p-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden; /* Protects text from pushing out */
 }
