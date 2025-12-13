@@ -1040,27 +1040,124 @@ html[dir="rtl"] .profile-content { text-align: right; }
 .skill-progress { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold-main)); width: 0; transition: width 1s; border-radius: 5px; box-shadow: 0 0 10px var(--gold-main); animation: fillBar 2s ease-out forwards; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-.project-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; transition: 0.4s; text-align: right; border: 1px solid #222; position: relative; max-width: 450px; margin: 0 auto;}
-.project-card:hover { transform: translateY(-10px); border-color: var(--gold-main); }
-.project-video { position: absolute; top: 0; left: 0; width: 100%; height: 220px; z-index: 2; opacity: 0; transition: 0.5s ease; background: #000; }
-.project-video img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-.project-card:hover .project-video { opacity: 1; }
-/* --- تعديل صورة المشروع لتملأ الكارت --- */
-.project-img {
-    height: 220px;
+/* =========================================
+   🔥 6. MODERN PROJECT SHOWCASE (FIXED)
+   ========================================= */
+
+/* 1. The Grid - Wider and Stronger */
+.projects-grid { 
+    display: grid; 
+    /* Changed from 250px to 350px to prevent "thin" cards */
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); 
+    gap: 30px; 
     width: 100%;
-    /* شيلنا أي ألوان خلفية ثابتة */
-    display: block; /* بدل flex */
-    transition: 0.5s transform; /* عشان الحركة */
 }
 
-/* حركة زووم لما تقف على الكارت */
-.project-card:hover .project-img {
-    transform: scale(1.1); /* تكبر شوية */
+/* 2. The Card Container - Big & Bold */
+.project-card { 
+    background: #0f0f0f; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    text-align: right; 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    position: relative; 
+    width: 100%;       /* Forces full width of grid cell */
+    max-width: 100%;   /* REMOVED the 450px limit */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
 }
-.project-info { padding: 25px; position: relative; z-index: 3; background: linear-gradient(to top, #0a0a0a 90%, transparent); }
-.project-info h3 { font-size: 1.4rem; margin-bottom: 10px; font-weight: 700; color: #fff; }
-.project-info a { color: var(--gold-main); font-weight: bold; display: flex; align-items: center; gap: 8px; }
+
+/* Hover Effect: Lift & Glow */
+.project-card:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--gold-main); 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.15); 
+}
+
+/* 3. The Image Area - Taller & Cinematic */
+.project-img {
+    height: 220px; /* Increased from 220px */
+    width: 100%;
+    background-size: cover !important; /* Ensure image covers area */
+    background-position: center !important;
+    position: relative;
+    transition: transform 0.8s ease;
+}
+
+/* Zoom Image on Hover */
+.project-card:hover .project-img {
+    transform: scale(1.05);
+}
+
+/* Dark Gradient Overlay on Image (makes text pop) */
+.project-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, transparent 40%, #0f0f0f 100%);
+    z-index: 1;
+}
+
+/* 4. The Info Box - Glassy & Clean */
+.project-info { 
+    padding: 30px; 
+    position: relative; 
+    z-index: 2; 
+    background: #0f0f0f; /* Solid backing to merge with gradient */
+    border-top: 1px solid rgba(255,255,255,0.05);
+    flex-grow: 1; /* Ensures equal height cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-info h3 { 
+    font-size: 1.4rem; /* Bigger Title */
+    margin-bottom: 10px; 
+    font-weight: 800; 
+    color: #fff; 
+    font-family: 'Cairo', sans-serif;
+}
+
+.project-info p {
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 5. The "View Project" Button */
+.project-info a { 
+    color: #000; 
+    background: var(--gold-main);
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: bold; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+    gap: 10px; 
+    text-decoration: none;
+    transition: 0.3s;
+    width: fit-content; /* Only takes needed space */
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.project-info a:hover {
+    background: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+.project-info a i {
+    transition: 0.3s;
+}
+.project-info a:hover i {
+    transform: translateX(-5px); /* Move arrow on hover */
+}
+
 
 .timeline { position: relative; max-width: 1000px; margin: 50px auto; padding: 20px 0; display: flex; flex-direction: column; }
 .timeline::after { content: ''; position: absolute; width: 4px; background: linear-gradient(to bottom, transparent, var(--gold-main), transparent); top: 0; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: 0 0 15px var(--gold-main); z-index: 0; }
@@ -2332,6 +2429,12 @@ html[lang="en"] p {
 
 @media (max-width: 900px) {
     
+    .projects-grid { 
+        grid-template-columns: 1fr; /* Full width on mobile */
+    }
+    .project-img {
+        height: 270px; /* Slightly smaller on phone */
+    }
     .modern-profile-card {
         flex-direction: column;
         padding: 30px;
@@ -2606,30 +2709,7 @@ html[lang="en"] p {
     .t-sass { bottom: -13px; left: 20px; }
     .t-css  { top: 20px; left: -20px; }
     .t-figma{ top: -20px; left: 20px; }
-}
-/* =========================================
-   🔧 MOBILE BUG FIXES (STOP WOBBLE)
-   ========================================= */
-
-/* 1. Force Stop Horizontal Scroll */
-html, body {
-    max-width: 100%;
-    overflow-x: hidden !important;
-    position: relative;
-}
-
-/* 2. Fix Floating Icons overlapping/pushing screen */
-@media (max-width: 900px) {
-    /* Pull icons INSIDE the screen limits */
-    .t-html { top: -15px; right: 0px; }
-    .t-css  { top: 10px; left: 0px; }
-    .t-js   { bottom: 10px; left: 0px; }
-    .t-react{ bottom: 50px; right: 0px; }
     
-    /* Hide the extra ones that cause clutter/overflow on small screens */
-    .t-git, .t-sass, .t-figma, .t-node {
-        display: none !important; 
-    }
 
     /* Fix the Main Card causing width issues */
     .modern-profile-card {
@@ -2644,6 +2724,17 @@ html, body {
         pointer-events: none;
     }
 }
+/* =========================================
+   🔧 MOBILE BUG FIXES (STOP WOBBLE)
+   ========================================= */
+
+/* 1. Force Stop Horizontal Scroll */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden !important;
+    position: relative;
+}
+
 /* Bill Icon Alignment */
 #billItems .bill-row i {
     flex-shrink: 0; /* Prevents icon from getting squashed */
