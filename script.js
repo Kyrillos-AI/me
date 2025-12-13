@@ -940,7 +940,10 @@ function updateTotal() {
 }
 
 /* =========================================
-   🧾 Bill Generator (No Project Required)
+   🧾 Bill Generator Logic
+   ========================================= */
+/* =========================================
+   🧾 Bill Generator Logic (Fixed)
    ========================================= */
 
 function showBill() {
@@ -948,60 +951,94 @@ function showBill() {
     const billItemsContainer = document.getElementById('billItems');
     const billTotalEl = document.getElementById('billTotal');
     
-    // Check Active Project & Addons
+    // 1. Get Active Selection
     const activeProject = document.querySelector('.type-item.active');
     const activeAddons = document.querySelectorAll('.pop-bubble.active');
 
-    // Validation: Must select AT LEAST one thing (Project OR Addon)
     if (!activeProject && activeAddons.length === 0) {
         showCustomAlert('من فضلك اختر خدمة واحدة على الأقل!', 'السلة فارغة');
         return;
     }
 
-    // Clear previous items
+    // 🔥 FIX 1: Lock Background Scroll
+    document.body.style.overflow = 'hidden';
+
+    // 2. Prepare Data
     billItemsContainer.innerHTML = '';
     let finalBillTotal = 0;
 
-    // --- A. Add Project (If selected) ---
+    // 🔥 FIX 2: Add Date & Time
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB'); // DD/MM/YYYY
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    // Insert Date Row
+    billItemsContainer.innerHTML += `
+        <div class="bill-row" style="opacity: 0.7; font-size: 0.8rem; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #444; justify-content: center; gap: 15px;">
+            <span>📅 ${dateStr}</span>
+            <span>⏰ ${timeStr}</span>
+        </div>
+    `;
+
+    // 3. Add Main Project (With synced Icon)
     if (activeProject) {
         const projName = activeProject.querySelector('h4').innerText;
         const projPriceText = activeProject.querySelector('.price-badge').innerText;
         const projPriceVal = parseInt(projPriceText.replace(/[^0-9]/g, ''));
+        
+        // 🔥 FIX 3: Get the exact icon class
+        const iconClass = activeProject.querySelector('i').className;
 
         finalBillTotal += projPriceVal;
 
         billItemsContainer.innerHTML += `
             <div class="bill-row">
-                <span>🔹 ${projName}</span>
-                <span>${projPriceVal} EGP</span>
+                <span style="display:flex; align-items:center; gap:8px;">
+                    <i class="${iconClass}" style="color:var(--gold-main); width:20px; text-align:center;"></i> 
+                    ${projName}
+                </span>
+                <span class="gold-text">${projPriceVal}</span>
             </div>
         `;
     }
 
-    // --- B. Add Addons ---
+    // 4. Add Addons (With synced Icons)
     if (activeAddons.length > 0) {
-        // If no project selected, add a header for clarity
+        // Label if no project selected
         if(!activeProject) {
-             billItemsContainer.innerHTML += `<div class="bill-row" style="border:none; color:#888; font-size:0.8rem;"><span>خدمات فردية:</span></div>`;
+             billItemsContainer.innerHTML += `<div class="bill-row" style="border:none; color:#666; font-size:0.75rem; justify-content:center;">-- خدمات إضافية --</div>`;
         }
 
         activeAddons.forEach(addon => {
-            const addonName = addon.querySelector('span').innerText;
+            // Get text and clean it (remove price from name)
+            let fullText = addon.innerText; 
+            // Usually innerText is "Icon Name +Price". We just want "Name".
+            // Since your HTML structure in JS generation might vary, let's grab the name safely:
+            // Assuming structure: <span> <i class="..."></i> Name </span>
+            const nameSpan = addon.querySelector('span'); 
+            const addonName = nameSpan ? nameSpan.innerText : "إضافة";
+            
             const addonPriceText = addon.querySelector('small').innerText;
             const addonPriceVal = parseInt(addonPriceText.replace(/[^0-9]/g, ''));
             
+            // Get Icon
+            const addonIcon = addon.querySelector('i').className;
+
             finalBillTotal += addonPriceVal;
 
             billItemsContainer.innerHTML += `
                 <div class="bill-row">
-                    <span>🔸 ${addonName}</span>
-                    <span>${addonPriceVal} EGP</span>
+                    <span style="display:flex; align-items:center; gap:8px;">
+                        <i class="${addonIcon}" style="color:#888; width:20px; text-align:center; font-size:0.8rem;"></i>
+                        ${addonName}
+                    </span>
+                    <span>${addonPriceVal}</span>
                 </div>
             `;
         });
     }
 
-    // --- C. Update Total ---
+    // 5. Final Total
     billTotalEl.innerText = finalBillTotal + " ج.م";
 
     // Show Modal
@@ -1010,6 +1047,9 @@ function showBill() {
 
 function closeBill() {
     document.getElementById('billModal').classList.remove('active');
+    
+    // 🔥 FIX 4: Unlock Background Scroll
+    document.body.style.overflow = 'auto';
 }
 
 /* =========================================

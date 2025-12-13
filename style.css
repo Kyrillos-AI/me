@@ -2027,6 +2027,7 @@ html[lang="en"] p {
     border: 1px dashed #333;
     border-radius: 8px;
     margin-bottom: 5px;     /* Small gap before total */
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Custom Scrollbar */
@@ -2186,6 +2187,143 @@ html[lang="en"] p {
     opacity: 1;
     transform: scale(1.2);
     text-shadow: 0 0 10px var(--gold-main);
+}
+/* =========================================
+   19. Compact Bill Modal (Maximized List Area)
+   ========================================= */
+
+/* 1. The Container (Fixed Size Logic) */
+.bill-container {
+    background: #111;
+    border: 2px solid var(--gold-main);
+    width: 90%;
+    max-width: 450px;       /* Slightly narrower for mobile feel */
+    max-height: 85vh;       /* Keeps it within screen limits */
+    display: flex;          /* Stack layout */
+    flex-direction: column;
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 0 0 20px var(--gold-dark);
+    transform: translateY(100px) scale(0.9);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bill-overlay.active .bill-container {
+    transform: translateY(0) scale(1);
+}
+
+/* 2. Compact Header */
+.bill-header {
+    flex-shrink: 0;
+    background: var(--gold-main);
+    color: #000;
+    padding: 8px 15px;      /* Reduced padding */
+    display: flex;          /* Horizontal layout */
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;           /* Fixed small height */
+}
+
+.bill-header h2 { 
+    font-size: 1rem;        /* Smaller font */
+    font-weight: 800; 
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bill-header i { 
+    font-size: 1.2rem;      /* Smaller icon */
+    margin: 0; 
+}
+
+.close-bill {
+    position: static;       /* Reset position */
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* 3. The Body (Flex Grow) */
+.bill-body {
+    flex: 1;                /* Grows to fill available space */
+    padding: 10px 15px;     /* Minimal padding */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;       /* Crucial for internal scroll */
+}
+
+/* 4. The List (THE BIG AREA) */
+#billItems {
+    flex: 1;                /* Takes ALL remaining space */
+    overflow-y: auto;       /* Scrolls internally */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed #333;
+    border-radius: 8px;
+    margin-bottom: 5px;     /* Small gap before total */
+}
+
+/* Custom Scrollbar */
+#billItems::-webkit-scrollbar { width: 5px; }
+#billItems::-webkit-scrollbar-track { background: #000; }
+#billItems::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+.bill-row {
+    font-size: 0.85rem;     /* Compact text */
+    padding: 6px 0;
+    border-bottom: 1px dashed #222;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 5. Compact Total Section */
+.bill-divider { margin: 5px 0; border-top-color: #333; }
+
+.total-row {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    margin-top: 0;
+    border: none;
+}
+
+.total-row span:first-child { font-size: 0.9rem; color: #888; }
+
+#billTotal {
+    font-size: 1.4rem;      /* Smaller but bold total */
+    color: var(--gold-main);
+    font-weight: 900;
+}
+
+/* 6. Compact Footer */
+.bill-footer {
+    flex-shrink: 0;
+    padding: 10px 15px;
+    background: #050505;
+    border-top: 1px solid #222;
+}
+
+.bill-footer p {
+    font-size: 0.65rem;     /* Tiny text */
+    margin-bottom: 8px;
+    color: #555;
+    margin-top: 0;
+}
+
+/* Smaller Button */
+.bill-footer .btn {
+    width: 100%;
+    padding: 8px 0;         /* Slim button */
+    font-size: 0.9rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 /* =========================================
    12. MOBILE FIX 
@@ -2468,4 +2606,50 @@ html[lang="en"] p {
     .t-sass { bottom: -13px; left: 20px; }
     .t-css  { top: 20px; left: -20px; }
     .t-figma{ top: -20px; left: 20px; }
+}
+/* =========================================
+   🔧 MOBILE BUG FIXES (STOP WOBBLE)
+   ========================================= */
+
+/* 1. Force Stop Horizontal Scroll */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden !important;
+    position: relative;
+}
+
+/* 2. Fix Floating Icons overlapping/pushing screen */
+@media (max-width: 900px) {
+    /* Pull icons INSIDE the screen limits */
+    .t-html { top: -15px; right: 0px; }
+    .t-css  { top: 10px; left: 0px; }
+    .t-js   { bottom: 10px; left: 0px; }
+    .t-react{ bottom: 50px; right: 0px; }
+    
+    /* Hide the extra ones that cause clutter/overflow on small screens */
+    .t-git, .t-sass, .t-figma, .t-node {
+        display: none !important; 
+    }
+
+    /* Fix the Main Card causing width issues */
+    .modern-profile-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        overflow: hidden; /* Cuts off anything sticking out */
+    }
+    
+    /* Ensure Particles don't block clicks */
+    #particles-js {
+        pointer-events: none;
+    }
+}
+/* Bill Icon Alignment */
+#billItems .bill-row i {
+    flex-shrink: 0; /* Prevents icon from getting squashed */
+    display: inline-block;
+}
+
+#billItems .bill-row {
+    align-items: center; /* Vertically centers text and icon */
 }
