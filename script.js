@@ -940,12 +940,6 @@ function updateTotal() {
 }
 
 /* =========================================
-   🧾 Bill Generator Logic
-   ========================================= */
-/* =========================================
-   🧾 Bill Generator Logic (Fixed)
-   ========================================= */
-/* =========================================
    🧾 Bill Generator Logic (Fixed Scroll + Icons + Date)
    ========================================= */
 function showBill() {
@@ -1047,13 +1041,6 @@ function closeBill() {
     document.getElementById('billModal').classList.remove('active');
     document.body.style.overflow = 'auto'; // Unlock scroll
 }
-function closeBill() {
-    document.getElementById('billModal').classList.remove('active');
-    
-    // 🔥 FIX 4: Unlock Background Scroll
-    document.body.style.overflow = 'auto';
-}
-
 /* =========================================
    💎 ULTIMATE WHATSAPP INVOICE (WITH ICONS)
    ========================================= */
@@ -1092,8 +1079,8 @@ function confirmOrderOnWhatsApp() {
 let message = `*مرحبا كيرلس👋 \n`;
     // HEADER
     message += `╔══════════════════╗\n`;
-    message += `║🧾 *    تـاريـخ الطـلـب* ║\n`;
-    message += `║   📅 ${date} • ${time}   ║\n`;
+    message += `🧾 *    تـاريـخ الطـلـب* \n`;
+    message += `   📅 ${date} • ${time}   \n`;
     message += `╚══════════════════╝\n\n`;
 
 
