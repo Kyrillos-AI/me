@@ -283,52 +283,57 @@
     </div>
 
     <div id="pricing-manager" class="tab-section" style="display:none;">
-        <div class="admin-card glass-panel">
-            <h3 class="card-title"><i class="fas fa-calculator"></i> إدارة الحاسبة</h3>
+    <div class="admin-card glass-panel">
+        <h3 class="card-title"><i class="fas fa-calculator"></i> إدارة الحاسبة والأسعار</h3>
 
-            <h4 style="color:var(--gold); margin:20px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">1. الخدمات الأساسية</h4>
-            <div id="adminServicesList" style="margin-bottom: 15px;"></div>
-            
-            <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
-                <p style="color:#aaa; font-size:0.9rem; margin-bottom:10px;">إضافة خدمة جديدة:</p>
-                <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
-                    <input type="text" id="newServName" placeholder="الاسم">
-                    <input type="number" id="newServPrice" placeholder="السعر">
-                    <select id="newServIcon" style="background:#000; color:#fff; border:1px solid #333; padding:10px; border-radius:5px;">
-                        <option value="fa-globe">🌐 Globe</option>
-                        <option value="fa-code">💻 Code</option>
-                        <option value="fa-shopping-cart">🛒 Cart</option>
-                        <option value="fa-mobile-alt">📱 Mobile</option>
-                        <option value="fa-paint-brush">🎨 Design</option>
-                    </select>
-                    <button class="btn-cyber small-btn" onclick="addNewService()"><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
-
-            <h4 style="color:var(--gold); margin:30px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">2. الإضافات</h4>
-            <div id="adminAddonsList" style="margin-bottom: 15px;"></div>
-            
-            <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
-                <p style="color:#aaa; font-size:0.9rem; margin-bottom:10px;">إضافة ميزة جديدة:</p>
-                <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
-                    <input type="text" id="newAddonName" placeholder="الاسم">
-                    <input type="number" id="newAddonPrice" placeholder="السعر">
-                    <select id="newAddonIcon" style="background:#000; color:#fff; border:1px solid #333; padding:10px; border-radius:5px;">
-                        <option value="fa-plus">➕ Plus</option>
-                        <option value="fa-language">🌐 Lang</option>
-                        <option value="fa-bolt">⚡ Speed</option>
-                    </select>
-                    <button class="btn-cyber small-btn" onclick="addNewAddon()"><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
-
-            <div style="margin-top: 40px; border-top: 1px solid #333; padding-top: 20px; text-align: center;">
-                <button class="btn-cyber" id="saveDynamicPricesBtn" onclick="saveAllCalculatorData()">
-                    <span class="btn-text">حفظ وتحديث الموقع</span> <i class="fas fa-save"></i>
-                </button>
+        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:30px; border:1px solid var(--gold);">
+            <h4 style="margin:0 0 15px 0; color:#fff;">⚙️ إعدادات عامة</h4>
+            <div class="input-group">
+                <label>سعر تصميم اللوجو (Need Design):</label>
+                <input type="number" id="adminLogoPrice" placeholder="مثال: 1500" style="color:var(--gold); font-weight:bold;">
             </div>
         </div>
+
+        <h4 style="color:var(--gold); margin:20px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">1. أنواع المشاريع (Step 1)</h4>
+        <div id="adminServicesList" style="margin-bottom: 15px;"></div>
+        <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+            <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
+                <input type="text" id="newServName" placeholder="الاسم">
+                <input type="number" id="newServPrice" placeholder="السعر">
+                <select id="newServIcon" class="icon-select"><option value="fa-globe">🌐 Globe</option><option value="fa-code">💻 Code</option><option value="fa-shopping-cart">🛒 Cart</option></select>
+                <button class="btn-cyber small-btn" onclick="addNewService()"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <h4 style="color:var(--gold); margin:30px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">2. الخصائص التقنية (Step 2)</h4>
+        <div id="adminAddonsList" style="margin-bottom: 15px;"></div>
+        <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+            <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
+                <input type="text" id="newAddonName" placeholder="الاسم">
+                <input type="number" id="newAddonPrice" placeholder="السعر">
+                <select id="newAddonIcon" class="icon-select"><option value="fa-server">Server</option><option value="fa-language">Lang</option><option value="fa-bolt">Speed</option></select>
+                <button class="btn-cyber small-btn" onclick="addNewAddon()"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <h4 style="color:var(--gold); margin:30px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">3. المظهر والتصميم (Step 3)</h4>
+        <div id="adminVisualsList" style="margin-bottom: 15px;"></div>
+        <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+            <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
+                <input type="text" id="newVisualName" placeholder="الاسم (مثال: 3D)">
+                <input type="number" id="newVisualPrice" placeholder="السعر">
+                <select id="newVisualIcon" class="icon-select"><option value="fa-cube">🧊 3D</option><option value="fa-film">🎬 Animation</option><option value="fa-moon">🌙 Dark Mode</option></select>
+                <button class="btn-cyber small-btn" onclick="addNewVisual()"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px solid #333; padding-top: 20px; text-align: center;">
+            <button class="btn-cyber" id="saveDynamicPricesBtn" onclick="saveAllCalculatorData()">
+                <span class="btn-text">حفظ وتحديث الموقع</span> <i class="fas fa-save"></i>
+            </button>
+        </div>
     </div>
+</div>
 
     <div id="manage-reviews" class="tab-section" style="display:none;">
         <div class="admin-card glass-panel">

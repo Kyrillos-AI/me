@@ -2513,3 +2513,150 @@ html, body {
 #billItems .bill-row {
     align-items: center; /* Vertically centers text and icon */
 }
+/* =========================================
+   🔥 WIZARD V7 STYLES
+   ========================================= */
+.new-wiz-step { animation: fadeIn 0.5s ease; }
+
+/* Logo Selector Cards */
+.logo-selector-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 500px; margin: 0 auto;
+}
+.logo-option {
+    background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px;
+    text-align: center; cursor: pointer; transition: 0.3s;
+    display: flex; flex-direction: column; align-items: center; gap: 10px; color: #888;
+}
+.logo-option:hover { background: #222; transform: translateY(-3px); }
+.logo-option.selected {
+    background: rgba(212, 175, 55, 0.1); border-color: var(--gold-main);
+    color: var(--gold-main); box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+/* Palette Grid (Orbs) */
+.palette-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
+.color-preset {
+    width: 50px; height: 50px; border-radius: 50%;
+    background-color: var(--c); cursor: pointer; position: relative;
+    border: 2px solid #222; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.color-preset.active { transform: scale(1.2); border-color: #fff; z-index: 2; }
+.color-preset.active::after {
+    content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: #000; font-size: 14px; opacity: 0.7;
+}
+
+/* Custom Rainbow Button Fix */
+.color-preset.custom-preset {
+    background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    display: flex; justify-content: center; align-items: center; opacity: 0.8;
+    overflow: hidden; /* Fixes square corners */
+}
+.custom-preset-input {
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    opacity: 0; cursor: pointer; padding: 0; margin: 0; border: none;
+}
+
+/* Remove Button (Red X) */
+.remove-color-btn {
+    position: absolute; top: -5px; right: -5px; width: 20px; height: 20px;
+    background: #ff2e63; color: white; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center; font-size: 10px;
+    border: 2px solid #111; cursor: pointer; z-index: 10;
+    transition: 0.2s;
+}
+.color-preset:hover .remove-color-btn { opacity: 1; transform: scale(1); }
+
+@keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+/* --- ORB GLOW & ROTATION --- */
+
+/* 1. Glow Effect for Selected Colors */
+.color-preset.active {
+    border-color: #fff;
+    transform: scale(1.2);
+    /* Dynamic glow based on the orb's color variable */
+    box-shadow: 0 0 15px var(--c), inset 0 0 10px rgba(255,255,255,0.5);
+    z-index: 5;
+}
+
+/* 2. Custom Rainbow Button Styles */
+.color-preset.custom-preset {
+    background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    opacity: 0.8;
+    transition: 0.5s ease;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+}
+
+/* 3. Rotate Animation on Hover (Restored) */
+.color-preset.custom-preset:hover {
+    transform: rotate(180deg) scale(1.1);
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+
+/* Ensure Icon stays upright while button rotates (Optional cool effect) */
+.custom-preset i {
+    pointer-events: none;
+    transition: 0.5s;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+}
+.color-preset.custom-preset:hover i {
+    transform: rotate(-180deg); /* Counter-rotate to keep icon still */
+}
+
+/* 4. Fix Input Size */
+.custom-preset-input {
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    opacity: 0; cursor: pointer;
+}
+/* =========================================
+   🚀 WIZARD STEP ANIMATIONS
+   ========================================= */
+
+/* The Container */
+#newWizardForm {
+    position: relative; /* Hides the sliding elements */
+    min-height: auto; /* Prevents the box from jumping in height */
+    transition: min-height 0.3s ease;
+}
+
+/* Base Step Class */
+.new-wiz-step {
+    /* Don't use display:none here, JS handles it */
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* Smooth ease */
+    animation-fill-mode: forwards;
+}
+
+/* --- ANIMATION KEYFRAMES --- */
+
+/* Moving Forward (Next) */
+@keyframes slideOutLeft {
+    0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: translateX(-100px) scale(0.9); filter: blur(10px); }
+}
+
+@keyframes slideInRight {
+    0% { opacity: 0; transform: translateX(100px) scale(1.1); filter: blur(10px); }
+    100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+/* Moving Backward (Prev) */
+@keyframes slideOutRight {
+    0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: translateX(100px) scale(0.9); filter: blur(10px); }
+}
+
+@keyframes slideInLeft {
+    0% { opacity: 0; transform: translateX(-100px) scale(1.1); filter: blur(10px); }
+    100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+/* Helper Classes applied by JS */
+.anim-out-left { animation-name: slideOutLeft; }
+.anim-in-right { animation-name: slideInRight; }
+.anim-out-right { animation-name: slideOutRight; }
+.anim-in-left { animation-name: slideInLeft; }

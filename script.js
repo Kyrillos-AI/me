@@ -41,25 +41,7 @@ window.scrollTo(0, 0);
 window.addEventListener('load', function() {
     window.scrollTo(0, 0);
 });
-/* =========================================
-   🔥 FIREBASE MASTER SETUP (تشغيل فايربيز مرة واحدة فقط)
-   ========================================= */
-const firebaseConfig = {
-    apiKey: "AIzaSyANz8dBPKkSD6mqTuVk77WLRqsVQ1hVlog",
-    authDomain: "kyrillos-protifolio.firebaseapp.com",
-    projectId: "kyrillos-protifolio",
-    storageBucket: "kyrillos-protifolio.firebasestorage.app",
-    messagingSenderId: "154071914816",
-    appId: "1:154071914816:web:b246ca0b0aada5db3502a5",
-    measurementId: "G-64M0V7QRPO"
-};
 
-// هنا بنقوله: لو مفيش تطبيقات شغالة، ابدأ شغل واحد. لو فيه، كمل عادي.
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-// بنعرف المتغير db مرة واحدة عشان نستخدمه في كل الملف
-const db = firebase.firestore();
 /* =========================================
    1🌍 Translation System
    ========================================= */
@@ -329,6 +311,32 @@ if(themeModal) {
     themeModal.addEventListener('click', (e) => {
         if (e.target === themeModal) closeThemeModal();
     });
+}
+/* =========================================
+   🔥 FIREBASE MASTER SETUP (SAFE VERSION)
+   ========================================= */
+// 1. Define 'db' globally using 'let' (not const) so we can assign it later
+let db; 
+
+const firebaseConfig = {
+    apiKey: "AIzaSyANz8dBPKkSD6mqTuVk77WLRqsVQ1hVlog",
+    authDomain: "kyrillos-protifolio.firebaseapp.com",
+    projectId: "kyrillos-protifolio",
+    storageBucket: "kyrillos-protifolio.firebasestorage.app",
+    messagingSenderId: "154071914816",
+    appId: "1:154071914816:web:b246ca0b0aada5db3502a5",
+    measurementId: "G-64M0V7QRPO"
+};
+
+// 2. Safety Check: Only initialize if Firebase library is loaded
+if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    // Initialize Database
+    db = firebase.firestore();
+} else {
+    console.error("⚠️ Firebase SDK not loaded yet. Database features will be disabled.");
 }
 function toggleSettings() { 
     if(settingsBox) settingsBox.classList.toggle('open'); 
@@ -1166,63 +1174,6 @@ function loadProfileImage() {
     });
 }
 window.addEventListener('load', loadProfileImage);
-/* =========================================
-   🔥 MAIN PAGE DYNAMIC CALCULATOR
-   ========================================= */
-function initDynamicCalculator() {
-    // Check if Firebase works
-    if (typeof db === 'undefined') {
-        console.log("Firebase not loaded yet...");
-        return;
-    }
-
-    // Listen to "calculator_v3"
-    db.collection("settings").doc("calculator_v3").onSnapshot((doc) => {
-        if (!doc.exists) return;
-        
-        const data = doc.data();
-        
-        // 1. RENDER SERVICES
-        const typeContainer = document.querySelector('.types-area');
-        if (typeContainer && data.services) {
-            typeContainer.innerHTML = ""; // Clear Hardcoded Items
-            
-            data.services.forEach(item => {
-                const icon = item.icon || "fa-globe"; // Default fallback
-                
-                typeContainer.innerHTML += `
-                    <div class="pop-card type-item" onclick="selectType(${item.price}, this)">
-                        <i class="fas ${icon}"></i>
-                        <h4>${item.name}</h4>
-                        <span class="price-badge">${item.price} ج.م</span>
-                    </div>
-                `;
-            });
-        }
-
-        // 2. RENDER ADDONS
-        const addonContainer = document.querySelector('.addons-area');
-        if (addonContainer && data.addons) {
-            addonContainer.innerHTML = ""; // Clear Hardcoded Items
-            
-            data.addons.forEach(item => {
-                const icon = item.icon || "fa-plus";
-                
-                addonContainer.innerHTML += `
-                    <div class="pop-bubble" onclick="toggleAddon(${item.price}, this)">
-                        <span style="display:flex; align-items:center; gap:8px;">
-                            <i class="fas ${icon}" style="font-size:0.8rem; opacity:0.8;"></i> ${item.name}
-                        </span> 
-                        <small>+${item.price}</small>
-                    </div>
-                `;
-            });
-        }
-    });
-}
-
-// Start listener
-window.addEventListener('load', initDynamicCalculator);
 
 /* =========================================
    🕵️‍♂️ VISITOR TRACKING & STATUS CHECK
@@ -1241,34 +1192,393 @@ function trackVisit() {
     }
 }
 
-// 2. Check Availability Status
+/* =========================================
+   🧙‍♂️ ULTIMATE WIZARD V7 (Status + Smooth Calc)
+   ========================================= */
+
+// 1. STATUS CHECKER (Updated for Wizard)
 function checkAvailability() {
+    if (typeof db === 'undefined') return;
+
     db.collection("settings").doc("status").onSnapshot((doc) => {
         if (doc.exists) {
             const state = doc.data().state;
-            const statusLabels = document.querySelectorAll('.status-active'); // The small text in "About"
-            const statusDot = document.querySelector('.status-badge'); // If you add a dot in hero
             
-            statusLabels.forEach(el => {
-                if (state === 'available') {
-                    el.innerText = "متاح للعمل";
-                    el.style.color = "#00ff88";
-                } else {
-                    el.innerText = "مشغول حالياً";
-                    el.style.color = "#ff2e63";
-                }
+            // A. Update "About Me" Status
+            document.querySelectorAll('.status-active').forEach(el => {
+                el.innerText = state === 'available' ? "متاح للعمل" : "مشغول حالياً";
+                el.style.color = state === 'available' ? "#00ff88" : "#ff2e63";
             });
+
+            // B. Update "Wizard" Status (The one above calculator)
+            const wizStatus = document.getElementById('wizStatus');
+            if(wizStatus) {
+                const dot = wizStatus.querySelector('.status-dot');
+                const text = wizStatus.querySelector('.status-text');
+                
+                if (state === 'available') {
+                    dot.style.background = "#00ff88"; dot.style.boxShadow = "0 0 10px #00ff88";
+                    text.innerText = "النظام متاح لاستقبال مشاريع جديدة"; text.style.color = "#00ff88";
+                } else {
+                    dot.style.background = "#ff2e63"; dot.style.boxShadow = "0 0 10px #ff2e63";
+                    text.innerText = "النظام مشغول حالياً (قائمة الانتظار)"; text.style.color = "#ff2e63";
+                }
+            }
+        }
+    });
+}
+// Run Status Check
+window.addEventListener('load', checkAvailability);
+
+
+// 2. WIZARD STATE & LOGIC
+let newWizState = {
+    step: 1,
+    basePrice: 0,
+    baseTime: 0,
+    addonsPrice: 0,
+    addonsTime: 0,
+    logoPrice: 0,
+    serverLogoPrice: 1500, 
+    logoStatus: "Have Logo",
+    selectedService: null,
+    selectedAddons: [],
+};
+
+function initNewWizardSystem() {
+    if (typeof db === 'undefined') return;
+
+    db.collection("settings").doc("calculator_v3").onSnapshot((doc) => {
+        if (!doc.exists) return;
+        const data = doc.data();
+
+        // A. Logo Price
+        const adminPrice = data.logoPrice ? Number(data.logoPrice) : 1500;
+        newWizState.serverLogoPrice = adminPrice;
+        
+        // Update Label Text
+        const logoInput = document.querySelector('input[value="Need Design"]');
+        if(logoInput) logoInput.parentElement.querySelector('span').innerText = `أحتاج تصميم (+${adminPrice})`;
+
+        // B. Services
+        renderGrid('newServicesGrid', data.services, 'pop-card type-item', 'selectNewService');
+        const l1 = document.getElementById('newLoader1'); if(l1) l1.style.display = 'none';
+
+        // C. Addons
+        renderGrid('newAddonsGrid', data.addons, 'pop-bubble', 'toggleNewAddon');
+        const l3 = document.getElementById('newLoader3'); if(l3) l3.style.display = 'none';
+
+        // D. Visuals
+        renderGrid('newVisualsGrid', data.visuals, 'pop-bubble', 'toggleNewAddon');
+    });
+}
+window.addEventListener('load', initNewWizardSystem);
+
+function renderGrid(id, items, className, clickFunc) {
+    const grid = document.getElementById(id);
+    if (!grid || !items) return;
+    grid.innerHTML = '';
+    
+    items.forEach(item => {
+        const icon = item.icon || 'fa-star';
+        if(className.includes('pop-card')) {
+            grid.innerHTML += `
+                <div class="${className}" onclick="${clickFunc}('${item.name}', ${item.price}, this)">
+                    <i class="fas ${icon}"></i><h4>${item.name}</h4><span class="price-badge">${item.price} ج.م</span>
+                </div>`;
+        } else {
+            grid.innerHTML += `
+                <div class="${className}" onclick="${clickFunc}('${item.name}', ${item.price}, this)">
+                    <span style="display:flex; align-items:center; gap:8px;"><i class="fas ${icon}"></i> ${item.name}</span><small>+${item.price}</small>
+                </div>`;
         }
     });
 }
 
-// Run on load
-window.addEventListener('load', () => {
-    if (typeof db !== 'undefined') {
-        trackVisit();
-        checkAvailability();
+// 3. SELECTION ACTIONS
+function selectNewService(name, price, card) {
+    newWizState.basePrice = parseInt(price);
+    // Estimate Time: 1 day per 500 EGP + 2 buffer days
+    newWizState.baseTime = Math.ceil(parseInt(price) / 500) + 2; 
+    newWizState.selectedService = { name, price };
+    
+    document.querySelectorAll('.type-item').forEach(c => c.classList.remove('active'));
+    card.classList.add('active'); 
+    calcNewTotal();
+}
+
+function toggleNewAddon(name, price, bubble) {
+    price = parseInt(price);
+    const timeEst = Math.ceil(price / 1000); // 1 day per 1000 EGP
+    const index = newWizState.selectedAddons.findIndex(a => a.name === name);
+
+    if (index > -1) { 
+        newWizState.selectedAddons.splice(index, 1);
+        newWizState.addonsPrice -= price;
+        newWizState.addonsTime -= timeEst;
+        bubble.classList.remove('active');
+    } else { 
+        newWizState.selectedAddons.push({ name, price });
+        newWizState.addonsPrice += price;
+        newWizState.addonsTime += timeEst;
+        bubble.classList.add('active');
     }
-});
+    calcNewTotal();
+}
+/* =========================================
+   🔧 FIX: LOGO PRICE & TIME LOGIC
+   ========================================= */
+
+function selectLogoOption(type, dummyPrice, element) {
+    const realPrice = (type === 'need') ? newWizState.serverLogoPrice : 0;
+    
+    // Check if we are switching TO 'need' FROM 'have'
+    if (type === 'need' && newWizState.logoStatus !== "يحتاج تصميم") {
+        newWizState.addonsTime += 2; // Add time only once
+        newWizState.logoStatus = "يحتاج تصميم";
+    } 
+    // Check if switching BACK to 'have'
+    else if (type === 'have' && newWizState.logoStatus === "يحتاج تصميم") {
+        newWizState.addonsTime -= 2; // Remove time
+        newWizState.logoStatus = "لديه شعار";
+    }
+    
+    // Update Price
+    newWizState.logoPrice = realPrice;
+    
+    // Visual Update
+    document.querySelectorAll('.logo-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    // Trigger Calculation (This runs the smooth animation)
+    calcNewTotal();
+}
+// 4. ANIMATION ENGINE (Smooth Counter)
+let currentDisplayPrice = 0;
+
+/* =========================================
+   🚀 FIXED: ANIMATION ENGINE & LOGO LOGIC
+   ========================================= */
+
+// 1. Calculate & Animate
+function calcNewTotal() {
+    // Calculate targets
+    const targetPrice = newWizState.basePrice + newWizState.addonsPrice + newWizState.logoPrice;
+    const targetTime = newWizState.baseTime + newWizState.addonsTime;
+    
+    // Elements
+    const pEl = document.getElementById('newLiveTotal');
+    const tEl = document.getElementById('newLiveTime');
+    const box = document.getElementById('newBouncyBox');
+    
+    // A. Animate Price (Read start value from DOM)
+    if(pEl) {
+        const currentPrice = parseInt(pEl.innerText.replace(/\D/g, '')) || 0; // Read current number
+        animateValue(pEl, currentPrice, targetPrice, 600);
+    }
+
+    // B. Update Time
+    if(tEl) tEl.innerText = targetTime > 0 ? targetTime + " أيام (تقريباً)" : "0 أيام";
+
+    // C. Bounce Effect
+    if(box) { 
+        box.style.transform = "scale(1.2)"; 
+        setTimeout(() => box.style.transform = "scale(1)", 150); 
+    }
+}
+
+// 2. The DOM-Based Animator (Prevents Snapping)
+function animateValue(obj, start, end, duration) {
+    if (start === end) return;
+    
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        
+        // Easing for smoothness (Start fast, end slow)
+        const ease = 1 - Math.pow(1 - progress, 3);
+        
+        obj.innerHTML = Math.floor(start + (end - start) * ease);
+        
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        } else {
+            obj.innerHTML = end; // Ensure exact final number
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// 3. Fixed Logo Selector (Prevents Time Accumulation)
+function selectLogoOption(type, dummyPrice, element) {
+    const realPrice = (type === 'need') ? newWizState.serverLogoPrice : 0;
+    
+    // Check if we are switching TO 'need' FROM 'have'
+    if (type === 'need' && newWizState.logoStatus !== "يحتاج تصميم") {
+        newWizState.addonsTime += 2; // Add time only once
+        newWizState.logoStatus = "يحتاج تصميم";
+    } 
+    // Check if switching BACK to 'have'
+    else if (type === 'have' && newWizState.logoStatus === "يحتاج تصميم") {
+        newWizState.addonsTime -= 2; // Remove time
+        newWizState.logoStatus = "لديه شعار";
+    }
+    
+    // Update Price
+    newWizState.logoPrice = realPrice;
+    
+    // Visual Update
+    document.querySelectorAll('.logo-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    element.querySelector('input').checked = true;
+    
+    // Trigger Calculation
+    calcNewTotal();
+}
+
+// 5. COLOR PALETTE LOGIC
+function togglePaletteColor(el) { el.classList.toggle('active'); }
+
+function addCustomPaletteColor(input) {
+    const color = input.value;
+    const grid = document.getElementById('paletteGrid');
+    const div = document.createElement('div');
+    
+    div.className = 'color-preset active';
+    div.style.setProperty('--c', color);
+    div.setAttribute('data-color', color);
+    div.style.animation = "popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    
+    div.onclick = function() { this.classList.toggle('active'); };
+    
+    // Add Remove Button
+    div.innerHTML = `<span class="remove-color-btn" onclick="removePaletteColor(event, this)"><i class="fas fa-times"></i></span>`;
+    
+    grid.insertBefore(div, document.querySelector('.custom-preset'));
+}
+
+function removePaletteColor(e, btn) {
+    e.stopPropagation(); // Stop click from toggling parent
+    const orb = btn.parentElement;
+    orb.style.transform = "scale(0)";
+    setTimeout(() => orb.remove(), 200);
+}
+
+/* =========================================
+   🚀 ANIMATED NAVIGATION FUNCTION
+   ========================================= */
+function navNewWizard(dir) {
+    const nextBtn = document.getElementById('btnNewNext');
+    const prevBtn = document.getElementById('btnNewPrev');
+
+    // 1. Validation Check
+    if (newWizState.step === 1 && dir === 1 && !newWizState.selectedService) {
+        showCustomAlert("اختر نوع المشروع أولاً!", "تنبيه"); return;
+    }
+    
+    // 2. Submit Check
+    if (newWizState.step === 5 && dir === 1) {
+        submitNewOrder(); return;
+    }
+
+    // --- ANIMATION LOGIC START ---
+    
+    const currentStepEl = document.getElementById(`new-step-${newWizState.step}`);
+    
+    // A. Apply Exit Animation
+    if (dir === 1) {
+        currentStepEl.classList.add('anim-out-left'); // Slide out to left
+    } else {
+        currentStepEl.classList.add('anim-out-right'); // Slide out to right
+    }
+
+    // B. Wait for animation to finish (400ms), then swap
+    setTimeout(() => {
+        // Hide Old
+        currentStepEl.style.display = 'none';
+        currentStepEl.classList.remove('active', 'anim-out-left', 'anim-out-right');
+
+        // Increment/Decrement Step
+        newWizState.step += dir;
+        
+        // Show New
+        const nextStepEl = document.getElementById(`new-step-${newWizState.step}`);
+        nextStepEl.style.display = 'block';
+        
+        // Apply Enter Animation
+        if (dir === 1) {
+            nextStepEl.classList.add('anim-in-right'); // Enter from right
+        } else {
+            nextStepEl.classList.add('anim-in-left'); // Enter from left
+        }
+        
+        // Cleanup after animation finishes
+        setTimeout(() => {
+            nextStepEl.classList.remove('anim-in-right', 'anim-in-left');
+            nextStepEl.classList.add('active'); 
+        }, 500);
+
+        // Update UI (Progress & Buttons)
+        document.getElementById('newWizStepNum').innerText = newWizState.step;
+        document.getElementById('newWizProgress').style.width = (newWizState.step / 5) * 100 + "%";
+        
+        prevBtn.disabled = (newWizState.step === 1);
+        
+        if (newWizState.step === 5) {
+            nextBtn.innerHTML = `إرسال واتساب <i class="fab fa-whatsapp"></i>`;
+            nextBtn.style.color = "#00ff88";
+            nextBtn.style.borderColor = "#00ff88";
+        } else {
+            nextBtn.innerHTML = `التالي`;
+            nextBtn.style.color = "";
+            nextBtn.style.borderColor = "";
+        }
+
+    }, 400); // ⏱️ Wait time
+}
+function submitNewOrder() {
+    const name = document.getElementById('newName').value;
+    const phone = document.getElementById('newPhone').value;
+    const desc = document.getElementById('newDescription').value;
+
+    if (!name || !phone) { showCustomAlert("اكتب الاسم ورقم الهاتف!", "ناقص"); return; }
+
+    const colors = [];
+    document.querySelectorAll('.color-preset.active').forEach(el => colors.push(el.getAttribute('data-color')));
+    
+    const total = document.getElementById('newLiveTotal').innerText + " ج.م";
+    const time = document.getElementById('newLiveTime').innerText;
+    
+    const items = [
+        `📦 مشروع: ${newWizState.selectedService.name}`, 
+        `🎨 اللوجو: ${newWizState.logoStatus}`,
+        ...newWizState.selectedAddons.map(a => `➕ ${a.name}`)
+    ];
+
+    const btn = document.getElementById('btnNewNext');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+
+    db.collection("orders").add({
+        customerName: name, phone: phone, client: `${name} (${phone})`,
+        items: items, total: total, time: time, date: new Date(), status: 'pending', notes: desc
+    }).then(() => {
+        let msg = `🚀 *طلب جديد (Website)*\n👤 ${name}\n📱 ${phone}\n` +
+                  `📦 ${newWizState.selectedService.name}\n` +
+                  `🎨 اللوجو: ${newWizState.logoStatus}\n`;
+        
+        if (newWizState.selectedAddons.length > 0) {
+            msg += `✨ الإضافات:\n`;
+            newWizState.selectedAddons.forEach(a => msg += `   - ${a.name}\n`);
+        }
+        if (colors.length > 0) msg += `🖌️ ألوان مفضلة: (صورة مرفقة)\n`;
+        
+        msg += `⏳ الوقت: ${time}\n💰 الإجمالي: ${total}\n📝 ${desc}`;
+
+        window.open(`https://wa.me/201275944732?text=${encodeURIComponent(msg)}`, '_blank');
+        location.reload();
+    });
+}
 /* =========================================
    🔥 SMART ORDER SYSTEM (FINAL FIXED VERSION)
    ========================================= */

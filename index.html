@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">(function(){ emailjs.init("TVEwI_vDpgc8zwwEd");})(); </script>
     <link rel="stylesheet" href="style.css">
@@ -101,7 +99,7 @@
     
     
     <li>
-        <a href="#estimator" class="nav-icon" data-tooltip="الأسعار">
+        <a href="#ultimate-wizard" class="nav-icon" data-tooltip="الأسعار">
             <i class="fas fa-shopping-cart"></i>
         </a>
     </li>
@@ -252,7 +250,7 @@
                 </div>
 
                 <div class="action-buttons">
-                    <a href="#estimator" class="btn primary" data-lang="cobtn">شوف الاسعار</a>
+                    <a href="#ultimate-wizard" class="btn primary" data-lang="cobtn">شوف الاسعار</a>
                     <a href="kyrillos-cv.pdf" download class="btn-text">Download CV <i class="fas fa-download"></i></a>
                 </div>
             </div>
@@ -451,36 +449,118 @@
             </div>
         </div>
     </section> 
-<section class="section" id="estimator">
+<section class="section" id="ultimate-wizard">
     <div class="container">
-        <h2 class="section-title" data-aos="fade-up">اختر متطلباتك </h2>
+        <h2 class="section-title" data-aos="fade-up">صمم باقتك بنفسك</h2>
         
-        <div class="estimator-box fun-glass" data-aos="zoom-in-up">
+        <div id="wizStatus" style="text-align:center; margin-bottom:20px; font-weight:bold; transition:0.3s;" data-aos="fade-up">
+            <span class="status-dot" style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ccc; margin-left:8px;"></span>
+            <span class="status-text" style="color:#888;">جاري التحقق...</span>
+        </div>
+
+        <div class="estimator-box fun-glass" data-aos="zoom-in">
             
-            <div class="est-header">
-                <h3><i class="fas fa-cubes"></i> اختر نوع المشروع:</h3>
-            </div>
-
-            <div class="pop-grid types-area">
-    </div>
-
-            <hr class="est-divider-glow">
-
-            <div class="est-header">
-                <h3><i class="fas fa-magic"></i> الاضافات او تعديل:</h3>
-            </div>
-            
-            <div class="pop-grid addons-area">
-    </div>
-
-            <div class="est-result-bar">
-                <div class="result-text">
-                    <span style="font-size:0.9rem; color:#888;">الإجمالي :</span>
-                    <div class="bouncy-price"><span id="totalPrice">0</span> ج.م</div>
+            <div class="wiz-header" style="text-align: center; margin-bottom: 30px;">
+                <div class="wiz-progress" style="background: #333; height: 6px; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
+                    <div class="wiz-progress-fill" id="newWizProgress" style="height: 100%; width: 20%; background: var(--gold-main); transition: 0.4s;"></div>
                 </div>
-                <button class="btn primary small-btn" onclick="showBill()">
-اطلب العرض الان! <i class="fas fa-file-invoice"></i>
-</button>   
+                <div class="wiz-step-text" style="color: #ccc; font-weight: bold;">
+                    خطوة <span id="newWizStepNum" style="color: var(--gold-main);">1</span> من 5
+                </div>
+            </div>
+
+            <form id="newWizardForm">
+                
+                <div class="new-wiz-step active" id="new-step-1">
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;"><i class="fas fa-cubes"></i> اختر نوع المشروع</h3>
+                    <div id="newLoader1" style="text-align:center; padding:20px; color:var(--gold-main);">
+                        <i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...
+                    </div>
+                    <div class="pop-grid" id="newServicesGrid"></div>
+                </div>
+
+                <div class="new-wiz-step" id="new-step-2" style="display:none;">
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;"><i class="fas fa-server"></i> الخصائص التقنية</h3>
+                    <div id="newLoader3" style="text-align:center; padding:20px; color:var(--gold-main);">
+                        <i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...
+                    </div>
+                    <div class="pop-grid addons-area" id="newAddonsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+                </div>
+
+                <div class="new-wiz-step" id="new-step-3" style="display:none;">
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;"><i class="fas fa-eye"></i> المظهر والتجربة</h3>
+                    <p style="text-align:center; color:#888; margin-bottom:20px;">كيف تريد أن يشعر الزائر؟</p>
+                    <div class="pop-grid addons-area" id="newVisualsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+                        <div style="text-align:center; width:100%; color:#666;">جاري تحميل العناصر...</div>
+                    </div>
+                </div>
+
+                <div class="new-wiz-step" id="new-step-4" style="display:none;">
+                    
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:15px;"><i class="fas fa-fingerprint"></i> الشعار (اللوجو)</h3>
+                    <div class="logo-selector-grid">
+                        <label class="logo-option selected" onclick="selectLogoOption('have', 0, this)">
+                            <input type="radio" name="logoOption" value="Have Logo" checked hidden>
+                            <i class="fas fa-check-circle"></i>
+                            <span>لدي شعار جاهز</span>
+                        </label>
+                        <label class="logo-option" onclick="selectLogoOption('need', 0, this)">
+                            <input type="radio" name="logoOption" value="Need Design" hidden>
+                            <i class="fas fa-pen-nib"></i>
+                            <span>أحتاج تصميم (+0)</span>
+                        </label>
+                    </div>
+
+                    <hr class="est-divider-glow">
+
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:10px;"><i class="fas fa-palette"></i> ألوان البراند</h3>
+                    <p style="text-align:center; color:#666; font-size:0.8rem; margin-bottom:15px;">اختر من القائمة أو أضف لونك</p>
+                    
+                    <div class="palette-grid" id="paletteGrid">
+                        <div class="color-preset active" style="--c:#D4AF37;" data-color="#D4AF37" onclick="togglePaletteColor(this)"></div>
+                        <div class="color-preset" style="--c:#00e5ff;" data-color="#00e5ff" onclick="togglePaletteColor(this)"></div>
+                        <div class="color-preset" style="--c:#ff2e63;" data-color="#ff2e63" onclick="togglePaletteColor(this)"></div>
+                        <div class="color-preset" style="--c:#8c00ff;" data-color="#8c00ff" onclick="togglePaletteColor(this)"></div>
+                        
+                        <div class="color-preset custom-preset" title="لون مخصص">
+                            <input type="color" class="custom-preset-input" onchange="addCustomPaletteColor(this)">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="new-wiz-step" id="new-step-5" style="display:none;">
+                    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;"><i class="fas fa-paper-plane"></i> تفاصيل التواصل</h3>
+                    
+                    <div class="input-group" style="margin-bottom:15px;">
+                        <textarea id="newDescription" class="cyber-input" rows="4" placeholder="اشرح فكرتك باختصار أو اترك رابط لموقع مشابه..."></textarea>
+                    </div>
+                    <div class="input-group" style="margin-bottom:15px;">
+                        <input type="text" id="newName" class="cyber-input" placeholder="الاسم الكريم" required>
+                    </div>
+                    <div class="input-group" style="margin-bottom:15px;">
+                        <input type="tel" id="newPhone" class="cyber-input" placeholder="رقم الواتساب" required>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="est-result-bar" style="margin-top: 30px; flex-direction:column; gap:15px;">
+                <div class="result-text" style="display: flex; align-items: center; gap: 15px; width:100%; justify-content:center;">
+                    <div class="bouncy-price" id="newBouncyBox">
+                        <span id="newLiveTotal">0</span> <span class="currency">ج.م</span>
+                    </div>
+                    <span style="color:#333; font-size:1.5rem;">|</span>
+                    <div class="time-badge" style="display: flex; align-items: center; gap: 8px; color: #fff;">
+                        <i class="fas fa-clock" style="color: var(--gold-main);"></i>
+                        <span id="newLiveTime" style="font-weight: bold; font-family: 'Courier New', monospace;">0 أيام</span>
+                    </div>
+                </div>
+                
+                <div class="wiz-nav-btns" style="display:flex; gap:10px; width:100%; justify-content:center;">
+                    <button type="button" class="btn secondary" id="btnNewPrev" onclick="navNewWizard(-1)" disabled>سابق</button>
+                    <button type="button" class="btn primary" id="btnNewNext" onclick="navNewWizard(1)">التالي</button>
+                </div>
             </div>
 
         </div>
@@ -720,6 +800,9 @@
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="script.js"></script>

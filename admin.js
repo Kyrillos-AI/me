@@ -518,115 +518,6 @@ document.getElementById('deleteProfileBtn').addEventListener('click', function()
         }
     );
 });
-
-/* =========================================
-   💰 ROBUST CALCULATOR LOGIC (V3)
-   ========================================= */
-
-// 1. ADD SERVICE (UI Only)
-function addNewService() {
-    const name = document.getElementById('newServName').value;
-    const price = document.getElementById('newServPrice').value;
-    const icon = document.getElementById('newServIcon').value; // Grabs selected icon
-
-    if (!name || !price) { showAlert("يرجى إدخال الاسم والسعر", "بيانات ناقصة"); return; }
-
-    createRow('adminServicesList', name, price, icon, 'service-row');
-    
-    // Clear fields
-    document.getElementById('newServName').value = "";
-    document.getElementById('newServPrice').value = "";
-}
-
-// 2. ADD ADDON (UI Only)
-function addNewAddon() {
-    const name = document.getElementById('newAddonName').value;
-    const price = document.getElementById('newAddonPrice').value;
-    const icon = document.getElementById('newAddonIcon').value;
-
-    if (!name || !price) { showAlert("يرجى إدخال الاسم والسعر", "بيانات ناقصة"); return; }
-
-    createRow('adminAddonsList', name, price, icon, 'addon-row');
-
-    document.getElementById('newAddonName').value = "";
-    document.getElementById('newAddonPrice').value = "";
-}
-
-// 3. CREATE ROW (Helper)
-function createRow(containerID, name, price, icon, rowClass) {
-    const container = document.getElementById(containerID);
-    const div = document.createElement('div');
-    div.className = rowClass; 
-    div.style.cssText = "display: grid; grid-template-columns: 40px 2fr 1fr auto; gap: 10px; align-items: center; background: #151515; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #333;";
-    
-    div.innerHTML = `
-        <div style="text-align:center;"><i class="fas ${icon}" style="color:var(--gold); font-size:1.2rem;"></i></div>
-        <input type="text" class="p-name" value="${name}" style="background:transparent; border:none; color:#fff; width:100%;">
-        <input type="number" class="p-price" value="${price}" style="background:transparent; border:none; color:var(--gold); font-weight:bold; width:100%;">
-        <input type="hidden" class="p-icon" value="${icon}"> <button onclick="this.parentElement.remove()" style="background:#ff2e63; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button>
-    `;
-    container.appendChild(div);
-}
-
-// 4. SAVE TO DATABASE (The Critical Part)
-function saveAllCalculatorData() {
-    const btn = document.getElementById('saveDynamicPricesBtn');
-    const oldText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
-
-    // Collect Services
-    const services = [];
-    document.querySelectorAll('.service-row').forEach(row => {
-        services.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    // Collect Addons
-    const addons = [];
-    document.querySelectorAll('.addon-row').forEach(row => {
-        addons.push({
-            name: row.querySelector('.p-name').value,
-            price: Number(row.querySelector('.p-price').value),
-            icon: row.querySelector('.p-icon').value
-        });
-    });
-
-    console.log("Saving Data:", { services, addons }); // For Debugging
-
-    // Save to Firestore 'calculator_v3'
-    db.collection("settings").doc("calculator_v3").set({
-        services: services,
-        addons: addons
-    }).then(() => {
-        showAlert("تم تحديث البيانات بنجاح!", "نجاح");
-        btn.innerHTML = oldText;
-    }).catch(err => {
-        console.error("Save Error:", err);
-        showAlert("حدث خطأ في الحفظ (حاول مره اخرى)", "خطأ");
-        btn.innerHTML = oldText;
-    });
-}
-
-// 5. LOAD DATA (On Refresh)
-function loadCalcData() {
-    db.collection("settings").doc("calculator_v3").get().then((doc) => {
-        if (doc.exists) {
-            const data = doc.data();
-            document.getElementById('adminServicesList').innerHTML = "";
-            document.getElementById('adminAddonsList').innerHTML = "";
-
-            if (data.services) data.services.forEach(s => createRow('adminServicesList', s.name, s.price, s.icon || 'fa-code', 'service-row'));
-            if (data.addons) data.addons.forEach(a => createRow('adminAddonsList', a.name, a.price, a.icon || 'fa-plus', 'addon-row'));
-        }
-    }).catch(err => console.log("Load Error:", err));
-}
-
-// Run on Load
-document.addEventListener('DOMContentLoaded', () => setTimeout(loadCalcData, 1000));
-
 /* =========================================
    📊 STATS & STATUS LOGIC
    ========================================= */
@@ -908,3 +799,103 @@ window.loadOrderStats = function() {
     if(recEl) recEl.innerText = receivedCount;
     if(confEl) confEl.innerText = confirmedCount;
 }
+/* =========================================
+   💰 CALCULATOR LOGIC V7 (Admin Fix)
+   ========================================= */
+
+// 1. ADD FUNCTIONS (Unified)
+function addNewService() { addRow('adminServicesList', 'newServName', 'newServPrice', 'newServIcon', 'service-row'); }
+function addNewAddon() { addRow('adminAddonsList', 'newAddonName', 'newAddonPrice', 'newAddonIcon', 'addon-row'); }
+// This was missing before 👇
+function addNewVisual() { addRow('adminVisualsList', 'newVisualName', 'newVisualPrice', 'newVisualIcon', 'visual-row'); }
+
+function addRow(containerID, nameID, priceID, iconID, className) {
+    const name = document.getElementById(nameID).value;
+    const price = document.getElementById(priceID).value;
+    const icon = document.getElementById(iconID).value;
+    
+    if (!name || !price) { showAlert("بيانات ناقصة", "خطأ"); return; }
+    
+    createRow(containerID, name, price, icon, className);
+    
+    // Clear inputs
+    document.getElementById(nameID).value = "";
+    document.getElementById(priceID).value = "";
+}
+
+function createRow(containerID, name, price, icon, rowClass) {
+    const container = document.getElementById(containerID);
+    const div = document.createElement('div');
+    div.className = rowClass;
+    // Styling for the row
+    div.style.cssText = "display: grid; grid-template-columns: 40px 2fr 1fr auto; gap: 10px; align-items: center; background: #151515; padding: 10px; margin-bottom: 8px; border: 1px solid #333; border-radius: 8px;";
+    
+    div.innerHTML = `
+        <div style="text-align:center;"><i class="fas ${icon}" style="color:var(--gold);"></i></div>
+        <input type="text" class="p-name" value="${name}" style="background:transparent; border:none; color:#fff; width:100%;">
+        <input type="number" class="p-price" value="${price}" style="background:transparent; border:none; color:var(--gold); font-weight:bold; width:100%;">
+        <input type="hidden" class="p-icon" value="${icon}">
+        <button onclick="this.parentElement.remove()" class="btn-del" style="padding:5px 10px;"><i class="fas fa-trash"></i></button>
+    `;
+    container.appendChild(div);
+}
+
+// 2. SAVE ALL DATA (Includes Logo & Visuals)
+function saveAllCalculatorData() {
+    const btn = document.getElementById('saveDynamicPricesBtn');
+    const oldText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+
+    // Helper to scrape data from DOM
+    const getData = (selector) => {
+        let arr = [];
+        document.querySelectorAll(selector).forEach(row => {
+            arr.push({
+                name: row.querySelector('.p-name').value,
+                price: Number(row.querySelector('.p-price').value),
+                icon: row.querySelector('.p-icon').value
+            });
+        });
+        return arr;
+    };
+
+    const logoPriceInput = document.getElementById('adminLogoPrice').value;
+    const logoPrice = logoPriceInput ? Number(logoPriceInput) : 1500;
+
+    // Save with Merge
+    db.collection("settings").doc("calculator_v3").set({
+        services: getData('.service-row'),
+        addons: getData('.addon-row'),
+        visuals: getData('.visual-row'), // Saving Visuals
+        logoPrice: logoPrice             // Saving Logo Price
+    }, { merge: true }).then(() => {
+        showAlert("تم حفظ جميع البيانات بنجاح!", "نجاح");
+        btn.innerHTML = oldText;
+    }).catch(err => {
+        console.error(err);
+        showAlert("خطأ في الحفظ", "خطأ");
+        btn.innerHTML = oldText;
+    });
+}
+
+// 3. LOAD DATA (Single Function)
+function loadCalcData() {
+    db.collection("settings").doc("calculator_v3").get().then((doc) => {
+        if (doc.exists) {
+            const data = doc.data();
+            
+            // Clear all lists first
+            document.getElementById('adminServicesList').innerHTML = "";
+            document.getElementById('adminAddonsList').innerHTML = "";
+            document.getElementById('adminVisualsList').innerHTML = "";
+
+            if (data.services) data.services.forEach(s => createRow('adminServicesList', s.name, s.price, s.icon, 'service-row'));
+            if (data.addons) data.addons.forEach(a => createRow('adminAddonsList', a.name, a.price, a.icon, 'addon-row'));
+            if (data.visuals) data.visuals.forEach(v => createRow('adminVisualsList', v.name, v.price, v.icon, 'visual-row'));
+            
+            if (data.logoPrice) document.getElementById('adminLogoPrice').value = data.logoPrice;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => setTimeout(loadCalcData, 1000));
