@@ -3974,6 +3974,96 @@ body {
   cursor: pointer;
 }
 /* =========================================
+   ⏳ NEW TIME SELECTOR STYLES (STEP 5)
+   ========================================= */
+.time-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.time-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.time-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-5px);
+}
+
+.time-card .main-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #888;
+  transition: 0.3s;
+}
+
+.time-card h4 {
+  margin: 10px 0 5px;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.time-card p {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.time-card .badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* ACTIVE STATE */
+.time-card.active {
+  border-color: var(--gold-main);
+  background: rgba(212, 175, 55, 0.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.time-card.active .main-icon {
+  color: var(--gold-main) !important;
+  transform: scale(1.1);
+}
+
+/* CHECK ICON (Hidden by default) */
+.time-card .check-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 25px;
+  height: 25px;
+  background: var(--gold-main);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.3s;
+}
+
+.time-card.active .check-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+/* =========================================
    🚀 WIZARD STEP ANIMATIONS
    ========================================= */
 
@@ -4060,4 +4150,21 @@ body {
 }
 .anim-in-left {
   animation-name: slideInLeft;
+}
+/* Ensure the email input takes full width if needed */
+input[type="email"] {
+  width: 100%;
+  padding: 15px;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: 0.3s;
+  font-family: "Cairo", sans-serif;
+}
+input[type="email"]:focus {
+  outline: none;
+  border-color: var(--gold-main);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }

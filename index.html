@@ -18,7 +18,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
@@ -699,224 +698,124 @@
             <div class="wiz-step-text" style="color: #ccc; font-weight: bold">
               <span data-lang="wiz_step_txt">خطوة</span>
               <span id="newWizStepNum" style="color: var(--gold-main)">1</span>
-              من 5
+              من 7
             </div>
           </div>
 
           <form id="newWizardForm">
-            <div class="new-wiz-step active" id="new-step-1">
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 20px"
-                data-lang="wiz_s1"
-              >
-                <i class="fas fa-cubes"></i> اختر نوع المشروع
-              </h3>
-              <div
-                id="newLoader1"
-                style="
-                  text-align: center;
-                  padding: 20px;
-                  color: var(--gold-main);
-                "
-              >
-                <i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...
-              </div>
-              <div class="pop-grid" id="newServicesGrid"></div>
+    
+    <div class="new-wiz-step active" id="new-step-1">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;" data-lang="wiz_s1">
+            <i class="fas fa-cubes"></i> اختر نوع المشروع
+        </h3>
+        <div id="newLoader1" style="text-align:center; padding:20px; color:var(--gold-main);">
+            <i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...
+        </div>
+        <div class="pop-grid" id="newServicesGrid"></div>
+    </div>
+
+    <div class="new-wiz-step" id="new-step-2" style="display:none;">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;" data-lang="wiz_s2">
+            <i class="fas fa-server"></i> الخصائص التقنية
+        </h3>
+        <div class="pop-grid addons-area" id="newAddonsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;"></div>
+    </div>
+
+    <div class="new-wiz-step" id="new-step-3" style="display:none;">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;" data-lang="wiz_s3">
+            <i class="fas fa-eye"></i> المظهر والتجربة
+        </h3>
+        <p style="text-align:center; color:#888; margin-bottom:20px;" data-lang="wiz_visual_hint">كيف تريد أن يشعر الزائر؟</p>
+        <div class="pop-grid addons-area" id="newVisualsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;"></div>
+    </div>
+
+    <div class="new-wiz-step" id="new-step-4" style="display:none;">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:30px;">
+            <i class="fas fa-fingerprint"></i> هل لديك شعار؟
+        </h3>
+        <div class="logo-selector-grid" style="max-width:400px; margin:0 auto; gap:20px;">
+            <label class="logo-option selected" onclick="selectLogoOption('have', 0, this)">
+                <input type="radio" name="logoOption" value="Have Logo" checked hidden>
+                <i class="fas fa-check-circle" style="font-size:2rem; margin-bottom:10px;"></i>
+                <span data-lang="wiz_logo_have" style="font-size:1.1rem; font-weight:bold;">لدي شعار جاهز</span>
+            </label>
+            <label class="logo-option" onclick="selectLogoOption('need', 0, this)">
+                <input type="radio" name="logoOption" value="Need Design" hidden>
+                <i class="fas fa-pen-nib" style="font-size:2rem; margin-bottom:10px;"></i>
+                <span data-lang="wiz_logo_need" style="font-size:1.1rem; font-weight:bold;">أحتاج تصميم (+0)</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="new-wiz-step" id="new-step-5" style="display:none;">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;" data-lang="wiz_colors">
+            <i class="fas fa-palette"></i> ألوان الهوية
+        </h3>
+        <p style="text-align:center; color:#888; margin-bottom:30px;" data-lang="wiz_colors_hint">
+            اختر الألوان التي تفضلها لمشروعك
+        </p>
+
+        <div class="palette-grid" id="paletteGrid">
+            <div class="color-preset active" style="--c:#D4AF37;" data-color="#D4AF37" onclick="togglePaletteColor(this)"></div>
+            <div class="color-preset" style="--c:#00e5ff;" data-color="#00e5ff" onclick="togglePaletteColor(this)"></div>
+            <div class="color-preset" style="--c:#ff2e63;" data-color="#ff2e63" onclick="togglePaletteColor(this)"></div>
+            <div class="color-preset" style="--c:#8c00ff;" data-color="#8c00ff" onclick="togglePaletteColor(this)"></div>
+            <div class="color-preset" style="--c:#00ff88;" data-color="#00ff88" onclick="togglePaletteColor(this)"></div>
+            <div class="color-preset custom-preset" title="لون مخصص">
+                <input type="color" class="custom-preset-input" onchange="addCustomPaletteColor(this)">
+                <i class="fas fa-plus"></i>
             </div>
+        </div>
+    </div>
 
-            <div class="new-wiz-step" id="new-step-2" style="display: none">
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 20px"
-                data-lang="wiz_s2"
-              >
-                <i class="fas fa-server"></i> الخصائص التقنية
-              </h3>
-              <div
-                id="newLoader3"
-                style="
-                  text-align: center;
-                  padding: 20px;
-                  color: var(--gold-main);
-                "
-              >
-                <i class="fas fa-circle-notch fa-spin"></i> جاري التحميل...
-              </div>
-              <div
-                class="pop-grid addons-area"
-                id="newAddonsGrid"
-                style="
-                  display: grid;
-                  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                  gap: 10px;
-                "
-              ></div>
+    <div class="new-wiz-step" id="new-step-6" style="display:none;">
+        <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;">
+            <i class="fas fa-hourglass-half"></i> الموعد المناسب للتسليم
+        </h3>
+        <p style="text-align:center; color:#888; margin-bottom:30px;">اختر الخطة الزمنية المناسبة لك</p>
+
+        <div class="time-selector-grid">
+            <div class="time-card active" onclick="selectTimeRange('normal', 'وقت قياسي (عادي)', 0, this)">
+                <div class="check-icon"><i class="fas fa-check"></i></div>
+                <i class="fas fa-coffee main-icon"></i>
+                <h4>وقت قياسي (Normal)</h4>
+                <p>الجدول الطبيعي للعمل دون ضغط.</p>
+                <span class="badge" style="background:#333; color:#fff;">السعر الطبيعي</span>
             </div>
-
-            <div class="new-wiz-step" id="new-step-3" style="display: none">
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 20px"
-                data-lang="wiz_s3"
-              >
-                <i class="fas fa-eye"></i> المظهر والتجربة
-              </h3>
-              <p
-                style="text-align: center; color: #888; margin-bottom: 20px"
-                data-lang="wiz_visual_hint"
-              >
-                كيف تريد أن يشعر الزائر؟
-              </p>
-              <div
-                class="pop-grid addons-area"
-                id="newVisualsGrid"
-                style="
-                  display: grid;
-                  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                  gap: 10px;
-                "
-              >
-                <div style="text-align: center; width: 100%; color: #666">
-                  جاري تحميل العناصر...
-                </div>
-              </div>
+            <div class="time-card" onclick="selectTimeRange('fast', 'مستعجل (Fast)', 500, this)">
+                <div class="check-icon"><i class="fas fa-check"></i></div>
+                <i class="fas fa-bolt main-icon" style="color:#ff2e63;"></i>
+                <h4>مستعجل (Urgent)</h4>
+                <p>أولوية قصوى وتسليم أسرع.</p>
+                <span class="badge" style="background:#ff2e63; color:#fff;">تكلفة إضافية</span>
             </div>
-
-            <div class="new-wiz-step" id="new-step-4" style="display: none">
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 15px"
-                data-lang="wiz_s4"
-              >
-                <i class="fas fa-fingerprint"></i> الشعار (اللوجو)
-              </h3>
-              <div class="logo-selector-grid">
-                <label
-                  class="logo-option selected"
-                  onclick="selectLogoOption('have', 0, this)"
-                >
-                  <input
-                    type="radio"
-                    name="logoOption"
-                    value="Have Logo"
-                    checked
-                    hidden
-                  />
-                  <i class="fas fa-check-circle"></i>
-                  <span data-lang="wiz_logo_have">لدي شعار جاهز</span>
-                </label>
-                <label
-                  class="logo-option"
-                  onclick="selectLogoOption('need', 0, this)"
-                >
-                  <input
-                    type="radio"
-                    name="logoOption"
-                    value="Need Design"
-                    hidden
-                  />
-                  <i class="fas fa-pen-nib"></i>
-                  <span data-lang="wiz_logo_need">أحتاج تصميم (+0)</span>
-                </label>
-              </div>
-
-              <hr class="est-divider-glow" />
-
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 10px"
-                data-lang="wiz_colors"
-              >
-                <i class="fas fa-palette"></i> ألوان البراند
-              </h3>
-              <p
-                style="
-                  text-align: center;
-                  color: #666;
-                  font-size: 0.8rem;
-                  margin-bottom: 15px;
-                "
-                data-lang="wiz_colors_hint"
-              >
-                اختر من القائمة أو أضف لونك
-              </p>
-
-              <div class="palette-grid" id="paletteGrid">
-                <div
-                  class="color-preset active"
-                  style="--c: #d4af37"
-                  data-color="#D4AF37"
-                  onclick="togglePaletteColor(this)"
-                ></div>
-                <div
-                  class="color-preset"
-                  style="--c: #00e5ff"
-                  data-color="#00e5ff"
-                  onclick="togglePaletteColor(this)"
-                ></div>
-                <div
-                  class="color-preset"
-                  style="--c: #ff2e63"
-                  data-color="#ff2e63"
-                  onclick="togglePaletteColor(this)"
-                ></div>
-                <div
-                  class="color-preset"
-                  style="--c: #8c00ff"
-                  data-color="#8c00ff"
-                  onclick="togglePaletteColor(this)"
-                ></div>
-
-                <div class="color-preset custom-preset" title="لون مخصص">
-                  <input
-                    type="color"
-                    class="custom-preset-input"
-                    onchange="addCustomPaletteColor(this)"
-                  />
-                  <i class="fas fa-plus"></i>
-                </div>
-              </div>
+            <div class="time-card" onclick="selectTimeRange('relaxed', 'غير مستعجل (Flexible)', -200, this)">
+                <div class="check-icon"><i class="fas fa-check"></i></div>
+                <i class="fas fa-feather-alt main-icon" style="color:#00e5ff;"></i>
+                <h4>براحتك (Flexible)</h4>
+                <p>لست في عجلة من أمري.</p>
+                <span class="badge" style="background:#00e5ff; color:#000;">خصم بسيط</span>
             </div>
+        </div>
+    </div>
 
-            <div class="new-wiz-step" id="new-step-5" style="display: none">
-              <h3
-                class="wiz-title"
-                style="text-align: center; color: #fff; margin-bottom: 20px"
-                data-lang="wiz_s5"
-              >
-                <i class="fas fa-paper-plane"></i> تفاصيل التواصل
-              </h3>
-
-              <div class="input-group" style="margin-bottom: 15px">
-                <input
-                  type="text"
-                  id="newName"
-                  class="cyber-input"
-                  placeholder="الاسم"
-                  required
-                  data-lang-placeholder="wiz_ph_name"
-                />
-                <input
-                  type="number"
-                  id="newPhone"
-                  class="cyber-input"
-                  placeholder="رقم الواتساب"
-                  required
-                  data-lang-placeholder="wiz_ph_phone"
-                />
-              </div>
-              <div class="input-group" style="margin-bottom: 15px">
-                <textarea
-                  id="newDescription"
-                  class="cyber-input"
-                  rows="4"
-                  placeholder="اشرح فكرتك باختصار أو اترك رابط لموقع مشابه..."
-                  data-lang-placeholder="wiz_ph_desc"
-                ></textarea>
-              </div>
-            </div>
-          </form>
+    <div class="new-wiz-step" id="new-step-7" style="display:none;">
+    <h3 class="wiz-title" style="text-align:center; color:#fff; margin-bottom:20px;" data-lang="wiz_s5">
+        <i class="fas fa-paper-plane"></i> تفاصيل التواصل
+    </h3>
+    <div class="input-group" style="margin-bottom:15px;">
+        <input type="text" id="newName" class="cyber-input" placeholder="الاسم" required data-lang-placeholder="wiz_ph_name">
+        <input type="number" id="newPhone" class="cyber-input" placeholder="رقم الواتساب" required data-lang-placeholder="wiz_ph_phone">
+    </div>
+    
+    <div class="input-group" style="margin-bottom:15px;">
+        <input type="email" id="newEmail" class="cyber-input" placeholder="البريد الإلكتروني (لإرسال الفاتورة)" required>
+    </div>
+    <div class="input-group" style="margin-bottom:15px;">
+        <textarea id="newDescription" class="cyber-input" rows="4" placeholder="تفاصيل إضافية..." data-lang-placeholder="wiz_ph_desc"></textarea>
+    </div>
+</div>
+</form>
 
           <div
             class="est-result-bar"
@@ -1482,13 +1381,10 @@
           <p data-lang="bill_footer">
             بالضغط على تأكيد، سيتم إرسال الطلب عبر واتساب.
           </p>
-          <button
-            class="btn primary full-width"
-            onclick="confirmOrderOnWhatsApp()"
-          >
-            <i class="fab fa-whatsapp"></i>
-            <span data-lang="btn_confirm">تأكيد وإرسال الطلب</span>
-          </button>
+         <button class="btn primary full-width" id="btnSubmitOrder" onclick="submitOrderFinal()">
+        <i class="fas fa-paper-plane"></i>
+        <span>تأكيد وإرسال الطلب (Email)</span>
+    </button>
         </div>
       </div>
     </div>

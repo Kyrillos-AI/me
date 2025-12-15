@@ -153,10 +153,10 @@
     </div>
 
     <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
-        <button onclick="filterOrders('all')" class="btn-cyber small-btn" style="border-color:#fff; color:#fff; min-width: 150px;">
+        <button onclick="filterOrders('all')" class="btn-cyber small-btn" style="border-color:#ffd700; color:#fff; min-width: 150px;">
             <i class="fas fa-list"></i> عرض الكل
         </button>
-        <button id="clearDataBtn" onclick="clearAllData()" class="btn-cyber small-btn" style="border-color: #ff2e63; color: #ff2e63; min-width: 150px;">
+        <button id="clearDataBtn" onclick="clearAllData()" class="btn-cyber red small-btn" style="border-color: #ff2e63; color: white; min-width: 150px;">
             <i class="fas fa-trash-alt"></i> حذف كل البيانات
         </button>
     </div>
@@ -242,7 +242,7 @@
                 <button class="btn-cyber" id="saveProfileBtn">
                     <span class="btn-text">حفظ الصورة</span> <i class="fas fa-save"></i>
                 </button>
-                <button class="btn-cyber" id="deleteProfileBtn" style="background: #ff2e63; color: white; border-color: #ff2e63;">
+                <button class="btn-cyber red" id="deleteProfileBtn" style=" color: white; border-color: #ff2e63;">
                     <span class="btn-text">حذف واسترجاع الأصلية</span> <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -385,6 +385,21 @@
         <div class="confirm-actions" style="display:flex; gap:15px; justify-content:center; margin-top:20px;">
             <button id="btnConfirmYes" class="btn-del" style="padding:10px 30px;">نعم، احذف</button>
             <button id="btnConfirmNo" class="btn-cyber" style="border-color:#555; color:#aaa; background:transparent; padding:10px 30px;">إلغاء</button>
+        </div>
+    </div>
+</div>
+<div id="orderDetailsModal" class="alert-overlay">
+    <div class="alert-box glass-panel" style="max-width: 500px; text-align: right;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; margin-bottom:15px;">
+            <h3 style="margin:0; color:var(--gold);"><i class="fas fa-file-invoice"></i> تفاصيل الطلب</h3>
+            <button onclick="closeOrderDetails()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+
+        <div id="modalContent" style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+            </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+             <button class="btn-cyber small-btn" onclick="closeOrderDetails()">إغلاق</button>
         </div>
     </div>
 </div>

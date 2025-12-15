@@ -781,8 +781,7 @@ function loadOrdersManager() {
       loadOrderStats();
     });
 }
-
-// Helper function to render the list (used by Filter)
+// Helper function to render the list (Updated)
 function renderOrders(ordersToRender) {
   const list = document.getElementById("ordersList");
   list.innerHTML = "";
@@ -794,73 +793,70 @@ function renderOrders(ordersToRender) {
   }
 
   ordersToRender.forEach((data) => {
-    // Color Code Status
+    // 1. Determine Status Badge
     let statusBadge = "";
-    let actionBtns = "";
-    let whatsappBtn = ""; // Reset button variable
-
     if (data.status === "pending") {
       statusBadge =
         '<span class="badge" style="background:#ffd700; color:#000;">قيد الانتظار ⏳</span>';
-      actionBtns = `
-                <button class="btn-cyber small-btn" onclick="updateOrderStatus('${data.id}', 'confirmed')" style="border-color:#00ff88; color:#00ff88;"> تأكيد ✅</button>
-                <button class="btn-cyber small-btn" onclick="updateOrderStatus('${data.id}', 'cancelled')" style="border-color:#ff2e63; color:#ff2e63;"> إلغاء ❌</button>
-            `;
     } else if (data.status === "confirmed") {
       statusBadge =
         '<span class="badge" style="background:#00ff88; color:#000;">تم التأكيد ✅</span>';
-      actionBtns = `<small style="color:#666;">مكتمل</small>`;
-
-      // ✅ 2. WHATSAPP BUTTON LOGIC (Added Here)
-      if (data.phone) {
-        // Remove special chars if any, ensure it works with WhatsApp
-        whatsappBtn = `
-                    <a href="https://wa.me/20${data.phone}" target="_blank" style="
-                        display: inline-block; margin-top: 5px; padding: 5px 10px; 
-                        background-color: #25D366; color: white; text-decoration: none; 
-                        border-radius: 5px; font-weight: bold; font-size: 0.8rem;">
-                        <i class="fab fa-whatsapp"></i> تواصل واتساب
-                    </a>
-                `;
-      }
     } else {
       statusBadge =
         '<span class="badge" style="background:#ff2e63; color:#fff;">ملغي ❌</span>';
-      actionBtns = `<small style="color:#666;">مرفوض</small>`;
     }
 
-    // Format Date
+    // 2. Extract Main Service Name only (for the card summary)
+    let mainService = "مشروع مخصص";
+    if (Array.isArray(data.items) && data.items.length > 0) {
+      // Usually the first item is the service (e.g., "📦 Project: X")
+      // We clean the emoji to make it look clean
+      mainService = data.items[0].replace(/📦|✨|🎨|➕/g, "").trim();
+    }
+
+    // 3. Format Date
     const dateObj = data.date ? data.date.toDate() : new Date();
     const dateStr = dateObj.toLocaleDateString("ar-EG");
 
-    // Note: I added data.customerName and data.phone below
     const itemHTML = `
             <div class="glass-panel" style="border:1px solid #333; padding:15px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:15px;">
                 
                 <div style="flex: 1;">
-                    <h4 style="margin:0 0 5px 0; color:#fff;">${
-                      data.customerName || data.client
+                    <h4 style="margin:0 0 5px 0; color:#fff; font-size:1.1rem;">${
+                      data.customerName || "عميل"
                     }</h4> 
-                    <small style="color:#888;">${dateStr} • ${
+                    
+                    <div style="color:var(--gold); font-size:0.9rem; margin-bottom:5px;">
+                        <i class="fas fa-cube"></i> ${mainService}
+                    </div>
+
+                    <small style="color:#666;">${dateStr} • ${
       data.phone || "No Phone"
     }</small>
-                    <div style="margin-top:5px; font-size:0.9rem; color:#ccc;">
-                        ${
-                          Array.isArray(data.items)
-                            ? data.items.join("<br>")
-                            : data.items
-                        }
-                    </div>
-                    ${whatsappBtn} </div>
-
-                <div style="text-align:left; min-width:120px;">
-                    <div style="font-size:1.2rem; font-weight:bold; color:var(--gold); margin-bottom:5px;">${
-                      data.total
-                    }</div>
-                    <div style="margin-bottom:10px;">${statusBadge}</div>
-                    <div style="display:flex; gap:5px;">${actionBtns}</div>
                 </div>
 
+                <div style="text-align:left; display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+                    <div style="font-size:1.2rem; font-weight:bold; color:#fff;">${
+                      data.total
+                    }</div>
+                    <div>${statusBadge}</div>
+                    
+                    <div style="display:flex; gap:8px; margin-top:5px;">
+                        <button class="btn-cyber small-btn" onclick="showOrderDetails('${
+                          data.id
+                        }')" style="padding: 5px 15px; font-size:0.8rem;">
+                            <i class="fas fa-eye"></i> التفاصيل
+                        </button>
+                        
+                        ${
+                          data.status === "pending"
+                            ? `
+                            <button class="btn-cyber small-btn" onclick="updateOrderStatus('${data.id}', 'confirmed')" style="border-color:#00ff88; color:#00ff88; padding: 5px;">✅</button>
+                            <button class="btn-cyber red small-btn" onclick="updateOrderStatus('${data.id}', 'cancelled')" style="padding: 5px;">❌</button>                        `
+                            : ""
+                        }
+                    </div>
+                </div>
             </div>
         `;
     list.innerHTML += itemHTML;
@@ -1125,3 +1121,104 @@ function loadCalcData() {
 document.addEventListener("DOMContentLoaded", () =>
   setTimeout(loadCalcData, 1000)
 );
+/* =========================================
+   👁️ ORDER DETAILS MODAL LOGIC
+   ========================================= */
+
+window.showOrderDetails = function (orderId) {
+  // 1. Find the order data from the global array
+  const order = allOrdersData.find((o) => o.id === orderId);
+
+  if (!order) {
+    showAlert("تعذر العثور على بيانات الطلب", "خطأ");
+    return;
+  }
+
+  const modal = document.getElementById("orderDetailsModal");
+  const content = document.getElementById("modalContent");
+
+  // 2. Build Items List (Full List)
+  let itemsHTML = '<ul style="padding-right:20px; color:#ddd; margin:0;">';
+  if (Array.isArray(order.items)) {
+    order.items.forEach((item) => {
+      itemsHTML += `<li style="margin-bottom:5px;">${item}</li>`;
+    });
+  } else {
+    itemsHTML += `<li>${order.items}</li>`;
+  }
+  itemsHTML += "</ul>";
+
+  // 3. Build Colors HTML
+  let colorsHTML = "";
+  if (order.colors && Array.isArray(order.colors) && order.colors.length > 0) {
+    colorsHTML = '<div class="color-grid">';
+    order.colors.forEach((colorCode) => {
+      colorsHTML += `
+                <div class="color-circle-box">
+                    <div class="color-circle" style="background:${colorCode}"></div>
+                    <span class="color-code">${colorCode}</span>
+                </div>
+            `;
+    });
+    colorsHTML += "</div>";
+  } else {
+    colorsHTML = '<span style="color:#666;">لا توجد ألوان محددة</span>';
+  }
+
+  // 4. WhatsApp Button for the modal
+  let waBtn = "";
+  if (order.phone) {
+    waBtn = `
+            <a href="https://wa.me/20${order.phone}" target="_blank" class="btn-cyber" style="margin-top:10px; display:inline-flex; width:auto; text-decoration:none;">
+                <i class="fab fa-whatsapp"></i> تواصل مع العميل
+            </a>
+        `;
+  }
+
+  // 5. Inject Content
+  content.innerHTML = `
+        <div class="order-detail-row">
+            <span class="order-label">العميل</span>
+            <div class="order-value">${order.customerName} (${
+    order.phone
+  })</div>
+        </div>
+
+        <div class="order-detail-row">
+            <span class="order-label">التفاصيل الكاملة</span>
+            <div class="order-value" style="font-size:0.9rem;">${itemsHTML}</div>
+        </div>
+
+        <div class="order-detail-row">
+            <span class="order-label">الألوان المختارة</span>
+            <div class="order-value">${colorsHTML}</div>
+        </div>
+
+        <div class="order-detail-row">
+            <span class="order-label">ملاحظات العميل</span>
+            <div class="order-value" style="color:${
+              order.notes ? "#fff" : "#666"
+            };">
+                "${order.notes || "لا توجد ملاحظات إضافية"}"
+            </div>
+        </div>
+
+        <div class="order-detail-row" style="background:rgba(212, 175, 55, 0.1); border-color:var(--gold);">
+            <span class="order-label" style="color:var(--gold);">الإجمالي والوقت</span>
+            <div class="order-value">
+                💰 ${order.total} <span style="margin:0 10px;">|</span> ⏳ ${
+    order.time || "غير محدد"
+  }
+            </div>
+        </div>
+
+        <div style="text-align:center;">${waBtn}</div>
+    `;
+
+  // 6. Show Modal
+  modal.classList.add("active");
+};
+
+window.closeOrderDetails = function () {
+  document.getElementById("orderDetailsModal").classList.remove("active");
+};

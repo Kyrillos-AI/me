@@ -1,480 +1,671 @@
 :root {
-    --gold: #D4AF37;
-    --dark-bg: #050505;
-    --glass: rgba(20, 20, 20, 0.8);
-    --alert: #ff2e63;
+  --gold: #d4af37;
+  --dark-bg: #050505;
+  --glass: rgba(20, 20, 20, 0.8);
+  --alert: #ff2e63;
 }
 /* =========================================
    🔥 CUSTOM SCROLLBAR (GOLD STYLE) 🔥
    ========================================= */
 ::-webkit-scrollbar {
-    width: 8px; /* عرض الشريط */
-    height: 8px; /* ارتفاع الشريط للأفقي */
+  width: 8px; /* عرض الشريط */
+  height: 8px; /* ارتفاع الشريط للأفقي */
 }
 
 ::-webkit-scrollbar-track {
-    background: #000; /* لون الخلفية */
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: #000; /* لون الخلفية */
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--gold); /* لون المقبض */
-    border-radius: 4px;
-    border: 1px solid #000;
+  background: var(--gold); /* لون المقبض */
+  border-radius: 4px;
+  border: 1px solid #000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #fff; /* لون عند اللمس */
-    box-shadow: 0 0 10px var(--gold);
+  background: #fff; /* لون عند اللمس */
+  box-shadow: 0 0 10px var(--gold);
 }
-* { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+* {
+  box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
+}
 
 body {
-    background-color: var(--dark-bg);
-    color: #fff;
-    margin: 0;
-    padding: 0;
+  background-color: var(--dark-bg);
+  color: #fff;
+  margin: 0;
+  padding: 0;
 }
 
 /* الخلفية */
 .cyber-grid-bg {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: radial-gradient(rgba(212, 175, 55, 0.1) 1px, transparent 1px);
-    background-size: 30px 30px;
-    z-index: -1;
-    pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+    rgba(212, 175, 55, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* 🔥 شاشة الدخول الجديدة 🔥 */
 .login-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000;
-    z-index: 99999;
-    display: flex; justify-content: center; align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-box {
-    width: 90%; max-width: 400px;
-    text-align: center;
-    border: 1px solid var(--gold);
-    box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
 }
 
-.login-icon { font-size: 3rem; color: var(--gold); margin-bottom: 10px; animation: pulse 2s infinite; }
-.error-msg { color: #ff2e63; margin-top: 10px; font-size: 0.9rem; min-height: 20px;}
+.login-icon {
+  font-size: 3rem;
+  color: var(--gold);
+  margin-bottom: 10px;
+  animation: pulse 2s infinite;
+}
+.error-msg {
+  color: #ff2e63;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  min-height: 20px;
+}
 
 /* باقي الستايلات كما هي... */
-.container { max-width: 1000px; margin: 0 auto; }
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
 .admin-header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
 }
-.admin-header h2 { margin: 0; color: var(--gold); }
-.status-badge { 
-    background: rgba(0, 255, 136, 0.1); color: #00ff88; 
-    padding: 5px 15px; border-radius: 20px; font-family: monospace; border: 1px solid #00ff88; 
+.admin-header h2 {
+  margin: 0;
+  color: var(--gold);
+}
+.status-badge {
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-family: monospace;
+  border: 1px solid #00ff88;
 }
 
 .glass-panel {
-    background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95));
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px; /* Slightly smaller radius */
-    padding: 20px 25px;  /* Reduced padding (was 35px) */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-    position: relative;
-    margin-bottom: 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(20, 20, 20, 0.9),
+    rgba(10, 10, 10, 0.95)
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px; /* Slightly smaller radius */
+  padding: 20px 25px; /* Reduced padding (was 35px) */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  margin-bottom: 20px;
 }
 
 /* A Gold glow at the top */
 .glass-panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0.7;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.7;
 }
 
 .glass-panel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.05);
-    border-color: rgba(212, 175, 55, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+    inset 0 0 20px rgba(212, 175, 55, 0.05);
+  border-color: rgba(212, 175, 55, 0.3);
 }
 
 .input-group {
-    margin-bottom: 15px; /* Less space between inputs */
+  margin-bottom: 15px; /* Less space between inputs */
 }
 
-input[type="text"], 
-input[type="number"], 
-input[type="password"], 
-textarea, 
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea,
 select {
-    width: 100%;
-    background: #0f0f0f;
-    border: 1px solid #333;
-    color: #fff;
-    padding: 10px 15px; /* Smaller, sleek padding */
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: 0.3s;
+  width: 100%;
+  background: #0f0f0f;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 10px 15px; /* Smaller, sleek padding */
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: 0.3s;
 }
 
-input:focus, textarea:focus, select:focus {
-    border-color: var(--gold);
-    background: #151515;
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--gold);
+  background: #151515;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
 }
 
 label {
-    margin-bottom: 5px;
-    font-size: 0.8rem; /* Smaller font */
+  margin-bottom: 5px;
+  font-size: 0.8rem; /* Smaller font */
 }
 
 /* --- FIX: Make Input Clickable --- */
 .scan-line {
-    /* ... your existing styles (width, height, background, etc) ... */
-    pointer-events: none; /* 👈 THIS IS THE FIX */
-    z-index: 10; /* Keep it visual, but untouchable */
+  /* ... your existing styles (width, height, background, etc) ... */
+  pointer-events: none; /* 👈 THIS IS THE FIX */
+  z-index: 10; /* Keep it visual, but untouchable */
 }
 
 /* Also ensure the input itself is on top if needed */
 .input-group input {
-    position: relative;
-    z-index: 5;
+  position: relative;
+  z-index: 5;
 }
 
 /* --- FIX: DROPZONE IMAGE FIT --- */
 .drop-zone {
-    position: relative;
-    height: 200px; /* Fixed height prevents page stretching */
-    width: 100%;
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.01);
-    transition: 0.3s;
-    text-align: center;
-    cursor: pointer;
+  position: relative;
+  height: 200px; /* Fixed height prevents page stretching */
+  width: 100%;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.01);
+  transition: 0.3s;
+  text-align: center;
+  cursor: pointer;
 }
 
 .img-preview {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 95%;  /* Leave a small gap */
-    max-height: 95%; /* Fits height perfectly */
-    width: auto;
-    height: auto;
-    object-fit: contain; /* KEY: Shows full image without crop */
-    border-radius: 5px;
-    z-index: 10;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 95%; /* Leave a small gap */
+  max-height: 95%; /* Fits height perfectly */
+  width: auto;
+  height: auto;
+  object-fit: contain; /* KEY: Shows full image without crop */
+  border-radius: 5px;
+  z-index: 10;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* Hide upload text when image is shown */
 .img-preview:not(.hidden) + .drop-content {
-    opacity: 0;
-    pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
 }
-.drop-zone:hover, .drop-zone.drag-over {
-    border-color: var(--gold);
-    background: rgba(212, 175, 55, 0.08);
-    transform: scale(1.01);
+.drop-zone:hover,
+.drop-zone.drag-over {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.08);
+  transform: scale(1.01);
 }
 
 /* Icon Animation */
 .upload-icon {
-    font-size: 2rem; /* Smaller icon */
-    color: #666;
-    margin-bottom: 10px;
+  font-size: 2rem; /* Smaller icon */
+  color: #666;
+  margin-bottom: 10px;
 }
 .drop-zone:hover .upload-icon {
-    color: var(--gold);
-    transform: translateY(-10px);
-    filter: drop-shadow(0 10px 15px rgba(212, 175, 55, 0.4));
+  color: var(--gold);
+  transform: translateY(-10px);
+  filter: drop-shadow(0 10px 15px rgba(212, 175, 55, 0.4));
 }
 
 .drop-zone p {
-    font-size: 1.1rem;
-    color: #ccc;
-    font-weight: bold;
+  font-size: 1.1rem;
+  color: #ccc;
+  font-weight: bold;
 }
 .drop-zone .small-text {
-    display: block;
-    margin-top: 5px;
-    color: #666;
-    font-size: 0.85rem;
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-size: 0.85rem;
 }
 
-.row-group { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+.row-group {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
 
 /* =========================================
    🔥 MODERN CYBER BUTTONS
    ========================================= */
 .btn-cyber {
-    position: relative;
-    width: 100%;
-    padding: 14px 20px;
-    background: rgba(212, 175, 55, 0.1); /* Low opacity gold */
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    border-radius: 8px;
-    font-weight: 800;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+  position: relative;
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(212, 175, 55, 0.1); /* Low opacity gold */
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
 }
 
 /* Hover State: Fill with Gold & Glow */
 .btn-cyber:hover {
-    background: var(--gold);
-    color: #000;
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
-    transform: translateY(-2px);
-    letter-spacing: 2px; /* Text expands */
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+  transform: translateY(-2px);
+  letter-spacing: 2px; /* Text expands */
 }
 
 /* The "Shine" Swipe Effect */
 .btn-cyber::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: 0.5s;
-    transform: skewX(-20deg);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: 0.5s;
+  transform: skewX(-20deg);
 }
-.btn-cyber:hover::before { left: 100%; }
+.btn-cyber:hover::before {
+  left: 100%;
+}
 
 /* --- DANGER BUTTON (DELETE/RESET) --- */
 .btn-del {
-    background: rgba(255, 46, 99, 0.1);
-    color: #ff2e63;
-    border: 1px solid #ff2e63;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+  background: rgba(255, 46, 99, 0.1);
+  color: #ff2e63;
+  border: 1px solid #ff2e63;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .btn-del:hover {
-    background: #ff2e63;
-    color: #fff;
-    box-shadow: 0 0 20px #ff2e63;
-    transform: scale(1.05);
+  background: #ff2e63;
+  color: #fff;
+  box-shadow: 0 0 20px #ff2e63;
+  transform: scale(1.05);
 }
 
 /* Confirmation Modal Specific Styles */
 .confirm-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
 }
 /* Alert */
-.alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
-.alert-overlay.active { opacity: 1; visibility: visible; }
-.alert-box { text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--gold); transform: scale(0.8); transition: 0.3s; }
-.alert-overlay.active .alert-box { transform: scale(1); }
-.alert-icon-box { font-size: 3rem; color: var(--gold); margin-bottom: 15px; animation: pulse 2s infinite; }
-.small-btn { padding: 10px 30px; width: auto; margin: 0 auto; display: inline-flex; }
+.alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+.alert-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.alert-box {
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid var(--gold);
+  transform: scale(0.8);
+  transition: 0.3s;
+}
+.alert-overlay.active .alert-box {
+  transform: scale(1);
+}
+.alert-icon-box {
+  font-size: 3rem;
+  color: var(--gold);
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+}
+.small-btn {
+  padding: 10px 30px;
+  width: auto;
+  margin: 0 auto;
+  display: inline-flex;
+}
 
-@keyframes pulse { 0% { transform: scale(1); text-shadow: 0 0 10px var(--gold); } 50% { transform: scale(1.1); text-shadow: 0 0 20px var(--gold); } 100% { transform: scale(1); } }
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 10px var(--gold);
+  }
+  50% {
+    transform: scale(1.1);
+    text-shadow: 0 0 20px var(--gold);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
 /* =========================================
    3. CLEAN TIKTOK GLITCH (NO BOX)
    ========================================= */
 .loader-wrapper {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100vh;
-    background: #050505;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100001;
-    font-family: 'Courier New', monospace;
-    overflow: hidden; 
-    transition: opacity 0.8s ease, visibility 0.8s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100001;
+  font-family: "Courier New", monospace;
+  overflow: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s;
 }
 
 .brand-loader {
-    position: relative;
-    width: 180px; 
-    height: 180px;
-    margin-bottom: 25px;
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 25px;
 }
 
 /* --- THE CONTENT LAYERS --- */
 .loader-content {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
 }
 
 /* --- RINGS (Original Layer) --- */
 .spinner-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 2px solid transparent;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
 }
 
 /* Original Outer Ring (Has Glow) */
 .ring-outer {
-    width: 100%; height: 100%;
-    border-top: 4px solid var(--gold-main);
-    border-right: 2px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); /* Glow is here */
-    animation: spinRing 2s linear infinite;
+  width: 100%;
+  height: 100%;
+  border-top: 4px solid var(--gold-main);
+  border-right: 2px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); /* Glow is here */
+  animation: spinRing 2s linear infinite;
 }
 
 /* Original Inner Ring (Has Glow) */
 .ring-inner {
-    width: 70%; height: 70%;
-    border-bottom: 4px solid #fff;
-    border-left: 2px solid rgba(255, 255, 255, 0.3);
-    animation: spinRingReverse 1.5s linear infinite;
+  width: 70%;
+  height: 70%;
+  border-bottom: 4px solid #fff;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+  animation: spinRingReverse 1.5s linear infinite;
 }
 
 /* --- LOGO --- */
 .logo-box {
-    z-index: 10;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .glitch-image {
-    width: 60px; 
-    height: 60px;
-    background-image: url('logo.png'); 
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+  width: 60px;
+  height: 60px;
+  background-image: url("logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* --- GLITCH LAYERS (The Fix) --- */
 
 .glitch-layer {
-    opacity: 0; 
-    z-index: -1;
-    pointer-events: none;
-    mix-blend-mode: screen; /* Blends cleanly with black */
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen; /* Blends cleanly with black */
 }
 
 /* 🛑 IMPORTANT FIX: Remove Shadows from Ghost Layers */
 /* This prevents the "Square Box" look when clipped */
 .glitch-layer .spinner-ring {
-    box-shadow: none !important; 
-    background: transparent !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
 /* Red Shift Layer */
 .glitch-layer.red {
-    opacity: 1;
-    /* Turns everything Pink/Red */
-    filter: sepia(100%) saturate(300%) hue-rotate(350deg);
-    animation: tiktok-glitch-1 2s infinite steps(2) alternate-reverse;
+  opacity: 1;
+  /* Turns everything Pink/Red */
+  filter: sepia(100%) saturate(300%) hue-rotate(350deg);
+  animation: tiktok-glitch-1 2s infinite steps(2) alternate-reverse;
 }
 
 /* Cyan Shift Layer */
 .glitch-layer.blue {
-    opacity: 1;
-    /* Turns everything Cyan */
-    filter: sepia(100%) saturate(300%) hue-rotate(180deg);
-    animation: tiktok-glitch-2 0.8s infinite steps(2) alternate-reverse;
+  opacity: 1;
+  /* Turns everything Cyan */
+  filter: sepia(100%) saturate(300%) hue-rotate(180deg);
+  animation: tiktok-glitch-2 0.8s infinite steps(2) alternate-reverse;
 }
 
 /* --- TEXT & PERCENTAGE --- */
 .loader-percent {
-    position: relative; z-index: 20;
-    font-size: 1.3rem; font-weight: bold;
-    color: var(--gold-main);
-    text-shadow: 0 0 10px var(--gold-main);
-    margin-top: 0px; 
+  position: relative;
+  z-index: 20;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--gold-main);
+  text-shadow: 0 0 10px var(--gold-main);
+  margin-top: 0px;
 }
 
 .loader-status {
-    position: relative; z-index: 20;
-    font-size: 1.1rem; color: #666;
-    letter-spacing: 3px; margin-top: 1px;
-    animation: blink 0.5s infinite;
+  position: relative;
+  z-index: 20;
+  font-size: 1.1rem;
+  color: #666;
+  letter-spacing: 3px;
+  margin-top: 1px;
+  animation: blink 0.5s infinite;
 }
 
 /* --- ANIMATIONS --- */
-@keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes spinRingReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes spinRing {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinRingReverse {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
 
 /* TIKTOK JITTER ANIMATION */
 @keyframes tiktok-glitch-1 {
-    0% { clip-path: inset(20% 0 50% 0); transform: translate(-4px, 1px); }
-    5% { clip-path: inset(10% 0 85% 0); transform: translate(4px, -1px); }
-    10% { clip-path: inset(80% 0 5% 0); transform: translate(-4px, 3px); }
-    15% { clip-path: inset(40% 0 30% 0); transform: translate(3px, -2px); }
-    20% { clip-path: inset(50% 0 20% 0); transform: translate(-3px, 2px); }
-    25% { clip-path: inset(0% 0 90% 0); transform: translate(2px, 2px); }
-    30%, 100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; } 
+  0% {
+    clip-path: inset(20% 0 50% 0);
+    transform: translate(-4px, 1px);
+  }
+  5% {
+    clip-path: inset(10% 0 85% 0);
+    transform: translate(4px, -1px);
+  }
+  10% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(-4px, 3px);
+  }
+  15% {
+    clip-path: inset(40% 0 30% 0);
+    transform: translate(3px, -2px);
+  }
+  20% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translate(-3px, 2px);
+  }
+  25% {
+    clip-path: inset(0% 0 90% 0);
+    transform: translate(2px, 2px);
+  }
+  30%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
 
 @keyframes tiktok-glitch-2 {
-    0% { clip-path: inset(60% 0 10% 0); transform: translate(6px, 4px); }
-    5% { clip-path: inset(30% 0 40% 0); transform: translate(-6px, -4px); }
-    10% { clip-path: inset(10% 0 80% 0); transform: translate(5px, 5px); }
-    15% { clip-path: inset(90% 0 0% 0); transform: translate(-5px, -5px); }
-    20% { clip-path: inset(20% 0 50% 0); transform: translate(4px, 2px); }
-    25%, 100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); opacity: 0; } 
+  0% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(6px, 4px);
+  }
+  5% {
+    clip-path: inset(30% 0 40% 0);
+    transform: translate(-6px, -4px);
+  }
+  10% {
+    clip-path: inset(10% 0 80% 0);
+    transform: translate(5px, 5px);
+  }
+  15% {
+    clip-path: inset(90% 0 0% 0);
+    transform: translate(-5px, -5px);
+  }
+  20% {
+    clip-path: inset(20% 0 50% 0);
+    transform: translate(4px, 2px);
+  }
+  25%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
 
-.loader-wrapper.hidden { opacity: 0; visibility: hidden; }
+.loader-wrapper.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
 /* --- تحديث الهيدر لاستيعاب الزر --- */
 .admin-header {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    margin-bottom: 30px; 
-    border-bottom: 1px solid rgba(255,255,255,0.1); 
-    padding-bottom: 20px;
-    width: 100%;           /* Header takes full width */
-    max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 20px;
+  width: 100%; /* Header takes full width */
+  max-width: 1000px;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.admin-header h2 { 
-    margin: 0; 
-    color: var(--gold); 
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
+.admin-header h2 {
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
 /* =========================================
@@ -482,152 +673,178 @@ label {
    ========================================= */
 
 /* 1. Global Reset to kill scrollbars */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; /* 🛑 This stops the double scrollbar 🛑 */
-    background-color: var(--dark-bg);
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 🛑 This stops the double scrollbar 🛑 */
+  background-color: var(--dark-bg);
 }
 
 .container {
-    max-width: 100%; 
-    margin: 0; 
-    padding: 0; 
-    height: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 /* 2. The Main Wrapper */
 .dashboard-wrapper {
-    display: flex;
-    width: 100%;
-    /* Use dvh for mobile browser compatibility */
-    height: 100vh; 
-    height: 100dvh; 
-    overflow: hidden;
-    background-color: var(--dark-bg);
+  display: flex;
+  width: 100%;
+  /* Use dvh for mobile browser compatibility */
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--dark-bg);
 }
 
 /* 3. Sidebar (Desktop) */
 .sidebar {
-   width: 260px;
-    height: 100%; /* Full Height */
-    background: rgba(10, 10, 10, 0.95);
-    border-left: 1px solid rgba(255,255,255,0.1); /* Left border because it's on right */
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-    z-index: 100;
-    flex-shrink: 0; /* Don't let it shrink */
-    overflow-y: auto; /* Scroll inside sidebar if needed */
+  width: 260px;
+  height: 100%; /* Full Height */
+  background: rgba(10, 10, 10, 0.95);
+  border-left: 1px solid rgba(255, 255, 255, 0.1); /* Left border because it's on right */
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  z-index: 100;
+  flex-shrink: 0; /* Don't let it shrink */
+  overflow-y: auto; /* Scroll inside sidebar if needed */
 }
 
-.brand { 
-    font-size: 1.5rem; color: var(--gold); font-weight: 900; 
-    margin-bottom: 40px; text-align: center; letter-spacing: 2px;
+.brand {
+  font-size: 1.5rem;
+  color: var(--gold);
+  font-weight: 900;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: 2px;
 }
 
-.sidebar ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 .sidebar li {
-    padding: 12px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #888;
-    font-weight: bold;
-    display: flex; align-items: center; gap: 15px;
-    transition: 0.3s;
+  padding: 12px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #888;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: 0.3s;
 }
 
-.sidebar li:hover, .sidebar li.active {
-    background: rgba(212, 175, 55, 0.1);
-    color: var(--gold);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+.sidebar li:hover,
+.sidebar li.active {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--gold);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
 }
 
-.logout { margin-top: auto; border-top: 1px solid #333; padding-top: 20px !important; }
+.logout {
+  margin-top: auto;
+  border-top: 1px solid #333;
+  padding-top: 20px !important;
+}
 
 /* 4. Main Content Area */
 .main-content {
-    flex: 1; 
-    height: 100%;
-    position: relative;
-    overflow-y: auto; /* Scroll ONLY inside here, not the body */
-    overflow-x: hidden;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;    
+  flex: 1;
+  height: 100%;
+  position: relative;
+  overflow-y: auto; /* Scroll ONLY inside here, not the body */
+  overflow-x: hidden;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Tab Section Animation */
 .tab-section {
-    max-width: 1000px; /* Keep content readable width */
-    margin: 0 auto;
-    padding-bottom: 50px; /* Space for scrolling */
-    animation: fadeIn 0.4s ease-out;
-    width: 100%;
+  max-width: 1000px; /* Keep content readable width */
+  margin: 0 auto;
+  padding-bottom: 50px; /* Space for scrolling */
+  animation: fadeIn 0.4s ease-out;
+  width: 100%;
 }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .card-title {
-    font-size: 1.4rem;
-    color: #fff;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 15px;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
 }
 
 .card-title i {
-    color: var(--gold);
-    background: rgba(212, 175, 55, 0.1);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
-
 
 /* =========================================
    💰 CALCULATOR ROW STYLING
    ========================================= */
 .calc-row {
-    display: grid;
-    grid-template-columns: 50px 1fr 100px auto; /* Icon | Name | Price | Delete */
-    gap: 15px;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 12px 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: 0.3s;
+  display: grid;
+  grid-template-columns: 50px 1fr 100px auto; /* Icon | Name | Price | Delete */
+  gap: 15px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
 }
 
 .calc-row:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--gold);
 }
 
 .calc-row input {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    height: auto !important;
-    color: #fff;
-    font-size: 1rem !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  color: #fff;
+  font-size: 1rem !important;
 }
 
 .calc-row input.p-price {
-    color: var(--gold);
-    font-weight: bold;
-    text-align: center;
+  color: var(--gold);
+  font-weight: bold;
+  text-align: center;
 }
 
 /* =========================================
@@ -635,247 +852,459 @@ html, body {
    ========================================= */
 
 /* 1. Desktop Default: Hide Top Button, Show Sidebar Button */
-.mobile-logout-btn { display: none; }
-.sidebar .logout { display: flex; margin-top: auto; }
-
-
+.mobile-logout-btn {
+  display: none;
+}
+.sidebar .logout {
+  display: flex;
+  margin-top: auto;
+}
 
 .p-img {
-    width: 70px !important;       /* Force Width */
-    height: 70px !important;      /* Force Height */
-    min-width: 70px;              /* Prevent shrinking below 70px */
-    max-width: 70px;              /* Prevent growing above 70px */
-    border-radius: 8px;
-    object-fit: cover;            /* Crop image to fit box, don't stretch */
-    border: 1px solid #333;
-    flex-shrink: 0;               /* 👈 KEY FIX: Stops flexbox from resizing it */
-    display: block;
+  width: 70px !important; /* Force Width */
+  height: 70px !important; /* Force Height */
+  min-width: 70px; /* Prevent shrinking below 70px */
+  max-width: 70px; /* Prevent growing above 70px */
+  border-radius: 8px;
+  object-fit: cover; /* Crop image to fit box, don't stretch */
+  border: 1px solid #333;
+  flex-shrink: 0; /* 👈 KEY FIX: Stops flexbox from resizing it */
+  display: block;
 }
 
 /* Ensure the container doesn't overflow */
 .project-item {
-    background: #111;
-    border-radius: 10px;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #222;
-    overflow: hidden; /* Cuts off anything sticking out */
+  background: #111;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #222;
+  overflow: hidden; /* Cuts off anything sticking out */
 }
 
 .p-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    overflow: hidden; /* Protects text from pushing out */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  overflow: hidden; /* Protects text from pushing out */
 }
 /* =========================================
    📱 MOBILE LAYOUT: BOTTOM BAR + FITTED CONTENT
    ========================================= */
 @media (max-width: 900px) {
+  .calc-row {
+    grid-template-columns: 40px 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .calc-row input.p-name {
+    grid-column: 2 / 4;
+  }
+  .calc-row input.p-price {
+    grid-column: 2 / 3;
+    text-align: right;
+  }
+  .calc-row .btn-del {
+    grid-row: 1 / 3;
+    grid-column: 3 / 4;
+    height: 100%;
+  }
+  /* Show Top Button on Phone */
+  .mobile-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 46, 99, 0.2);
+    color: #ff2e63;
+    border: 1px solid #ff2e63;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
 
-    
-    .calc-row {
-        grid-template-columns: 40px 1fr auto;
-        grid-template-rows: auto auto;
-    }
-    .calc-row input.p-name { grid-column: 2 / 4; }
-    .calc-row input.p-price { grid-column: 2 / 3; text-align: right; }
-    .calc-row .btn-del { grid-row: 1 / 3; grid-column: 3 / 4; height: 100%; }
-    /* Show Top Button on Phone */
-    .mobile-logout-btn {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        background: rgba(255, 46, 99, 0.2);
-        color: #ff2e63;
-        border: 1px solid #ff2e63;
-        padding: 8px 15px;
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
+  /* Hide Sidebar Button on Phone */
+  .sidebar .logout {
+    display: none !important;
+  }
 
-    /* Hide Sidebar Button on Phone */
-    .sidebar .logout { display: none !important; }
+  /* Fix Header Layout (Text on Top, Badge Below) */
+  .admin-header {
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start; /* Aligns text block to top */
+  }
 
-    /* Fix Header Layout (Text on Top, Badge Below) */
-    .admin-header {
-        flex-direction: row !important;
-        justify-content: space-between;
-        align-items: flex-start; /* Aligns text block to top */
-    }
-    
-    /* Ensure the Title & Badge stack correctly */
-    .admin-header div:first-child {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* Force left alignment */
-        gap: 5px;
-    }
-    
-    .status-badge {
-        font-size: 0.7rem; /* Smaller badge on phone */
-        padding: 3px 8px;
-    }
-    .btn-home .btn-text { display: none; }
-    .btn-home { padding: 10px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
-    .header-right { flex-direction: column; align-items: flex-start; gap: 5px; }
-    /* 1. LOCK THE SCREEN (Prevents double scrolling) */
-    html, body {
-        height: 100%;
-        width: 100%;
-        overflow: hidden; 
-        position: fixed; /* Stops iOS rubber-banding */
-    }
+  /* Ensure the Title & Badge stack correctly */
+  .admin-header div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Force left alignment */
+    gap: 5px;
+  }
 
-    .dashboard-wrapper {
-        display: block !important;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-    }
+  .status-badge {
+    font-size: 0.7rem; /* Smaller badge on phone */
+    padding: 3px 8px;
+  }
+  .btn-home .btn-text {
+    display: none;
+  }
+  .btn-home {
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+  .header-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  /* 1. LOCK THE SCREEN (Prevents double scrolling) */
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: fixed; /* Stops iOS rubber-banding */
+  }
 
-    /* 2. MAIN CONTENT (The Empty Space Above Bar) */
-    .main-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        /* Calculates exact height: Screen minus 85px (Bar Height) */
-        height: calc(100% - 85px); 
-        overflow-y: scroll; /* Allows scrolling inside this box only */
-        padding: 15px;
-        padding-bottom: 100px; /* Extra padding so content doesn't touch edges */
-        z-index: 1; /* Sits behind the high z-index bar */
-        -webkit-overflow-scrolling: touch; /* Smooth scroll */
-    }
+  .dashboard-wrapper {
+    display: block !important;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
 
-    /* 3. BOTTOM HOVERING BAR */
-    .sidebar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 70px; /* Taller to fit Icon + Text */
-        background: rgba(5, 5, 5, 0.98); /* Deep Black */
-        border-top: 2px solid var(--gold);
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.7); /* Hovering Shadow */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 88888; /* Highest priority */
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-    }
+  /* 2. MAIN CONTENT (The Empty Space Above Bar) */
+  .main-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Calculates exact height: Screen minus 85px (Bar Height) */
+    height: calc(100% - 85px);
+    overflow-y: scroll; /* Allows scrolling inside this box only */
+    padding: 15px;
+    padding-bottom: 100px; /* Extra padding so content doesn't touch edges */
+    z-index: 1; /* Sits behind the high z-index bar */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll */
+  }
 
-    /* Hide desktop-only elements */
-    .sidebar .brand, .sidebar .logout { display: none !important; }
+  /* 3. BOTTOM HOVERING BAR */
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Taller to fit Icon + Text */
+    background: rgba(5, 5, 5, 0.98); /* Deep Black */
+    border-top: 2px solid var(--gold);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.7); /* Hovering Shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 88888; /* Highest priority */
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
 
-    .sidebar ul {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-evenly; /* Spread items evenly */
-        align-items: center;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        overflow-x: auto; 
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch; 
-        scroll-behavior: smooth;
-        scrollbar-width: none;
-    }
-    /* HIDE SCROLLBAR (Chrome/Safari/Edge) */
-    .sidebar ul::-webkit-scrollbar {
-        display: none;
-    }
+  /* Hide desktop-only elements */
+  .sidebar .brand,
+  .sidebar .logout {
+    display: none !important;
+  }
 
-    /* 4. NAVIGATION ITEMS (Icon Top, Text Bottom) */
-    .sidebar li {
-        display: flex;
-        flex-direction: column !important; /* Forces vertical stack */
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        min-width: 15%; 
-        max-width: 15%;
-        height: 100%;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        
-        width: 60px; /* Touch target size */
-        padding: 4px;
-        font-size: 6px; /* Small text size */
-        font-weight: bold;
-        color: #666;
-        gap: 2px; /* Space between Icon and Text */
-        transition: 0.2s;
-    }
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly; /* Spread items evenly */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  /* HIDE SCROLLBAR (Chrome/Safari/Edge) */
+  .sidebar ul::-webkit-scrollbar {
+    display: none;
+  }
 
-    /* The Icon */
-    .sidebar li i {
-        font-size: 1.4rem; /* Big Icon */
-        margin: 0;
-        color: #888;
-        display: block;
-    }
+  /* 4. NAVIGATION ITEMS (Icon Top, Text Bottom) */
+  .sidebar li {
+    display: flex;
+    flex-direction: column !important; /* Forces vertical stack */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 15%;
+    max-width: 15%;
+    height: 100%;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 
-    /* Active State (Gold Glow) */
-    .sidebar li.active {
-        color: var(--gold);
-        background: rgba(212, 175, 55, 0.05) !important; /* Subtle box */
-        border-radius: 8px;
-    }
-    
-    .sidebar li.active i {
-        color: var(--gold);
-        text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
-        transform: translateY(-2px);
-    }
-    .sidebar li.active::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 20%;
-        width: 60%;
-        height: 3px;
-        background: var(--gold);
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 0 10px var(--gold);
-    }
+    width: 60px; /* Touch target size */
+    padding: 4px;
+    font-size: 6px; /* Small text size */
+    font-weight: bold;
+    color: #666;
+    gap: 2px; /* Space between Icon and Text */
+    transition: 0.2s;
+  }
 
-    /* 5. FIX WORK BOXES (Small Down & Fit) */
-    .glass-panel {
-        padding: 15px; /* Compact padding */
-        border-radius: 30px;
-        margin-bottom: 15px;
-    }
+  /* The Icon */
+  .sidebar li i {
+    font-size: 1.4rem; /* Big Icon */
+    margin: 0;
+    color: #888;
+    display: block;
+  }
 
-    /* Stack inputs vertically to fit width */
-    .row-group, .split-group, .form-grid {
-        display: grid;
-        grid-template-columns: 1fr !important;
-        gap: 12px;
-    }
+  /* Active State (Gold Glow) */
+  .sidebar li.active {
+    color: var(--gold);
+    background: rgba(212, 175, 55, 0.05) !important; /* Subtle box */
+    border-radius: 8px;
+  }
 
-    .input-group { margin-bottom: 10px; }
+  .sidebar li.active i {
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+  }
+  .sidebar li.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    width: 60%;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 0 10px var(--gold);
+  }
 
-    /* Prevent Zoom on inputs */
-    input, select, textarea { font-size: 16px !important; }
-    
-    /* Header Adjustment */
-    .admin-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    #stats-overview .admin-card > div {
+  /* 5. FIX WORK BOXES (Small Down & Fit) */
+  .glass-panel {
+    padding: 15px; /* Compact padding */
+    border-radius: 30px;
+    margin-bottom: 15px;
+  }
+
+  /* Stack inputs vertically to fit width */
+  .row-group,
+  .split-group,
+  .form-grid {
+    display: grid;
     grid-template-columns: 1fr !important;
-    }
+    gap: 12px;
+  }
+
+  .input-group {
+    margin-bottom: 10px;
+  }
+
+  /* Prevent Zoom on inputs */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Header Adjustment */
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  #stats-overview .admin-card > div {
+    grid-template-columns: 1fr !important;
+  }
+}
+/* --- MODERN MODAL STYLING --- */
+.modal-card {
+  padding: 0 !important; /* Remove default padding from glass-panel */
+  overflow: hidden;
+  max-width: 450px !important;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+/* Header */
+.modal-header {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar-circle {
+  width: 50px;
+  height: 50px;
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid var(--gold);
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.phone-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Body */
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1; /* Takes remaining space */
+}
+
+/* Footer */
+.modal-footer {
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  gap: 10px;
+}
+
+.btn-contact {
+  flex: 1; /* Takes most space */
+  background: #25d366; /* WhatsApp Green */
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+.btn-contact:hover {
+  background: #1ebc57;
+}
+
+.btn-close {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.btn-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Order Details Modal Styles */
+.order-detail-row {
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.order-label {
+  display: block;
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.order-value {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  white-space: pre-wrap; /* Keeps line breaks in notes */
+}
+
+/* Color Circles */
+.color-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.color-circle-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #000;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid #333;
+}
+
+.color-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.color-code {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--gold);
+}
+/* =========================================
+   🔴 RED CYBER BUTTON (ADD THIS)
+   ========================================= */
+.btn-cyber.red {
+  background: rgba(255, 46, 99, 0.1); /* Red Tint Background */
+  color: #ff2e63;
+  border-color: #ff2e63;
+  box-shadow: 0 0 10px rgba(255, 46, 99, 0.1);
+}
+
+.btn-cyber.red:hover {
+  background: #ff2e63; /* Solid Red on Hover */
+  color: #fff;
+  box-shadow: 0 0 25px rgba(255, 46, 99, 0.6); /* Red Glow */
+}
+
+/* Fix the "Shine" effect for red buttons to match */
+.btn-cyber.red::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
 }
