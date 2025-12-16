@@ -1034,13 +1034,11 @@ function createRow(containerID, name, price, icon, rowClass) {
   container.appendChild(div);
 }
 
-// 2. SAVE ALL DATA (Includes Logo & Visuals)
 function saveAllCalculatorData() {
   const btn = document.getElementById("saveDynamicPricesBtn");
   const oldText = btn.innerHTML;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
 
-  // Helper to scrape data from DOM
   const getData = (selector) => {
     let arr = [];
     document.querySelectorAll(selector).forEach((row) => {
@@ -1053,23 +1051,29 @@ function saveAllCalculatorData() {
     return arr;
   };
 
-  const logoPriceInput = document.getElementById("adminLogoPrice").value;
-  const logoPrice = logoPriceInput ? Number(logoPriceInput) : 1500;
+  // Get Values
+  const logoPrice =
+    Number(document.getElementById("adminLogoPrice").value) || 1500;
+  const fastPercent =
+    Number(document.getElementById("adminFastPercent").value) || 25; // Default 25%
+  const slowPercent =
+    Number(document.getElementById("adminSlowPercent").value) || 10; // Default 10%
 
-  // Save with Merge
   db.collection("settings")
     .doc("calculator_v3")
     .set(
       {
         services: getData(".service-row"),
         addons: getData(".addon-row"),
-        visuals: getData(".visual-row"), // Saving Visuals
-        logoPrice: logoPrice, // Saving Logo Price
+        visuals: getData(".visual-row"),
+        logoPrice: logoPrice,
+        fastPercent: fastPercent, // Saved as %
+        slowPercent: slowPercent, // Saved as %
       },
       { merge: true }
     )
     .then(() => {
-      showAlert("تم حفظ جميع البيانات بنجاح!", "نجاح");
+      showAlert("تم حفظ الإعدادات بنجاح!", "نجاح");
       btn.innerHTML = oldText;
     })
     .catch((err) => {
@@ -1078,8 +1082,6 @@ function saveAllCalculatorData() {
       btn.innerHTML = oldText;
     });
 }
-
-// 3. LOAD DATA (Single Function)
 function loadCalcData() {
   db.collection("settings")
     .doc("calculator_v3")
@@ -1088,7 +1090,6 @@ function loadCalcData() {
       if (doc.exists) {
         const data = doc.data();
 
-        // Clear all lists first
         document.getElementById("adminServicesList").innerHTML = "";
         document.getElementById("adminAddonsList").innerHTML = "";
         document.getElementById("adminVisualsList").innerHTML = "";
@@ -1112,12 +1113,16 @@ function loadCalcData() {
             createRow("adminVisualsList", v.name, v.price, v.icon, "visual-row")
           );
 
+        // Load Settings
         if (data.logoPrice)
           document.getElementById("adminLogoPrice").value = data.logoPrice;
+        if (data.fastPercent)
+          document.getElementById("adminFastPercent").value = data.fastPercent;
+        if (data.slowPercent)
+          document.getElementById("adminSlowPercent").value = data.slowPercent;
       }
     });
 }
-
 document.addEventListener("DOMContentLoaded", () =>
   setTimeout(loadCalcData, 1000)
 );

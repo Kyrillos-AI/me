@@ -1513,33 +1513,48 @@ function initNewWizardSystem() {
       if (!doc.exists) return;
       const data = doc.data();
 
-      // A. Logo Price
-      const adminPrice = data.logoPrice ? Number(data.logoPrice) : 1500;
-      newWizState.serverLogoPrice = adminPrice;
+      // 1. Load Settings
+      newWizState.serverLogoPrice = data.logoPrice
+        ? Number(data.logoPrice)
+        : 1500;
+      newWizState.config.fastPercent = data.fastPercent
+        ? Number(data.fastPercent)
+        : 25;
+      newWizState.config.slowPercent = data.slowPercent
+        ? Number(data.slowPercent)
+        : 10;
 
-      // Update Label Text
+      // 2. Update UI Text
       const logoInput = document.querySelector('input[value="Need Design"]');
       if (logoInput)
         logoInput.parentElement.querySelector(
           "span"
-        ).innerText = `أحتاج تصميم (+${adminPrice})`;
+        ).innerText = `أحتاج تصميم (+${newWizState.serverLogoPrice})`;
 
-      // B. Services
+      // Update Time Badges with %
+      const fastBadge = document.querySelector(
+        '.time-card[onclick*="fast"] .badge'
+      );
+      const slowBadge = document.querySelector(
+        '.time-card[onclick*="relaxed"] .badge'
+      );
+
+      if (fastBadge)
+        fastBadge.innerText = `زيادة (+${newWizState.config.fastPercent}%)`;
+      if (slowBadge)
+        slowBadge.innerText = `خصم (-${newWizState.config.slowPercent}%)`;
+
+      // 3. Render Grids (Same as before...)
       renderGrid(
         "newServicesGrid",
         data.services,
         "pop-card type-item",
         "selectNewService"
       );
-      const l1 = document.getElementById("newLoader1");
-      if (l1) l1.style.display = "none";
-
-      // C. Addons
+      // ... rest of render code ...
+      if (document.getElementById("newLoader1"))
+        document.getElementById("newLoader1").style.display = "none";
       renderGrid("newAddonsGrid", data.addons, "pop-bubble", "toggleNewAddon");
-      const l3 = document.getElementById("newLoader3");
-      if (l3) l3.style.display = "none";
-
-      // D. Visuals
       renderGrid(
         "newVisualsGrid",
         data.visuals,
@@ -1568,6 +1583,36 @@ function renderGrid(id, items, className, clickFunc) {
                 </div>`;
     }
   });
+}
+/* =========================================
+   🎨 LOGO SELECTION LOGIC (RESTORED)
+   ========================================= */
+function selectLogoOption(type, dummyPrice, element) {
+  // 1. Determine Real Price (Get price from Firebase setting or default 1500)
+  const realPrice = type === "need" ? newWizState.serverLogoPrice || 1500 : 0;
+
+  // 2. Update State
+  newWizState.logoPrice = realPrice;
+  newWizState.logoStatus = type === "need" ? "Need Design" : "Have Logo";
+
+  // 3. UI Updates
+  // Remove 'selected' class from all options
+  document.querySelectorAll(".logo-option").forEach((el) => {
+    el.classList.remove("selected");
+    // Uncheck hidden radios
+    const radio = el.querySelector("input");
+    if (radio) radio.checked = false;
+  });
+
+  // Add 'selected' to the clicked element
+  element.classList.add("selected");
+
+  // Check the specific radio
+  const activeRadio = element.querySelector("input");
+  if (activeRadio) activeRadio.checked = true;
+
+  // 4. Recalculate Totals
+  calcNewTotal();
 }
 
 // 3. SELECTION ACTIONS
@@ -1690,43 +1735,65 @@ let newWizState = {
   selectedAddons: [],
   // 🔥 NEW: Time Preference
   timeRange: { type: "normal", label: "وقت قياسي", extraCost: 0 },
+  // 🔥 CONFIG FOR PERCENTAGES
+  config: {
+    fastPercent: 25, // Default 25%
+    slowPercent: 10, // Default 10%
+  },
 };
 
-/* --- NEW FUNCTION: Select Time Range --- */
-function selectTimeRange(type, label, extraCost, card) {
-  // 1. Update State
-  newWizState.timeRange = { type, label, extraCost };
+/* REPLACE selectTimeRange WITH THIS */
+function selectTimeRange(type, label, dummy, card) {
+  // We only store the type now, calculation happens in calcNewTotal
+  newWizState.timeRange = { type, label };
 
-  // 2. UI Updates
+  // UI Updates
   document
     .querySelectorAll(".time-card")
     .forEach((el) => el.classList.remove("active"));
   card.classList.add("active");
 
-  // 3. Recalculate Total (To add extra cost if any)
   calcNewTotal();
 }
 
-/* --- UPDATED TOTAL CALCULATION --- */
 function calcNewTotal() {
   const pEl = document.getElementById("newLiveTotal");
   const tEl = document.getElementById("newLiveTime");
   const box = document.getElementById("newBouncyBox");
 
-  // Total = Base + Addons + Logo + TimeRange Extra Cost
-  const total =
-    newWizState.basePrice +
-    newWizState.addonsPrice +
-    newWizState.logoPrice +
-    (newWizState.timeRange.extraCost || 0);
+  // 1. Calculate Subtotal (Service + Addons + Logo)
+  const subTotal =
+    newWizState.basePrice + newWizState.addonsPrice + newWizState.logoPrice;
 
-  // Time Calculation logic
+  // 2. Calculate Time Adjustment (Percentage)
+  let timeAdjustment = 0;
+
+  if (newWizState.timeRange.type === "fast") {
+    // Example: 25% extra
+    timeAdjustment = Math.round(
+      subTotal * (newWizState.config.fastPercent / 100)
+    );
+  } else if (newWizState.timeRange.type === "relaxed") {
+    // Example: 10% discount
+    timeAdjustment = -Math.round(
+      subTotal * (newWizState.config.slowPercent / 100)
+    );
+  } else {
+    // 🛑 ADD THIS ELSE BLOCK TO RESET COST FOR NORMAL TIME
+    timeAdjustment = 0;
+  }
+
+  // 3. Final Total
+  const total = subTotal + timeAdjustment;
+
+  // Store for Bill
+  newWizState.finalTimeCost = timeAdjustment;
+
+  // 4. Time Logic
   let time = newWizState.baseTime + newWizState.addonsTime;
-
-  // Modify displayed time based on selection
   if (newWizState.timeRange.type === "fast")
-    time = Math.max(1, Math.ceil(time * 0.7)); // 30% faster
-  if (newWizState.timeRange.type === "relaxed") time = Math.ceil(time * 1.2); // 20% slower
+    time = Math.max(1, Math.ceil(time * 0.7));
+  if (newWizState.timeRange.type === "relaxed") time = Math.ceil(time * 1.2);
 
   // Update UI
   if (pEl) animateValue(pEl, parseInt(pEl.innerText) || 0, total, 500);
@@ -1796,17 +1863,23 @@ function navNewWizard(dir) {
     }
   }, 300);
 }
-
-/* --- UPDATED BILL OPEN FUNCTION --- */
+/* =========================================
+   🧾 OPEN BILL MODAL (RESTORED & FIXED)
+   ========================================= */
 function openNewBill() {
   const nameInput = document.getElementById("newName");
   const phoneInput = document.getElementById("newPhone");
 
+  // Validation
   if (!nameInput.value || !phoneInput.value) {
-    showCustomAlert("يرجى كتابة الاسم ورقم الهاتف!", "بيانات ناقصة");
+    showCustomAlert(
+      "يرجى كتابة الاسم ورقم الهاتف في الخطوة الأخيرة!",
+      "بيانات ناقصة"
+    );
     return;
   }
 
+  // Fill Client Info
   document.getElementById("billCustomerName").innerText = nameInput.value;
   document.getElementById("billCustomerPhone").innerText = phoneInput.value;
 
@@ -1842,17 +1915,20 @@ function openNewBill() {
             </div>`;
   }
 
-  // 4. Time Preference (New)
-  const timeCost = newWizState.timeRange.extraCost;
+  // 4. Time Preference (Percentage Logic)
+  const timeCost = newWizState.finalTimeCost || 0;
+
   if (timeCost !== 0) {
     const sign = timeCost > 0 ? "+" : "";
+    const color = timeCost > 0 ? "#ff2e63" : "#00e5ff"; // Red for extra, Blue for discount
+    const percent =
+      timeCost > 0
+        ? newWizState.config.fastPercent
+        : newWizState.config.slowPercent;
+
     itemsContainer.innerHTML += `
-            <div class="bill-row" style="color:${
-              timeCost > 0 ? "#ff2e63" : "#00e5ff"
-            }">
-                <span><i class="fas fa-clock"></i> ${
-                  newWizState.timeRange.label
-                }</span>
+            <div class="bill-row" style="color:${color}">
+                <span><i class="fas fa-clock"></i> ${newWizState.timeRange.label} (${percent}%)</span>
                 <span>${sign}${timeCost}</span>
             </div>`;
   } else {
@@ -1863,10 +1939,11 @@ function openNewBill() {
             </div>`;
   }
 
-  // Colors
+  // 5. Colors (Visuals)
   const colorsContainer = document.getElementById("billColorsContainer");
   const colorsRow = document.getElementById("billColorsRow");
   colorsContainer.innerHTML = "";
+
   const selectedColors = document.querySelectorAll(".color-preset.active");
   if (selectedColors.length > 0) {
     colorsRow.style.display = "flex";
@@ -1879,17 +1956,17 @@ function openNewBill() {
     colorsRow.style.display = "none";
   }
 
-  // Total
-  const total =
-    newWizState.basePrice +
-    newWizState.addonsPrice +
-    newWizState.logoPrice +
-    (newWizState.timeRange.extraCost || 0);
+  // 6. Final Total
+  // Recalculate one last time to be safe
+  const subTotal =
+    newWizState.basePrice + newWizState.addonsPrice + newWizState.logoPrice;
+  const total = subTotal + timeCost;
+
   totalEl.innerText = total + " ج.م";
 
+  // Show Modal
   document.getElementById("billModal").classList.add("active");
 }
-
 /* --- UPDATED WHATSAPP MSG --- */
 function confirmOrderOnWhatsApp() {
   const name = document.getElementById("newName").value;

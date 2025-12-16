@@ -287,20 +287,56 @@
         <h3 class="card-title"><i class="fas fa-calculator"></i> إدارة الحاسبة والأسعار</h3>
 
         <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:30px; border:1px solid var(--gold);">
-            <h4 style="margin:0 0 15px 0; color:#fff;">⚙️ إعدادات عامة</h4>
-            <div class="input-group">
-                <label>سعر تصميم اللوجو (Need Design):</label>
-                <input type="number" id="adminLogoPrice" placeholder="مثال: 1500" style="color:var(--gold); font-weight:bold;">
-            </div>
+    <h4 style="margin:0 0 15px 0; color:#fff;">⚙️ إعدادات الأسعار (General Settings)</h4>
+    
+    <div class="row-group" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+        <div class="input-group">
+            <label>سعر اللوجو (Fixed):</label>
+            <input type="number" id="adminLogoPrice" placeholder="1500" style="color:var(--gold); font-weight:bold;">
         </div>
 
+        <div class="input-group">
+            <label>نسبة المستعجل (%):</label>
+            <input type="number" id="adminFastPercent" placeholder="e.g. 25" style="color:#ff2e63; font-weight:bold;">
+        </div>
+
+        <div class="input-group">
+            <label>نسبة الخصم (%):</label>
+            <input type="number" id="adminSlowPercent" placeholder="e.g. 10" style="color:#00e5ff; font-weight:bold;">
+        </div>
+    </div>
+</div>
         <h4 style="color:var(--gold); margin:20px 0 10px; border-bottom:1px solid #333; padding-bottom:5px;">1. أنواع المشاريع (Step 1)</h4>
         <div id="adminServicesList" style="margin-bottom: 15px;"></div>
         <div class="add-box" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
             <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
                 <input type="text" id="newServName" placeholder="الاسم">
                 <input type="number" id="newServPrice" placeholder="السعر">
-                <select id="newServIcon" class="icon-select"><option value="fa-globe">🌐 Globe</option><option value="fa-code">💻 Code</option><option value="fa-shopping-cart">🛒 Cart</option></select>
+                <select id="newServIcon" class="icon-select" style="font-family: 'Font Awesome 6 Free', 'Cairo';">
+    <optgroup label="💻 Development">
+        <option value="fa-code"> Code</option>
+        <option value="fa-laptop-code"> Laptop Code</option>
+        <option value="fa-globe"> Website</option>
+        <option value="fa-mobile-alt">ce Mobile App</option>
+        <option value="fa-gamepad">kb Game</option>
+        <option value="fa-robot"> AI / Bot</option>
+    </optgroup>
+    <optgroup label="🎨 Design">
+        <option value="fa-paint-brush"> Brush</option>
+        <option value="fa-palette"> Palette</option>
+        <option value="fa-pen-nib"> Pen Nib</option>
+        <option value="fa-layer-group"> Layers</option>
+        <option value="fa-bezier-curve"> Vector</option>
+        <option value="fa-crop-alt"> Crop</option>
+    </optgroup>
+    <optgroup label="📢 Marketing">
+        <option value="fa-bullhorn"> Marketing</option>
+        <option value="fa-chart-line"> Analytics</option>
+        <option value="fa-store"> E-Commerce</option>
+        <option value="fa-shopping-cart"> Cart</option>
+        <option value="fa-search"> SEO</option>
+    </optgroup>
+</select>
                 <button class="btn-cyber small-btn" onclick="addNewService()"><i class="fas fa-plus"></i></button>
             </div>
         </div>
@@ -311,7 +347,27 @@
             <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
                 <input type="text" id="newAddonName" placeholder="الاسم">
                 <input type="number" id="newAddonPrice" placeholder="السعر">
-                <select id="newAddonIcon" class="icon-select"><option value="fa-server">Server</option><option value="fa-language">Lang</option><option value="fa-bolt">Speed</option></select>
+                <select id="newAddonIcon" class="icon-select" style="font-family: 'Font Awesome 6 Free', 'Cairo';">
+    <optgroup label="⚡ Performance">
+        <option value="fa-bolt"> Fast Speed</option>
+        <option value="fa-server"> Server</option>
+        <option value="fa-cloud"> Cloud</option>
+        <option value="fa-database"> Database</option>
+        <option value="fa-microchip">db Chip</option>
+    </optgroup>
+    <optgroup label="🔒 Security">
+        <option value="fa-lock"> SSL / Lock</option>
+        <option value="fa-shield-alt"> Shield</option>
+        <option value="fa-user-secret"> Privacy</option>
+        <option value="fa-fingerprint"> Fingerprint</option>
+    </optgroup>
+    <optgroup label="🌍 Features">
+        <option value="fa-language"> Multi-Lang</option>
+        <option value="fa-map-marked-alt"> Maps</option>
+        <option value="fa-comment-dots"> Chat</option>
+        <option value="fa-envelope"> Email System</option>
+    </optgroup>
+</select>
                 <button class="btn-cyber small-btn" onclick="addNewAddon()"><i class="fas fa-plus"></i></button>
             </div>
         </div>
@@ -322,7 +378,25 @@
             <div class="split-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px;">
                 <input type="text" id="newVisualName" placeholder="الاسم (مثال: 3D)">
                 <input type="number" id="newVisualPrice" placeholder="السعر">
-                <select id="newVisualIcon" class="icon-select"><option value="fa-cube">🧊 3D</option><option value="fa-film">🎬 Animation</option><option value="fa-moon">🌙 Dark Mode</option></select>
+                <select id="newVisualIcon" class="icon-select" style="font-family: 'Font Awesome 6 Free', 'Cairo';">
+    <optgroup label="✨ Effects">
+        <option value="fa-star"> Star</option>
+        <option value="fa-magic"> Magic</option>
+        <option value="fa-fire">d Fire</option>
+        <option value="fa-gem"> Premium</option>
+    </optgroup>
+    <optgroup label="🧊 3D & Motion">
+        <option value="fa-cube"> 3D Cube</option>
+        <option value="fa-cubes"> Cubes</option>
+        <option value="fa-film"> Animation</option>
+        <option value="fa-video"> Video</option>
+    </optgroup>
+    <optgroup label="🌙 Theme">
+        <option value="fa-moon"> Dark Mode</option>
+        <option value="fa-sun"> Light Mode</option>
+        <option value="fa-adjust"> Contrast</option>
+    </optgroup>
+</select>
                 <button class="btn-cyber small-btn" onclick="addNewVisual()"><i class="fas fa-plus"></i></button>
             </div>
         </div>
