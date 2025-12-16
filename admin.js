@@ -646,12 +646,12 @@ function loadAdminStats() {
 
         if (state === "available") {
           textEl.innerHTML =
-            '<span style="color:#00ff88">● النظام متاح لاستقبال مشاريع</span>';
+            '<span style="color:#00ff88">●  يلا بيــنا شـغـل </span>';
           icon.style.color = "#00ff88";
           iconBg.style.background = "rgba(0, 255, 136, 0.1)";
         } else {
           textEl.innerHTML =
-            '<span style="color:#ff2e63">● النظام مغلق (مشغول)</span>';
+            '<span style="color:#ff2e63">● انا بردو بقول فاكس شغل</span>';
           icon.style.color = "#ff2e63";
           iconBg.style.background = "rgba(255, 46, 99, 0.1)";
         }
@@ -671,8 +671,8 @@ function updateStatus(state) {
     .then(() => {
       showAlert(
         state === "available"
-          ? "تم تفعيل وضع: متاح ✅"
-          : "تم تفعيل وضع: مشغول ⛔",
+          ? " ✅ فاضي يلا بينا فلوس "
+          : " ⛔   مشغول ريحلك حبه ",
         "تم التحديث"
       );
     });

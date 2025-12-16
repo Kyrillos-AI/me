@@ -70,7 +70,7 @@ const translations = {
     about_title: "المبرمج",
     about_title_span: "المبدع",
     about_desc:
-      "لا أقوم فقط بكتابة الكود، بل أصنع تجارب رقمية حية. أدمج بين الفن البرمجي والتصميم الإبداعي لخلق مواقع لا تُنسى.",
+      " انا مش بس بكتب كود انا بصمم موقع متكامل سهل التعامل معاه من المستخدمين وباحدث شكل ممكن باحدث الحركات واقل سعر احجز مشروعك وشوف بنفسك",
     spec_dev: "مطور شامل",
     spec_dev_sub: "FrontEnd & BackEnd",
     spec_ui: "مصمم واجهات",
@@ -405,7 +405,16 @@ function toggleLanguage() {
     typed = new Typed(".auto-type", {
       strings:
         currentLang === "ar"
-          ? ["مصمم واجهات مبدع.", "مطور ويب محترف.", "شريك نجاحك."]
+          ? [
+              "الكود خد الموقع فحته تانيه",
+              "مصمم واجهات رايق.",
+              "مبرمج ويب فنان.",
+              "هيصمملك عظمه مش موقع.",
+              "دعم مجاني لو حصل عطل",
+              "انت صدقت ولا اي",
+              "مش هيحصل اعطال متصغرناش",
+              "وافتكر ان....",
+            ]
           : [
               "Creative UI Designer.",
               "Pro Web Developer.",
@@ -423,7 +432,16 @@ function toggleLanguage() {
 AOS.init({ offset: 120, duration: 1000 });
 
 var typed = new Typed(".auto-type", {
-  strings: ["مصمم واجهات مبدع.", "مطور ويب محترف.", "شريك نجاحك."],
+  strings: [
+    "الكود خد الموقع فحته تانيه",
+    "مصمم واجهات رايق.",
+    "مبرمج ويب فنان.",
+    "هيصمملك عظمه مش موقع.",
+    "دعم مجاني لو حصل عطل",
+    "انت صدقت ولا اي",
+    "مش هيحصل اعطال متصغرناش",
+    "وافتكر ان....",
+  ],
   typeSpeed: 100,
   backSpeed: 50,
   loop: true,
@@ -1490,12 +1508,12 @@ function checkAvailability() {
           if (state === "available") {
             dot.style.background = "#00ff88";
             dot.style.boxShadow = "0 0 10px #00ff88";
-            text.innerText = "النظام متاح لاستقبال مشاريع جديدة";
+            text.innerText = "جاهز لاستلام مشروعك دلوقتى";
             text.style.color = "#00ff88";
           } else {
             dot.style.background = "#ff2e63";
             dot.style.boxShadow = "0 0 10px #ff2e63";
-            text.innerText = "النظام مشغول حالياً (قائمة الانتظار)";
+            text.innerText = "مشغول حالياً تقدر تطلب وهرد فاسرع وقت";
             text.style.color = "#ff2e63";
           }
         }
