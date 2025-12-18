@@ -2238,3 +2238,29 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+async function sharePortfolio() {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Kyrillos | Creative Developer",
+        text: "شاهد معرض أعمال كيرلس المذهل!",
+        url: window.location.href,
+      });
+      console.log("تمت المشاركة بنجاح");
+    } catch (err) {
+      console.log("تم إلغاء المشاركة");
+    }
+  } else {
+    // إذا كان المتصفح لا يدعمها (مثل الكمبيوتر) استخدم الكود الموجود عندك فعلياً
+    copyLink();
+  }
+}
+window.addEventListener("deviceorientation", (event) => {
+  const cards = document.querySelectorAll(".project-card");
+  const x = event.beta; // الميل للأمام والخلف
+  const y = event.gamma; // الميل لليمين واليسار
+
+  cards.forEach((card) => {
+    card.style.transform = `rotateX(${x / 10}deg) rotateY(${y / 10}deg)`;
+  });
+});
