@@ -1227,27 +1227,34 @@ window.showOrderDetails = function (orderId) {
 window.closeOrderDetails = function () {
   document.getElementById("orderDetailsModal").classList.remove("active");
 };
-async function checkBiometricSupport() {
+// دالة لمحاولة تشغيل البصمة تلقائياً عند فتح صفحة الدخول
+async function autoTriggerBiometric() {
   if (window.PublicKeyCredential) {
-    const available =
-      await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-    if (available) {
-      // الجهاز يدعم البصمة أو التعرف على الوجه
-      showAlert(
-        "جهازك يدعم الدخول الحيوي. يمكنك تفعيل البصمة لاحقاً.",
-        "نظام الأمان"
-      );
-    } else {
-      showAlert(
-        "جهازك لا يدعم التحقق بالبصمة حالياً.",
-        "تنبيه",
-        "fa-exclamation-triangle"
-      );
+    try {
+      const available =
+        await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      if (available) {
+        // بدلاً من التنبيه، سنحاول محاكاة طلب التحقق (للعرض فقط حالياً)
+        // ملاحظة: التحقق الحقيقي يتطلب مفاتيح من السيرفر
+        console.log("Biometric system ready...");
+        // يمكنك إزالة التنبيه القديم ووضع تفاعل حقيقي هنا
+      }
+    } catch (e) {
+      console.error("Biometric error", e);
     }
   }
 }
 
-// ربط الوظيفة بأيقونة البصمة في صفحة اللوجن
-document
-  .querySelector(".login-icon")
-  ?.addEventListener("click", checkBiometricSupport);
+// تعديل كود الـ Login ليحاول تشغيل البصمة فوراً
+function checkLogin() {
+  // الكود الحالي الخاص بك
+  autoTriggerBiometric(); // استدعاء تلقائي
+}
+async function fastBiometricLogin() {
+  if (window.PublicKeyCredential) {
+    // محاكاة سريعة: إذا نجح في التعرف على وجود البصمة، يدخله بكلمة السر الافتراضية
+    document.getElementById("adminPass").value = "123456"; // الباسورد الخاص بك
+    checkLogin();
+    showAlert("تم التحقق بالبصمة (محاكاة)", "دخول سريع", "fa-fingerprint");
+  }
+}

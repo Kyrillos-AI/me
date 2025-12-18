@@ -2214,3 +2214,27 @@ window.addEventListener("load", function () {
     .trim();
   loadParticles(themeColor);
 });
+// دالة اهتزاز محسنة
+function triggerVibration() {
+  if (navigator.vibrate) {
+    // اهتزاز مزدوج خفيف ليعطي إيحاءً احترافياً
+    navigator.vibrate([40, 30, 40]);
+  } else {
+    console.log("Vibration API not supported on this device/browser.");
+  }
+}
+
+// تأكد من ربطها بالأزرار بعد تحميل الصفحة تماماً
+window.addEventListener("DOMContentLoaded", () => {
+  // استهداف كل الأزرار والروابط التفاعلية
+  const elements = document.querySelectorAll(
+    ".btn-cyber, .nav-icon, .color-btn, .btn"
+  );
+
+  elements.forEach((el) => {
+    el.addEventListener("click", () => {
+      triggerVibration();
+      console.log("Vibrated!"); // للتأكد في الكونسول أثناء الفحص
+    });
+  });
+});
